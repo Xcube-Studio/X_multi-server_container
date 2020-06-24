@@ -86,16 +86,16 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="233" Width="80" VerticalAlignment="Center" Foreground="Wheat"/>
-                                <Button Padding="0" x:Name="Button_Close" Click="Button_Close_Click" Width="25" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Margin="0,-10,-5,-10" >
+                                <TextBlock Text="{Binding PageTitle}" Width="80" VerticalAlignment="Center" Foreground="Wheat"/>
+                                <Button Padding="0" Click="Button_ClosePage_Click" Tag="{Binding uuid}" Width="28" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Margin="0,-10,-5,-10" >
                                     &#xE711;
                                 </Button>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListView>
-                <Button x:Name="Add" HorizontalAlignment="Left" Padding="0,3" Width="48" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" Margin="-3,0,0,3" Click="Add_Click">
-                    <TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="White" />
+                <Button x:Name="Add" Width="32" Height="32" HorizontalAlignment="Left"    Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent"  Click="Add_Click">
+                    <TextBlock  Text="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="White" />
                 </Button>
             </StackPanel>
             <!--<TextBox Grid.Column="1" 
