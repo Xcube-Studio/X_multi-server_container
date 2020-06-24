@@ -11,7 +11,7 @@
         fw:AcrylicWindow.AcrylicWindowStyle="NoIcon"
         fw:AcrylicWindow.NoiseOpacity="0.01"
         Background="Transparent"
-        Height="450" Width="800" fw:AcrylicWindow.FallbackColor="Black" fw:AcrylicWindow.TintColor="Black">
+        Height="350" Width="500" fw:AcrylicWindow.FallbackColor="Black" fw:AcrylicWindow.TintColor="Black">
     <Window.Resources>
         <SolidColorBrush x:Key="TextBox.Static.Border" Color="Transparent"/>
         <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="Transparent"/>
@@ -64,26 +64,26 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <ToggleButton x:Name="toggle" Style="{StaticResource ToggleButtonStyle1}" Grid.Column="0" HorizontalAlignment="Left" FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE700;" Width="48" IsChecked="{Binding ElementName=menuPop1, Path=IsOpen, Mode=TwoWay}" Background="Transparent" Foreground="White" BorderBrush="Transparent" />
-
-            <TextBox Grid.Column="1" 
+            <!--<ToggleButton x:Name="toggle"   Grid.Column="0" HorizontalAlignment="Left" FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE700;" Width="48" IsChecked="{Binding ElementName=menuPop1, Path=IsOpen, Mode=TwoWay}" Background="Transparent" Foreground="White" BorderBrush="Transparent" />-->
+        
+            <!--<TextBox Grid.Column="1" 
                      HorizontalAlignment="Left" Margin="0,2,140,2" Width="190"
                      Height="24" FontSize="12" Padding="2" BorderThickness="1"
                      Style="{StaticResource TextBoxRevealStyle}"
-                     fw:Extensions.PlaceholderText="Placeholder"/>
-            <fw:AcrylicPopup x:Name="menuPop1" StaysOpen="False" PopupAnimation="Slide" Placement="Bottom" PlacementTarget="{Binding ElementName=toggle}" AllowsTransparency="True" HorizontalAlignment="Left">
+                     fw:Extensions.PlaceholderText="Placeholder"/>-->
+            <!--<fw:AcrylicPopup x:Name="menuPop1" StaysOpen="False" PopupAnimation="Scroll" Placement="Bottom" PlacementTarget="{Binding ElementName=toggle}" AllowsTransparency="True" HorizontalAlignment="Left">
                 <Grid Height="150" Width="127" HorizontalAlignment="Left">
                     <Grid.Effect>
                         <DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="Black" Opacity="0.50"/>
                     </Grid.Effect>
                     <Border BorderThickness="0" CornerRadius="3" Margin="3">
                         <StackPanel Margin="0">
-                            <Button Content="设置" Background="Transparent" FontSize="14" Style="{StaticResource ButtonAccentRevealStyle}" FontFamily="Microsoft YaHei UI Light" Foreground="White"/>
-                            <Button Content="关于" Background="Transparent" FontSize="14" Style="{StaticResource ButtonAccentRevealStyle}" FontFamily="Microsoft YaHei UI Light" Foreground="White" Margin="0,3,0,0"/>
+                            <Button Content="设置"  FontSize="14" Style="{StaticResource ButtonAccentRevealStyle}" FontFamily="Microsoft YaHei UI Light" Foreground="White"/>
+                            <Button Content="关于"  FontSize="14" Style="{StaticResource ButtonAccentRevealStyle}" FontFamily="Microsoft YaHei UI Light" Foreground="White" Margin="0,3,0,0"/>
                         </StackPanel>
                     </Border>
                 </Grid>
-            </fw:AcrylicPopup>
+            </fw:AcrylicPopup>-->
         </Grid>
     </fw:AcrylicWindow.TitleBar>
     <TextBox Background="{x:Null}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" BorderBrush="{x:Null}" Foreground="White" Padding="10,10,20,10" SelectionBrush="#7FFFFFFF" CaretBrush="#7FFFFFFF" Style="{DynamicResource TextBoxStyle1}" Margin="0" AcceptsTab="True" AcceptsReturn="True"/>
