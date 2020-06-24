@@ -3,11 +3,88 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-           xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+        xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
         xmlns:local="clr-namespace:X_multi_server_container"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        fw:AcrylicWindow.Enabled="True"
+        Foreground="White"
+        fw:AcrylicWindow.AcrylicWindowStyle="NoIcon"
+        fw:AcrylicWindow.NoiseOpacity="0.01"
+        Background="Transparent"
+        Height="450" Width="800" fw:AcrylicWindow.FallbackColor="Black" fw:AcrylicWindow.TintColor="Black">
+    <Window.Resources>
+        <SolidColorBrush x:Key="TextBox.Static.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="TextBox.Focus.Border" Color="Transparent"/>
+        <Style x:Key="TextBoxStyle1" TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <fw:AcrylicWindow.TitleBar>
+        <Grid WindowChrome.IsHitTestVisibleInChrome="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <ToggleButton x:Name="toggle" Style="{StaticResource ToggleButtonStyle1}" Grid.Column="0" HorizontalAlignment="Left" FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE700;" Width="48" IsChecked="{Binding ElementName=menuPop1, Path=IsOpen, Mode=TwoWay}" Background="Transparent" Foreground="White" BorderBrush="Transparent" />
+
+            <TextBox Grid.Column="1" 
+                     HorizontalAlignment="Left" Margin="0,2,140,2" Width="190"
+                     Height="24" FontSize="12" Padding="2" BorderThickness="1"
+                     Style="{StaticResource TextBoxRevealStyle}"
+                     fw:Extensions.PlaceholderText="Placeholder"/>
+            <fw:AcrylicPopup x:Name="menuPop1" StaysOpen="False" PopupAnimation="Slide" Placement="Bottom" PlacementTarget="{Binding ElementName=toggle}" AllowsTransparency="True" HorizontalAlignment="Left">
+                <Grid Height="150" Width="127" HorizontalAlignment="Left">
+                    <Grid.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="Black" Opacity="0.50"/>
+                    </Grid.Effect>
+                    <Border BorderThickness="0" CornerRadius="3" Margin="3">
+                        <StackPanel Margin="0">
+                            <Button Content="设置" Background="Transparent" FontSize="14" Style="{StaticResource ButtonAccentRevealStyle}" FontFamily="Microsoft YaHei UI Light" Foreground="White"/>
+                            <Button Content="关于" Background="Transparent" FontSize="14" Style="{StaticResource ButtonAccentRevealStyle}" FontFamily="Microsoft YaHei UI Light" Foreground="White" Margin="0,3,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </fw:AcrylicPopup>
+        </Grid>
+    </fw:AcrylicWindow.TitleBar>
+    <TextBox Background="{x:Null}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" BorderBrush="{x:Null}" Foreground="White" Padding="10,10,20,10" SelectionBrush="#7FFFFFFF" CaretBrush="#7FFFFFFF" Style="{DynamicResource TextBoxStyle1}" Margin="0" AcceptsTab="True" AcceptsReturn="True"/>
 </Window>
