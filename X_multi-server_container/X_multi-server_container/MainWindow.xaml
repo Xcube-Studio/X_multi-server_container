@@ -77,7 +77,7 @@
             <Button HorizontalAlignment="Left" FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE700;" Width="48" Foreground="White" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" />
             <!--<TextBlock Text="Welcome to XMSC" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>-->
             <StackPanel Margin="45,-3,0,-2" Orientation="Horizontal">
-                <ListView x:Name="ListView_Page"  HorizontalAlignment="Left" Style="{StaticResource ListBoxRevealStyle}" Background="{x:Null}" Foreground="{x:Null}" BorderBrush="{x:Null}">
+                <ListView x:Name="ListView_Page" SelectionChanged="ListView_Page_SelectionChanged" HorizontalAlignment="Left" Style="{StaticResource ListBoxRevealStyle}" Background="{x:Null}" Foreground="{x:Null}" BorderBrush="{x:Null}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel Orientation="Horizontal"/>
@@ -85,7 +85,7 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Tag="{Binding uuid}" Orientation="Horizontal" MouseUp="StackPanel_MouseUp">
+                            <StackPanel   Orientation="Horizontal"  >
                                 <TextBlock Text="{Binding PageTitle}" Width="80" VerticalAlignment="Center" Foreground="Wheat"/>
                                 <Button Content="&#xE711;" Padding="0" Click="Button_ClosePage_Click" Tag="{Binding uuid}" Width="28" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Margin="0,-10,-5,-10" />
                             </StackPanel>

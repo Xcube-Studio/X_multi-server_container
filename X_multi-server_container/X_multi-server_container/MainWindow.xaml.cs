@@ -33,17 +33,27 @@ namespace X_multi_server_container
         }
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            PageContainer.Navigate(PageManager.AddPage(new Page(), "Page#" + PageManager.UUIDTemp));
+            PageContainer.Navigate(PageManager.AddPage(new Pages.Home(), "Page#" + PageManager.UUIDTemp));
             try { PageContainer.RemoveBackEntry(); } catch { }
         }
         private void Button_ClosePage_Click(object sender, RoutedEventArgs e)
         {
-            try { PageManager.ClosePage((sender as Button).Tag as string); }
+            try
+            {
+                PageManager.ClosePage((sender as Button).Tag as string);
+                ListView_Page.SelectedIndex = nextPage;
+            }
             catch (Exception) { }
         }
-        private void StackPanel_MouseUp(object sender, MouseButtonEventArgs e)
+        private int nextPage = 0;
+        private void ListView_Page_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            PageContainer.Navigate(PageManager.GetPage((sender as StackPanel).Tag as string));
+            try
+            {
+                nextPage = ListView_Page.SelectedIndex;
+                _ = PageContainer.Navigate(PageManager.GetPage((ListView_Page.SelectedItem as PageItemModel).uuid));
+            }
+            catch (Exception) { }
         }
 
         //private void Button_Click(object sender, RoutedEventArgs e)
