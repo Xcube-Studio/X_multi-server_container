@@ -23,7 +23,6 @@ namespace X_multi_server_container
         public MainWindow()
         {
             InitializeComponent();
-                SourceChord.FluentWPF.AcrylicWindow.
-    }
+        }
     }
 }
