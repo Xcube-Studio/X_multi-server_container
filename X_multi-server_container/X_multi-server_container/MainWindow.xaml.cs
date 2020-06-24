@@ -30,18 +30,21 @@ namespace X_multi_server_container
             InitializeComponent();
             ListView_Page.ItemsSource = PageManager.PageItems;
             PageContainer.Navigate(PageManager.AddPage(new Pages.Setup(), "Welcome"));
+            ListView_Page.SelectedIndex = 0;
         }
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             PageContainer.Navigate(PageManager.AddPage(new Pages.Home(), "Page#" + PageManager.UUIDTemp));
+            ListView_Page.SelectedIndex = ListView_Page.Items.Count - 1;
             try { PageContainer.RemoveBackEntry(); } catch { }
         }
         private void Button_ClosePage_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                int a = ListView_Page.SelectedIndex;
                 PageManager.ClosePage((sender as Button).Tag as string);
-                ListView_Page.SelectedIndex = nextPage;
+                ListView_Page.SelectedIndex = a - 1;
             }
             catch (Exception) { }
         }

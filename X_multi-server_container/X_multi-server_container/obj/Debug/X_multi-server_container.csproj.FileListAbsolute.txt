@@ -45,3 +45,7 @@ C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_containe
 C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\Settings.baml
 C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\Home.g.cs
 C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\Home.baml
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\Home.g.cs
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\Settings.g.cs
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\Home.baml
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\Settings.baml

@@ -116,5 +116,5 @@
             </fw:AcrylicPopup>-->
         </Grid>
     </fw:AcrylicWindow.TitleBar>
-    <Frame x:Name="PageContainer"/>
+    <Frame x:Name="PageContainer" NavigationUIVisibility="Hidden"/>
 </fw:AcrylicWindow>
