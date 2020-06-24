@@ -11,7 +11,7 @@
         fw:AcrylicWindow.AcrylicWindowStyle="NoIcon"
         fw:AcrylicWindow.NoiseOpacity="0.01"
         Background="Transparent"  
-        Height="350" Width="500" fw:AcrylicWindow.FallbackColor="Black" fw:AcrylicWindow.TintColor="Black">
+        Height="450" Width="800" fw:AcrylicWindow.FallbackColor="Black" fw:AcrylicWindow.TintColor="Black">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -75,7 +75,6 @@
     <fw:AcrylicWindow.TitleBar>
         <Grid WindowChrome.IsHitTestVisibleInChrome="True">
             <Button HorizontalAlignment="Left" FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE700;" Width="48" Foreground="White" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" />
-            <!--<TextBlock Text="Welcome to XMSC" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>-->
             <StackPanel Margin="45,-3,0,-2" Orientation="Horizontal">
                 <ListView x:Name="ListView_Page" SelectionChanged="ListView_Page_SelectionChanged" HorizontalAlignment="Left" Style="{StaticResource ListBoxRevealStyle}" Background="{x:Null}" Foreground="{x:Null}" BorderBrush="{x:Null}">
                     <ListBox.ItemsPanel>
@@ -92,28 +91,10 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListView>
-                <Button x:Name="Add" Width="32" Height="32" HorizontalAlignment="Left"    Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent"  Click="Add_Click">
-                    <TextBlock  Text="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="White" />
+                <Button x:Name="Add" Width="30" Height="30" HorizontalAlignment="Left" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" Click="Add_Click" Margin="-2,0,0,0">
+                    <TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="White"/>
                 </Button>
             </StackPanel>
-            <!--<TextBox Grid.Column="1" 
-                     HorizontalAlignment="Left" Margin="0,2,140,2" Width="190"
-                     Height="24" FontSize="12" Padding="2" BorderThickness="1"
-                     Style="{StaticResource TextBoxRevealStyle}"
-                     fw:Extensions.PlaceholderText="Placeholder"/>-->
-            <!--<fw:AcrylicPopup x:Name="menuPop1" StaysOpen="False" PopupAnimation="Scroll" Placement="Bottom" PlacementTarget="{Binding ElementName=toggle}" AllowsTransparency="True" HorizontalAlignment="Left">
-                <Grid Height="150" Width="127" HorizontalAlignment="Left">
-                    <Grid.Effect>
-                        <DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="Black" Opacity="0.50"/>
-                    </Grid.Effect>
-                    <Border BorderThickness="0" CornerRadius="3" Margin="3">
-                        <StackPanel Margin="0">
-                            <Button Content="设置"  FontSize="14" Style="{StaticResource ButtonAccentRevealStyle}" FontFamily="Microsoft YaHei UI Light" Foreground="White"/>
-                            <Button Content="关于"  FontSize="14" Style="{StaticResource ButtonAccentRevealStyle}" FontFamily="Microsoft YaHei UI Light" Foreground="White" Margin="0,3,0,0"/>
-                        </StackPanel>
-                    </Border>
-                </Grid>
-            </fw:AcrylicPopup>-->
         </Grid>
     </fw:AcrylicWindow.TitleBar>
     <Frame x:Name="PageContainer" NavigationUIVisibility="Hidden"/>

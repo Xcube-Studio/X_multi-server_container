@@ -16,7 +16,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SourceChord.FluentWPF;
 
-
 namespace X_multi_server_container
 {
     /// <summary>
@@ -40,10 +39,13 @@ namespace X_multi_server_container
         }
         private void Button_ClosePage_Click(object sender, RoutedEventArgs e)
         {
+            if (ListView_Page.Items.Count == 1)
+                App.Current.Shutdown();
             try
             {
+                int a = ListView_Page.SelectedIndex;
                 PageManager.ClosePage((sender as Button).Tag as string);
-                ListView_Page.SelectedIndex = nextPage;
+                ListView_Page.SelectedIndex = a - 1;
             }
             catch (Exception) { }
         }
