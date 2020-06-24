@@ -14,8 +14,9 @@
     </Page.Resources>
     <Grid>
         <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-            <StackPanel>
+            <StackPanel >
                 <TextBlock Text="Home!"  FontSize="40"/>
+                <TextBlock Text="{Binding testtxt}"  FontSize="20"/>
             </StackPanel>
         </Grid>
     </Grid>
