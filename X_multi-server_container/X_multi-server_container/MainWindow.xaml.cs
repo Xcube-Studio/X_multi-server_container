@@ -34,7 +34,7 @@ namespace X_multi_server_container
         }
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            PageContainer.Navigate(PageManager.AddPage(new Pages.Home(), "Page#" + PageManager.UUIDTemp));
+            PageContainer.Navigate(PageManager.AddPage(new Pages.Home() { DataContext = new test() { testtxt = PageManager.UUIDTemp } }, "Page#" + PageManager.UUIDTemp));
             ListView_Page.SelectedIndex = ListView_Page.Items.Count - 1;
             try { PageContainer.RemoveBackEntry(); } catch { }
         }
@@ -42,9 +42,8 @@ namespace X_multi_server_container
         {
             try
             {
-                int a = ListView_Page.SelectedIndex;
                 PageManager.ClosePage((sender as Button).Tag as string);
-                ListView_Page.SelectedIndex = a - 1;
+                ListView_Page.SelectedIndex = nextPage;
             }
             catch (Exception) { }
         }
@@ -53,10 +52,13 @@ namespace X_multi_server_container
         {
             try
             {
-                nextPage = ListView_Page.SelectedIndex;
-                _ = PageContainer.Navigate(PageManager.GetPage((ListView_Page.SelectedItem as PageItemModel).uuid));
+                if (ListView_Page.SelectedIndex >= 0)
+                {
+                    nextPage = ListView_Page.SelectedIndex;
+                    _ = PageContainer.Navigate(PageManager.GetPage((ListView_Page.SelectedItem as PageItemModel).uuid));
+                }
             }
-            catch (Exception) { }
+            catch (Exception) { ListView_Page.SelectedIndex = nextPage; }
         }
 
         //private void Button_Click(object sender, RoutedEventArgs e)
@@ -64,5 +66,13 @@ namespace X_multi_server_container
         //    throw new NotImplementedException();
         //}
     }
-
+    public class test
+    {
+        public string _testtxt = Guid.NewGuid().ToString();
+        public string testtxt
+        {
+            get { return _testtxt; }
+            set { _testtxt = value; }
+        }
+    }
 }
