@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SourceChord.FluentWPF;
+ 
 
 namespace X_multi_server_container
 {
@@ -21,9 +22,12 @@ namespace X_multi_server_container
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
+       PageContainer.Navigate(     PageManager.AddPage(new Pages.Setup()));
         }
     }
+  
 }
