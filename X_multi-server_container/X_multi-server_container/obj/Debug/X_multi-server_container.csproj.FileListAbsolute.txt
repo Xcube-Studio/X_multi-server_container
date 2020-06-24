@@ -1,0 +1,12 @@
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\X_multi-server_container.csprojAssemblyReference.cache
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\MainWindow.baml
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\Setup.baml
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\MainWindow.g.cs
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\Setup.g.cs
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\X_multi-server_container_MarkupCompile.cache
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\X_multi-server_container.g.resources
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\X_multi_server_container.Properties.Resources.resources
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\X_multi-server_container.csproj.GenerateResource.cache
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\X_multi-server_container.csproj.CoreCompileInputs.cache
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\X_multi-server_container.exe
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\X_multi-server_container.pdb
