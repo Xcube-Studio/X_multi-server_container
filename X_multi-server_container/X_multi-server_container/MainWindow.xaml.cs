@@ -20,13 +20,25 @@ namespace X_multi_server_container
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : AcrylicWindow
     {
 
         public MainWindow()
         {
             InitializeComponent();
-       PageContainer.Navigate(     PageManager.AddPage(new Pages.Setup()));
+            PageContainer.Navigate(PageManager.AddPage(new Pages.Setup()));
+        }
+
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = new Button();
+            button.Tag = (ListView_Page.Items.Count + 1).ToString();
+            ListView_Page.Items.Add(button);
+        }
+
+        private void Button_Close_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
   
