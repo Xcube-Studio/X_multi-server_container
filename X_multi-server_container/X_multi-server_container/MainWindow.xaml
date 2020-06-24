@@ -71,10 +71,11 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate >
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="233" VerticalAlignment="Center" Foreground="Wheat"/>
-                            <Button Padding="0" Style="{StaticResource ButtonRoundRevealStyle}"  Margin="3,0,0,0">
-                                <Grid Height="12" Width="12">
+                        <StackPanel  Orientation="Horizontal">
+                            <TextBlock FontSize="16" Text="233" VerticalAlignment="Center" Foreground="Wheat"/>
+                            <!--Click="{Binding CloseEvent}"-->
+                            <Button Height="16"  Width="16" Padding="0" Style="{StaticResource ButtonRoundRevealStyle}"  Margin="3,0,0,0">
+                                <Grid Height="13" Width="13">
                                     <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="x" Margin="0,-3.5,1,0"/>
                                 </Grid>
                             </Button>
