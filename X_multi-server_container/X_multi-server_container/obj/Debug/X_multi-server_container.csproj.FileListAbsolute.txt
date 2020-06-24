@@ -41,3 +41,7 @@ C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_containe
 C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\X_multi-server_container_MarkupCompile.lref
 C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\App.baml
 C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\X_multi-server_container.csproj.CopyComplete
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\Settings.g.cs
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\Settings.baml
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\Home.g.cs
+C:\Users\gaoxi\Documents\GitHub\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\Home.baml

@@ -18,23 +18,22 @@ namespace X_multi_server_container
         public static string CreateNewUUID => Guid.NewGuid().ToString();
         public static Page AddPage(Page page, string title)
         {
-            //page.Tag = pages.Count;
             UUIDTemp = CreateNewUUID;
             pages.Add(UUIDTemp, page);
-            PageItems.Add(new PageItem() { PageTitle = title, PageSource = page, uuid = UUIDTemp });
+            PageItems.Add(new PageItemModel() { PageTitle = title, PageSource = page, uuid = UUIDTemp });
             return page;
         }
+        public static Page GetPage(string uuid) => PageItems.First(l => l.uuid == uuid).PageSource;
         public static void ClosePage(string uuid)
         {
             pages[uuid] = null;
             pages.Remove(uuid);
             PageItems.Remove(PageItems.First(l => l.uuid == uuid));
             GC.Collect();
-            //Dispatcher.CurrentDispatcher.Invoke
         }
-        public static ObservableCollection<PageItem> PageItems = new ObservableCollection<PageItem>();
+        public static ObservableCollection<PageItemModel> PageItems = new ObservableCollection<PageItemModel>();
     }
-    public class PageItem : INotifyPropertyChanged
+    public class PageItemModel : INotifyPropertyChanged
     {
 
         private string _PageTitle = "Page";
