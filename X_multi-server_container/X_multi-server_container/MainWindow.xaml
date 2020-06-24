@@ -85,11 +85,9 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Tag="{Binding uuid}" Orientation="Horizontal" MouseUp="StackPanel_MouseUp">
                                 <TextBlock Text="{Binding PageTitle}" Width="80" VerticalAlignment="Center" Foreground="Wheat"/>
-                                <Button Padding="0" Click="Button_ClosePage_Click" Tag="{Binding uuid}" Width="28" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Margin="0,-10,-5,-10" >
-                                    &#xE711;
-                                </Button>
+                                <Button Content="&#xE711;" Padding="0" Click="Button_ClosePage_Click" Tag="{Binding uuid}" Width="28" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Margin="0,-10,-5,-10" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

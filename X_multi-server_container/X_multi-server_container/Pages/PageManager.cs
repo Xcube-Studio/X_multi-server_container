@@ -24,14 +24,14 @@ namespace X_multi_server_container
             PageItems.Add(new PageItem() { PageTitle = title, PageSource = page, uuid = UUIDTemp });
             return page;
         }
+        public static Page GetPage(string uuid) => PageItems.First(l => l.uuid == uuid).PageSource;
         public static void ClosePage(string uuid)
         {
             pages[uuid] = null;
             pages.Remove(uuid);
             PageItems.Remove(PageItems.First(l => l.uuid == uuid));
             GC.Collect();
-            //Dispatcher.CurrentDispatcher.Invoke
-        }
+         }
         public static ObservableCollection<PageItem> PageItems = new ObservableCollection<PageItem>();
     }
     public class PageItem : INotifyPropertyChanged

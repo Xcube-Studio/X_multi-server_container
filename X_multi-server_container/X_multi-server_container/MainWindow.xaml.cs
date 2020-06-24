@@ -29,24 +29,21 @@ namespace X_multi_server_container
         {
             InitializeComponent();
             ListView_Page.ItemsSource = PageManager.PageItems;
-
             PageContainer.Navigate(PageManager.AddPage(new Pages.Setup(), "Welcome"));
         }
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-             PageContainer.Navigate(PageManager.AddPage(new Page(), "Page#" +PageManager.UUIDTemp));
+            PageContainer.Navigate(PageManager.AddPage(new Page(), "Page#" + PageManager.UUIDTemp));
+            try { PageContainer.RemoveBackEntry(); } catch { }
         }
-
         private void Button_ClosePage_Click(object sender, RoutedEventArgs e)
         {
-            //Button button = new Button();
-            //button.Click += (object _sender, RoutedEventArgs _e) => { };
-            try
-            {
-                PageManager.ClosePage((sender as Button).Tag as string);
-            }
-            catch (Exception)
-            { } 
+            try { PageManager.ClosePage((sender as Button).Tag as string); }
+            catch (Exception) { }
+        }
+        private void StackPanel_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            PageContainer.Navigate(PageManager.GetPage((sender as StackPanel).Tag as string));
         }
 
         //private void Button_Click(object sender, RoutedEventArgs e)
