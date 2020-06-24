@@ -18,9 +18,9 @@ namespace X_multi_server_container.Pages
     /// <summary>
     /// Interaction logic for setup.xaml
     /// </summary>
-    public partial class setup : Page
+    public partial class Setup : Page
     {
-        public setup()
+        public Setup()
         {
             InitializeComponent();
         }

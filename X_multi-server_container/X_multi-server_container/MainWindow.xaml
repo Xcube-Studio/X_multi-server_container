@@ -10,7 +10,8 @@
         Foreground="White"
         fw:AcrylicWindow.AcrylicWindowStyle="NoIcon"
         fw:AcrylicWindow.NoiseOpacity="0.01"
-        Background="Transparent"
+        
+         Background="Transparent"  
         Height="350" Width="500" fw:AcrylicWindow.FallbackColor="Black" fw:AcrylicWindow.TintColor="Black">
     <Window.Resources>
         <SolidColorBrush x:Key="TextBox.Static.Border" Color="Transparent"/>
@@ -58,14 +59,33 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
+
     <fw:AcrylicWindow.TitleBar>
         <Grid WindowChrome.IsHitTestVisibleInChrome="True">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
             <!--<ToggleButton x:Name="toggle"   Grid.Column="0" HorizontalAlignment="Left" FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE700;" Width="48" IsChecked="{Binding ElementName=menuPop1, Path=IsOpen, Mode=TwoWay}" Background="Transparent" Foreground="White" BorderBrush="Transparent" />-->
-        
+            <ListView Style="{StaticResource ListBoxRevealStyle}" Background="{x:Null}" Foreground="{x:Null}" BorderBrush="{x:Null}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="233" VerticalAlignment="Center" Foreground="Wheat"/>
+                            <Button Padding="0" Style="{StaticResource ButtonRoundRevealStyle}"  Margin="3,0,0,0">
+                                <Grid Height="12" Width="12">
+                                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="x" Margin="0,-3.5,1,0"/>
+                                </Grid>
+                            </Button>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <Button/>
+                <Button/>
+            </ListView>
+            <!--<TextBlock Text="Welcome to XMSC" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>-->
+
             <!--<TextBox Grid.Column="1" 
                      HorizontalAlignment="Left" Margin="0,2,140,2" Width="190"
                      Height="24" FontSize="12" Padding="2" BorderThickness="1"
@@ -86,5 +106,6 @@
             </fw:AcrylicPopup>-->
         </Grid>
     </fw:AcrylicWindow.TitleBar>
-    <TextBox Background="{x:Null}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" BorderBrush="{x:Null}" Foreground="White" Padding="10,10,20,10" SelectionBrush="#7FFFFFFF" CaretBrush="#7FFFFFFF" Style="{DynamicResource TextBoxStyle1}" Margin="0" AcceptsTab="True" AcceptsReturn="True"/>
+    <Frame x:Name="PageContainer"/>
+    <!--<TextBox Background="{x:Null}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" BorderBrush="{x:Null}" Foreground="White" Padding="10,10,20,10" SelectionBrush="#7FFFFFFF" CaretBrush="#7FFFFFFF" Style="{DynamicResource TextBoxStyle1}" Margin="0" AcceptsTab="True" AcceptsReturn="True"/>-->
 </Window>
