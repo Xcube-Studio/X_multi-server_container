@@ -39,7 +39,6 @@ namespace X_multi_server_container
     }
     public class PageItemModel : INotifyPropertyChanged
     {
-
         private string _PageTitle = "Page";
         public string PageTitle
         {
@@ -52,19 +51,12 @@ namespace X_multi_server_container
             get { return _PageSource; }
             set { _PageSource = value; FirePropertyChanged("PageSource"); }
         }
-        //Tag用的标记序号
         private string _uuid;
         public string uuid
         {
             get { return _uuid; }
             set { _uuid = value; FirePropertyChanged("uuid"); }
         }
-        //private Action<object, RoutedEventArgs> _CloseClick;
-        //public Action<object, RoutedEventArgs> CloseClick
-        //{
-        //    get { return _CloseClick; }
-        //    set { _CloseClick = value; FirePropertyChanged("CloseClick"); }
-        //}
         public virtual event PropertyChangedEventHandler PropertyChanged;
         public virtual void FirePropertyChanged(string propertyName)
         {
@@ -72,5 +64,4 @@ namespace X_multi_server_container
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
 }
