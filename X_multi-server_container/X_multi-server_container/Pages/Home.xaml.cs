@@ -24,5 +24,10 @@ namespace X_multi_server_container.Pages
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
