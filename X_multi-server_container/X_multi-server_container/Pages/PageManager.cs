@@ -16,7 +16,13 @@ namespace X_multi_server_container
     {
         public static Dictionary<string, Page> pages = new Dictionary<string, Page>();
         public static string UUIDTemp = Guid.NewGuid().ToString();
-        public static string CreateNewUUID => Guid.NewGuid().ToString();
+        private static string CreateNewUUID => Guid.NewGuid().ToString();
+        /// <summary>
+        /// 添加新的页面
+        /// </summary>
+        /// <param name="page">页面源，使用new Pages.xxx()初始化</param>
+        /// <param name="title">页面标题</param>
+        /// <returns>返回初始化后的Page</returns>
         public static Page AddPage(Page page, string title)
         {
             pages.Add(UUIDTemp, page);
@@ -26,7 +32,17 @@ namespace X_multi_server_container
             PageItems.Add(PageInfo);
             return page;
         }
+        /// <summary>
+        /// 获取Page
+        /// </summary>
+        /// <param name="uuid">UUID</param>
+        /// <returns>返回通过uuid找到的Page</returns>
         public static Page GetPage(string uuid) => PageItems.First(l => l.uuid == uuid).PageSource;
+        /// <summary>
+        /// 关闭Page
+        /// </summary>
+        /// <param name="uuid">需要关闭的Page的UUID</param>
+        /// <returns>返回关闭的Page的位置</returns>
         public static int ClosePage(string uuid)
         {
             pages[uuid].Content = null;
@@ -36,6 +52,13 @@ namespace X_multi_server_container
             GC.Collect();
             return index;
         }
+        /// <summary>
+        /// 替换Page
+        /// </summary>
+        /// <param name="uuid">目标Page的UUID</param>
+        /// <param name="page">替换成的Page，使用new Pages.xxx()初始化</param>
+        /// <param name="title">替换后的Page标题</param>
+        /// <returns>返回替换后的Page的位置</returns>
         public static int ReplacePage(string uuid, Page page, string title)
         {
             //清除旧Page
@@ -55,7 +78,9 @@ namespace X_multi_server_container
             //返回Page的Index
             return index;
         }
-
+        /// <summary>
+        /// PageItemModel示例组,绑定了界面的Source/DataContnnt
+        /// </summary>
         public static ObservableCollection<PageItemModel> PageItems = new ObservableCollection<PageItemModel>();
     }
     public class PageItemModel : INotifyPropertyChanged
