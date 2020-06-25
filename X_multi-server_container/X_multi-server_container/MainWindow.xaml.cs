@@ -23,7 +23,6 @@ namespace X_multi_server_container
     /// </summary>
     public partial class MainWindow : AcrylicWindow
     {
-
         public MainWindow()
         {
             InitializeComponent();
@@ -50,7 +49,7 @@ namespace X_multi_server_container
             }
             catch (Exception) { }
         }
-        private int nextPage = 0;
+        private int nextPage = 0; 
         private void ListView_Page_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
