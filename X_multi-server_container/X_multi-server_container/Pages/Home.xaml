@@ -14,14 +14,15 @@
             <Setter Property="Foreground" Value="Wheat" />
         </Style>
     </Page.Resources>
-    <Grid>
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" >
-            <TextBlock Text="Home!"  FontSize="40"/>
-            <TextBlock Text="{Binding testtxt}"  FontSize="20"/>
+    <DockPanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" DockPanel.Dock="Top">
+            <TextBlock Text="Home Page"  FontSize="40" HorizontalAlignment="Center"/>
+            <TextBlock Text="{Binding uuid}"  FontSize="20"/>
         </StackPanel>
-        <consoleControl:ConsoleControl 
-            x:Name="consoleControl"
-            FontSize="14" Background="{x:Null}" Foreground="White" BorderBrush="Black" />
-
-    </Grid>
+        <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Test"/>
+            </StackPanel>
+        </StackPanel>
+     </DockPanel>
 </Page>

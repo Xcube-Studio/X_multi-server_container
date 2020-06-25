@@ -18,9 +18,11 @@ namespace X_multi_server_container
         public static string CreateNewUUID => Guid.NewGuid().ToString();
         public static Page AddPage(Page page, string title)
         {
-            UUIDTemp = CreateNewUUID;
             pages.Add(UUIDTemp, page);
-            PageItems.Add(new PageItemModel() { PageTitle = title, PageSource = page, uuid = UUIDTemp });
+            var PageInfo = new PageItemModel() { PageTitle = title, PageSource = page, uuid = UUIDTemp };
+            UUIDTemp = CreateNewUUID;
+            page.DataContext = PageInfo;
+            PageItems.Add(PageInfo);
             return page;
         }
         public static Page GetPage(string uuid) => PageItems.First(l => l.uuid == uuid).PageSource;
