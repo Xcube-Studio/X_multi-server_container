@@ -94,13 +94,13 @@
                         <DataTemplate>
                             <StackPanel  Height="25" Orientation="Horizontal"  >
                                 <TextBlock Text="{Binding PageTitle}" Width="80" VerticalAlignment="Center" Foreground="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                                <Button Content="&#xE711;" Padding="0" Click="Button_ClosePage_Click" Tag="{Binding uuid}" Width="30" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Margin="0,-10,-5,-10" />
+                                <Button Content="&#xE711;" Padding="0" Click="Button_ClosePage_Click" Tag="{Binding uuid}" Width="30" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Margin="0,-2,-5,-2" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListView>
                 <Rectangle Width="1" Fill="Gray" DockPanel.Dock="Right"/>
-                <Button x:Name="Add" DockPanel.Dock="Right"  HorizontalAlignment="Left" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" Click="Button_AddPage_Click" Margin="-2,0,0,0" Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">
+                <Button x:Name="Add" Margin="-0.5,0,0,1.5" MaxWidth="60" DockPanel.Dock="Right"  HorizontalAlignment="Left" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" Click="Button_AddPage_Click"   Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">
                     <TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="White"/>
                 </Button>
             </DockPanel>
