@@ -20,7 +20,7 @@
         </StackPanel>
         <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal">
-                <Button Content="Test"/>
+                <Button Content="Test" Click="Button_Click"/>
             </StackPanel>
         </StackPanel>
      </DockPanel>

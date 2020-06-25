@@ -52,3 +52,11 @@ C:\Users\gaoxi\source\repos\X_multi-server_container\X_multi-server_container\X_
 C:\Users\gaoxi\source\repos\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\ProcessContainer.g.cs
 C:\Users\gaoxi\source\repos\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\NativeConsole.baml
 C:\Users\gaoxi\source\repos\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\ProcessContainer.baml
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\bin\Debug\ConsoleControl.WPF.dll
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\bin\Debug\ConsoleControlAPI.dll
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\bin\Debug\ConsoleControl.WPF.pdb
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\bin\Debug\ConsoleControlAPI.pdb
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\NativeConsole.g.cs
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\ProcessContainer.g.cs
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\NativeConsole.baml
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\Pages\ProcessContainer.baml
