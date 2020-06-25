@@ -14,6 +14,136 @@
         </Style>
     </Page.Resources>
     <Grid>
-        <TextBlock Text="Welcome to XMSC(beta) !"  FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="15" x:Name="PaddingModel"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="{Binding Path=Width,ElementName=PaddingModel,Mode=OneTime}"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="{Binding Path=Width,ElementName=PaddingModel,Mode=OneTime}"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="{Binding Path=Width,ElementName=PaddingModel,Mode=OneTime}"/>
+                    <RowDefinition Height="31*"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="51*"/>
+                    <RowDefinition Height="{Binding Path=Width,ElementName=PaddingModel,Mode=OneTime}"/>
+                </Grid.RowDefinitions>
+                <!--#region 左上分区 -->
+                <Grid Grid.Row="1">
+                    <TextBlock Margin="5" FontSize="30" Foreground="SkyBlue" DockPanel.Dock="Top"><Run Text="入"/><Run Text="门"/></TextBlock>
+                    <Grid>
+
+                    </Grid>
+                </Grid>
+                <!--#endregion-->
+                <!--#region 左下分区 -->
+                <fw:AcrylicPanel Grid.Row="3">
+                    <Grid>
+                        <Border Height="1" VerticalAlignment="Top" >
+                            <Border.Background>
+                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+                            </Border.Background>
+                        </Border>
+                        <TextBlock Text="最近" Margin="5" FontSize="30" Foreground="SkyBlue" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <ListView x:Name="listView" Background="{x:Null}" BorderBrush="{x:Null}" Margin="10,52,10,10">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" />
+                                    <!--<ToolBarOverflowPanel  />-->
+                                    <!--<TabPanel/>-->
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="50" Width="400" >
+                                        <StackPanel Margin="10,0,0,0" Orientation="Horizontal">
+                                            <TextBlock Text="&#xE990;" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Foreground="Wheat" FontSize="32"/>
+                                            <StackPanel Orientation="Vertical" Margin="10,5,0,5">
+                                                <TextBlock Text="{Binding Path=Content}" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Wheat" FontSize="18"/>
+                                                <TextBlock Text="{Binding Path=Tag}" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Wheat" FontSize="12"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <Button Margin="0,0,10,0" Content="&#xE711;" HorizontalAlignment="Right" Padding="0" Width="30" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Height="30" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <Button Content="XMCL.Sln" Tag="C:\Users\20441\Desktop\XMCL\3"/>
+                        </ListView>
+                    </Grid>
+                </fw:AcrylicPanel>
+                <!--#endregion-->
+            </Grid>
+            <Grid Grid.Column="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="{Binding Path=Width,ElementName=PaddingModel,Mode=OneTime}"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="{Binding Path=Width,ElementName=PaddingModel,Mode=OneTime}"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="{Binding Path=Width,ElementName=PaddingModel,Mode=OneTime}"/>
+                </Grid.RowDefinitions>
+                <!--#region 右上分区 -->
+                <fw:AcrylicPanel Grid.Row="1">
+                    <Grid>
+                        <TextBlock Text="打开启动方案" FontSize="25" Foreground="SkyBlue" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
+                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#E5FFFFFF" Margin="10,48,0,0" FontSize="14" ><Run Text="打开某个对象"/><Run Text="以启动你的服务端"/></TextBlock>
+                        <Border Height="1" VerticalAlignment="Top" >
+                            <Border.Background>
+                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+                            </Border.Background>
+                        </Border>
+                        <Border Height="1" VerticalAlignment="Top" Margin="10,70,10,0" >
+                            <Border.Background>
+                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+                            </Border.Background>
+                        </Border>
+                        <Button Style="{StaticResource ButtonRevealStyle}" x:Name="button" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Top" Margin="10,76,10,0" Padding="0" FontSize="18">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE729;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text=" 打开服务端所在文件夹" FontSize="14"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource ButtonRevealStyle}" x:Name="button1" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Top" Margin="10,104,10,0" Padding="0" FontSize="18">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xED41;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock FontSize="14"><Run Text=" 打开"/><Run Text="启动"/><Run Text="方案"/></TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </fw:AcrylicPanel>
+                <!--#endregion-->
+                <!--#region 右下分区 -->
+                <fw:AcrylicPanel Grid.Row="3">
+                    <Grid>
+                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#E5FFFFFF" Margin="10,48,0,0" FontSize="14" Text="方案模板" />
+                        <TextBlock Text="新建启动方案" Margin="10,10,0,0" FontSize="25" Foreground="SkyBlue" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <Border Height="1" VerticalAlignment="Top" >
+                            <Border.Background>
+                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+                            </Border.Background>
+                        </Border>
+                        <Border Height="1" VerticalAlignment="Top" Margin="10,70,10,0" >
+                            <Border.Background>
+                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+                            </Border.Background>
+                        </Border>
+                        <Button Style="{StaticResource ButtonRevealStyle}" x:Name="button3" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Top" Margin="10,76,10,0" Padding="0" FontSize="18">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text=" 适用于Minecraft:Java Edition的方案" FontSize="13"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource ButtonRevealStyle}" x:Name="button4" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Top" Margin="10,104,10,0" Padding="0" FontSize="18">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text=" 适用于Minecraft:Bedrock Edition的方案" FontSize="13"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </fw:AcrylicPanel>
+                <!--#endregion-->
+            </Grid>
+        </Grid>
     </Grid>
 </Page>
