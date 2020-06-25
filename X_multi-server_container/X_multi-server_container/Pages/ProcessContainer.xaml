@@ -45,9 +45,9 @@
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="Input"/>
-            <Button Content="发送" Grid.Column="2" Padding="10,5" Click="SendButton_Click"/>
+            <TextBox x:Name="Input" Style="{StaticResource TextBoxRevealStyle}" Background="Transparent"/>
+            <Button Content="发送" Background="Transparent" Grid.Column="2" Padding="10,5" Click="SendButton_Click"/>
         </Grid>
-        <RichTextBox x:Name="Cos" Background="{x:Null}" DockPanel.Dock="Top" Margin="7" Foreground="AliceBlue" Block.LineHeight="1"/>
+        <TextBox x:Name="Cos" Background="{x:Null}" DockPanel.Dock="Top" Margin="7" Foreground="AliceBlue" Block.LineHeight="1"/>
     </DockPanel>
 </Page>

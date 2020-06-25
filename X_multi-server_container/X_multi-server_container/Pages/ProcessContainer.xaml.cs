@@ -41,11 +41,10 @@ namespace X_multi_server_container.Pages
             });
         }
         private Process p;
-        int pid = 0;
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             string bdspath = programmarPath.Text;
-            _ = Task.Run(() =>
+            Task.Run(() =>
             {
                 p = new Process();
                 p.StartInfo.FileName = bdspath;//控制台程序的路径
@@ -54,27 +53,40 @@ namespace X_multi_server_container.Pages
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.RedirectStandardInput = true;
+                p.StartInfo.RedirectStandardError = true;
                 p.StartInfo.CreateNoWindow = true;
+                p.EnableRaisingEvents = true;
                 p.Start();
-                pid = p.Id;
-                int pidn = p.Id;
-                while (pid == pidn)
-                {
-                    try
-                    {
-                        p.StandardInput.Flush();
-                        var readtask = p.StandardOutput.ReadLineAsync();
-                        readtask.Wait(1000);
-                        string result = Encoding.UTF8.GetString(Encoding.Default.GetBytes(readtask.Result));
-                        WL(result);
-                     }
-                    catch (Exception) { }
-                }
-                WL("》EXIT《");
-                p.Close();
-                p.Kill();
+                p.BeginErrorReadLine(); p.BeginOutputReadLine();
+                p.OutputDataReceived += P_OutputDataReceived;
+                p.ErrorDataReceived += P_ErrorDataReceived;
+                p.Exited += P_Exited;
             });
         }
+
+        private void P_Exited(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            this.Dispatcher.Invoke(new Action(() =>
+            {
+                Cos.AppendText(e.Data + "\r\n");
+                Cos.ScrollToEnd();
+            }));
+        }
+
+        private void P_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            this.Dispatcher.Invoke(new Action(() =>
+            {
+                Cos.AppendText(e.Data + "\r\n");
+                Cos.ScrollToEnd();
+            }));
+        }
+
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             try
