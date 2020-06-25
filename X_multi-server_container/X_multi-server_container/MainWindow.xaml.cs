@@ -44,8 +44,8 @@ namespace X_multi_server_container
             try
             {
                 int a = ListView_Page.SelectedIndex;
-                PageManager.ClosePage((sender as Button).Tag as string);
-                ListView_Page.SelectedIndex = a - 1;
+                if (PageManager.ClosePage((sender as Button).Tag as string) == a)
+                    ListView_Page.SelectedIndex = a - 1;
             }
             catch (Exception) { }
         }
