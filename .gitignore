@@ -26,10 +26,7 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-[Bb]in/
-[Oo]bj/
-[Ll]og/
-[Ll]ogs/
-
-X_multi-server_container/X_multi-server_container/obj/
-X_multi-server_container/X_multi-server_container/bin/
+X_multi-server_container/X_multi-server_container/[Bb]in/
+X_multi-server_container/X_multi-server_container/[Oo]bj/
+X_multi-server_container/X_multi-server_container/[Ll]og/
+X_multi-server_container/X_multi-server_container/[Ll]ogs/
