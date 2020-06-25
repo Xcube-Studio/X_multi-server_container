@@ -14,8 +14,13 @@ namespace X_multi_server_container
 {
     public static class PageManager
     {
-        public static Dictionary<string, Page> pages = new Dictionary<string, Page>();
+        /// <summary>
+        /// UUID缓存
+        /// </summary>
         public static string UUIDTemp = Guid.NewGuid().ToString();
+        /// <summary>
+        /// 随机生成新的UUID
+        /// </summary>
         private static string CreateNewUUID => Guid.NewGuid().ToString();
         /// <summary>
         /// 添加新的页面
@@ -82,6 +87,17 @@ namespace X_multi_server_container
         /// PageItemModel示例组,绑定了界面的Source/DataContnnt
         /// </summary>
         public static ObservableCollection<PageItemModel> PageItems = new ObservableCollection<PageItemModel>();
+        /// <summary>
+        /// 使用Dictionary排列的Page组
+        /// 通过PageItems获取的副本
+        /// </summary>
+        public static Dictionary<string, Page> pages
+        {
+            get
+            {
+                return PageItems.ToDictionary(l => l.uuid, l => l.PageSource);
+            }
+        }
     }
     public class PageItemModel : INotifyPropertyChanged
     {
