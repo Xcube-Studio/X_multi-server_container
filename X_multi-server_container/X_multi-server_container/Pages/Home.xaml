@@ -12,16 +12,19 @@
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="Wheat" />
         </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource ButtonRevealStyle}">
+            <Setter Property="Margin" Value="3" />
+            <Setter Property="FontSize" Value="15" />
+        </Style>
     </Page.Resources>
     <DockPanel>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" DockPanel.Dock="Top">
-            <TextBlock Text="Home Page"  FontSize="40" HorizontalAlignment="Center"/>
-            <TextBlock Text="{Binding uuid}"  FontSize="20"/>
+            <TextBlock Text="XMSC Home Page"  FontSize="40" HorizontalAlignment="Center"/>
+            <TextBlock Text="{Binding uuid}"  FontSize="12" HorizontalAlignment="Center" Foreground="Gray"/>
         </StackPanel>
-       
-        <Grid>
+         <Grid Margin="0,-20,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="15" x:Name="PaddingModel"/>
+                <ColumnDefinition Width="8" x:Name="PaddingModel"/>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="{Binding Path=Width,ElementName=PaddingModel,Mode=OneTime}"/>
                 <ColumnDefinition Width="2*"/>
@@ -65,19 +68,22 @@
                     <RowDefinition Height="{Binding Path=Width,ElementName=PaddingModel,Mode=OneTime}"/>
                 </Grid.RowDefinitions>
                 <!--#region 右上分区 -->
-                 <Grid Grid.Row="1">
+                <Grid Grid.Row="1">
                     <DockPanel>
                         <TextBlock Text="打开启动方案" Margin="5" FontSize="25" Foreground="SkyBlue" DockPanel.Dock="Top"/>
-                     
-                    </DockPanel>
+                     </DockPanel>
                 </Grid>
                 <!--#endregion-->
                 <!--#region 右下分区 -->
-
                 <Grid Grid.Row="3">
                     <DockPanel>
                         <TextBlock Text="新建启动方案" Margin="5" FontSize="25" Foreground="SkyBlue" DockPanel.Dock="Top"/>
-                       
+                        <GroupBox Header="使用一个项目模板" Foreground="LightGray">
+                            <StackPanel>
+                                <Button Content="新建BDS核心服务器" Click="CreateBDS_Button_Click"/>
+                                <Button Content="新建.jar核心服务器"/>
+                            </StackPanel>
+                        </GroupBox>
                     </DockPanel>
                 </Grid   >
                 <!--#endregion-->

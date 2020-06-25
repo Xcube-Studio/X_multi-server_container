@@ -16,25 +16,13 @@ using System.Windows.Shapes;
 namespace X_multi_server_container.Pages
 {
     /// <summary>
-    /// Interaction logic for Home.xaml
+    /// CreateSolution.xaml 的交互逻辑
     /// </summary>
-    public partial class Home : Page
+    public partial class CreateSolution : Page
     {
-        public Home()
+        public CreateSolution()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void CreateBDS_Button_Click(object sender, RoutedEventArgs e)
-        {
-            PageManager.ReplacePage(
-                ((Application.Current.MainWindow as MainWindow).ListView_Page.SelectedItem as PageItemModel).uuid,
-                 new Pages.CreateSolution(), "新建解决方案(BDS服务器模板)");
         }
     }
 }
