@@ -73,38 +73,45 @@
         </Style>
     </Window.Resources>
     <fw:AcrylicWindow.TitleBar>
-        <Grid WindowChrome.IsHitTestVisibleInChrome="True">
+        <Grid WindowChrome.IsHitTestVisibleInChrome="True" Margin="0,0,0,-3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button HorizontalAlignment="Left" FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE700;" Width="48" Foreground="White" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" />
-            <Rectangle Width="1" Fill="Gray" Grid.Column="1" />
-            <Grid x:Name="PageTabAreaReference" Margin="0,0,35,0" Grid.Column="2"/>
+            <!--<Rectangle Width="1" Fill="Gray" Grid.Column="1" />-->
+            <Grid x:Name="PageTabAreaReference" Margin="0,0,62,0" Grid.Column="2"/>
             <DockPanel  Grid.Column="2">
-                <ListView x:Name="ListView_Page" Margin="-3" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  MaxWidth="{Binding ElementName=PageTabAreaReference,Path=ActualWidth}" SelectionChanged="ListView_Page_SelectionChanged" HorizontalAlignment="Left" Style="{StaticResource ListBoxRevealStyle}" Background="{x:Null}" Foreground="{x:Null}" BorderBrush="{x:Null}">
+                <ListView x:Name="ListView_Page" MaxHeight="93" Margin="-3" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"  MaxWidth="{Binding ElementName=PageTabAreaReference,Path=ActualWidth}" SelectionChanged="ListView_Page_SelectionChanged" HorizontalAlignment="Left" Style="{StaticResource ListBoxRevealStyle}" Background="{x:Null}" Foreground="{x:Null}" BorderBrush="{x:Null}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <!--<VirtualizingStackPanel Orientation="Horizontal" />-->
-                            <WrapPanel Orientation="Horizontal"  />
+                            <WrapPanel Orientation="Horizontal" />
+                            <!--<ToolBarOverflowPanel  />-->
+                            <!--<TabPanel/>-->
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel  Height="25" Orientation="Horizontal"  >
-                                <TextBlock Text="{Binding PageTitle}" Width="80" VerticalAlignment="Center" Foreground="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                                <Button Content="&#xE711;" Padding="0" Click="Button_ClosePage_Click" Tag="{Binding uuid}" Width="30" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Margin="0,-2,-5,-2" />
-                            </StackPanel>
+                            <DockPanel  Height="28" >
+                                <TextBlock DockPanel.Dock="Left" Text="{Binding PageTitle}" MaxWidth="80" VerticalAlignment="Center" Foreground="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                <Button Content="&#xE711;" DockPanel.Dock="Right" Padding="0" Click="Button_ClosePage_Click" Tag="{Binding uuid}" Width="30" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Margin="0,-2,-5,-2" />
+                            </DockPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListView>
-                <Rectangle Width="1" Fill="Gray" DockPanel.Dock="Right"/>
-                <Button x:Name="Add" Margin="-0.5,0,0,1.5" MaxWidth="60" DockPanel.Dock="Right"  HorizontalAlignment="Left" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" Click="Button_AddPage_Click"   Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">
-                    <TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="White"/>
-                </Button>
+                <!--<Rectangle Width="1" Fill="Gray"  />-->
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <Button x:Name="Add" Margin="-0.5,0,0,1.5" MaxWidth="62"    HorizontalAlignment="Left" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" Click="Button_AddPage_Click"   Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">
+                        <TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="White"/>
+                    </Button>
+                    <!--<Rectangle Width="1" Fill="Gray" />-->
+                 </StackPanel>
             </DockPanel>
         </Grid>
     </fw:AcrylicWindow.TitleBar>
-    <Frame x:Name="PageContainer" NavigationUIVisibility="Hidden"/>
+    <DockPanel>
+        <!--<Separator DockPanel.Dock="Top"/>-->
+         <Frame x:Name="PageContainer" NavigationUIVisibility="Hidden"/>
+  </DockPanel>
 </fw:AcrylicWindow>
