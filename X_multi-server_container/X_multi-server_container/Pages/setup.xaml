@@ -47,7 +47,7 @@
                             </Border.Background>
                         </Border>
                         <TextBlock Text="最近" Margin="5" FontSize="30" Foreground="SkyBlue" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <ListView x:Name="listView" Background="{x:Null}" BorderBrush="{x:Null}" Margin="10,52,10,10">
+                        <ListView x:Name="listView" Style="{StaticResource ListBoxRevealStyle}" Background="{x:Null}" BorderBrush="{x:Null}" Margin="10,52,10,10">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Horizontal" />
