@@ -46,3 +46,7 @@ C:\Users\gaoxi\source\repos\X_multi-server_container\X_multi-server_container\X_
 C:\Users\gaoxi\source\repos\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\X_multi-server_container.csproj.CopyComplete
 C:\Users\gaoxi\source\repos\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\X_multi-server_container.exe
 C:\Users\gaoxi\source\repos\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\X_multi-server_container.pdb
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\bin\Debug\ConsoleControl.WPF.dll
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\bin\Debug\ConsoleControlAPI.dll
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\bin\Debug\ConsoleControl.WPF.pdb
+C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\bin\Debug\ConsoleControlAPI.pdb
