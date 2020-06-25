@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\
+C:\Users\gaoxi\source\repos\X_multi-server_container\X_multi-server_container\X_multi-server_container\obj\Debug\
 X_multi_server_container
 none
 false
 DEBUG;TRACE
-C:\Users\20441\Desktop\X_multi-server_container\X_multi-server_container\X_multi-server_container\App.xaml
-41297042407
+C:\Users\gaoxi\source\repos\X_multi-server_container\X_multi-server_container\X_multi-server_container\App.xaml
+6-1679755480
 
-10-1970491392
-16-743148781
-MainWindow.xaml;Pages\Home.xaml;Pages\Settings.xaml;Pages\Setup.xaml;
+12-1318662462
+16-721036432
+MainWindow.xaml;Pages\Home.xaml;Pages\NativeConsole.xaml;Pages\ProcessContainer.xaml;Pages\Settings.xaml;Pages\Setup.xaml;
 
 True
 

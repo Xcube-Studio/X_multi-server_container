@@ -31,9 +31,9 @@ namespace X_multi_server_container
             PageContainer.Navigate(PageManager.AddPage(new Pages.Setup(), "Welcome"));
             ListView_Page.SelectedIndex = 0;
         }
-        private void Add_Click(object sender, RoutedEventArgs e)
+        private void Button_AddPage_Click(object sender, RoutedEventArgs e)
         {
-            PageContainer.Navigate(PageManager.AddPage(new Pages.Home() { DataContext = new test() { testtxt = PageManager.UUIDTemp } }, "Page#" + PageManager.UUIDTemp));
+            PageContainer.Navigate(PageManager.AddPage(new Pages.Home(), "Page#" + PageManager.UUIDTemp));
             ListView_Page.SelectedIndex = ListView_Page.Items.Count - 1;
             try { PageContainer.RemoveBackEntry(); } catch { }
         }
@@ -41,11 +41,12 @@ namespace X_multi_server_container
         {
             if (ListView_Page.Items.Count == 1)
                 App.Current.Shutdown();
+            int index = ListView_Page.SelectedIndex;
             try
             {
-                int a = ListView_Page.SelectedIndex;
-                if (PageManager.ClosePage((sender as Button).Tag as string) == a)
-                    ListView_Page.SelectedIndex = a - 1;
+                int closeindex = PageManager.ClosePage((sender as Button).Tag as string);
+                if (closeindex == index)
+                    ListView_Page.SelectedIndex = closeindex == 0 ? 0 : closeindex - 1;
             }
             catch (Exception) { }
         }
@@ -61,20 +62,6 @@ namespace X_multi_server_container
                 }
             }
             catch (Exception) { ListView_Page.SelectedIndex = nextPage; }
-        }
-
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    throw new NotImplementedException();
-        //}
-    }
-    public class test
-    {
-        public string _testtxt = Guid.NewGuid().ToString();
-        public string testtxt
-        {
-            get { return _testtxt; }
-            set { _testtxt = value; }
         }
     }
 }
