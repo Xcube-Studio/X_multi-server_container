@@ -10,7 +10,7 @@
         Foreground="White"
         fw:AcrylicWindow.AcrylicWindowStyle="NoIcon"
         fw:AcrylicWindow.NoiseOpacity="0.01"
-        Background="Transparent"  
+        Background="Transparent"
         Height="450" Width="800" fw:AcrylicWindow.FallbackColor="Black" fw:AcrylicWindow.TintColor="Black">
     <Window.Resources>
         <Style x:Key="FocusVisual">
