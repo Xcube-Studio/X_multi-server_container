@@ -22,13 +22,22 @@
             <TextBlock Text="Home Page"  FontSize="40" HorizontalAlignment="Center"/>
             <TextBlock Text="{Binding uuid}"  FontSize="10" HorizontalAlignment="Center" Foreground="Gray"/>
         </StackPanel>
-        <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
-            <Button>
-                <TextBlock Text="新建控制台面板"  FontSize="20"/>
-            </Button>
-            <Button Click="CreateProcessContainer_Button_Click">
+        <TabPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="400">
+            <Grid>
+                <Button Click="GotoSetupPageButton_Click" Height="60">
+                    <TextBlock Text="   打开启动页   "  FontSize="20"/>
+                </Button>
+            </Grid>
+            <Grid>
+                <Button Click="Button_Click">
+                <TextBlock Text="新建控制台面板"  FontSize="20" />
+                </Button>
+            </Grid>
+            <Grid>
+                <Button Click="CreateProcessContainer_Button_Click">
                 <TextBlock Text="新建进程容器"  FontSize="20"/>
-            </Button> 
-        </WrapPanel>
+                </Button>
+            </Grid>
+        </TabPanel>
     </Grid>
 </Page>
