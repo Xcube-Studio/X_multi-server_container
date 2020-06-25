@@ -71,6 +71,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!--<Style TargetType="ToolTip" />-->
     </Window.Resources>
     <fw:AcrylicWindow.TitleBar>
         <Grid WindowChrome.IsHitTestVisibleInChrome="True" Margin="0,0,0,-3">
@@ -93,25 +94,48 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <DockPanel  Height="28" >
-                                <TextBlock DockPanel.Dock="Left" Text="{Binding PageTitle}" MaxWidth="80" VerticalAlignment="Center" Foreground="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                                <Button Content="&#xE711;" DockPanel.Dock="Right" Padding="0" Click="Button_ClosePage_Click" Tag="{Binding uuid}" Width="30" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Margin="0,-2,-5,-2" />
+                            <DockPanel  Height="28">
+                                <TextBlock DockPanel.Dock="Left" Text="{Binding PageTitle}" MaxWidth="80" VerticalAlignment="Center" Foreground="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}">
+                                    <TextBlock.ToolTip>
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="页面标题:"/>
+                                                <TextBlock Text="{Binding PageTitle}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="页面UUID:"/>
+                                                <TextBlock Text="{Binding uuid}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <Button Content="&#xE711;" DockPanel.Dock="Right" Padding="0" Click="Button_ClosePage_Click" Tag="{Binding uuid}" Width="30" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Margin="0,-2,-5,-2">
+                                    <Button.ToolTip>
+                                        <StackPanel >
+                                            <StackPanel Orientation="Horizontal" >
+                                                <TextBlock Text="点击关闭"/>
+                                                <TextBlock Text="{Binding PageTitle}"/>
+                                                <TextBlock Text="页面"/>
+                                            </StackPanel>
+                                         </StackPanel>
+                                    </Button.ToolTip>
+                                </Button>
                             </DockPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListView>
                 <!--<Rectangle Width="1" Fill="Gray"  />-->
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                    <Button x:Name="Add" Margin="-0.5,0,0,1.5" MaxWidth="62"    HorizontalAlignment="Left" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" Click="Button_AddPage_Click"   Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">
+                    <Button x:Name="Add" Margin="-0.5,0,0,1.5" MaxWidth="62" ToolTip="新建页面(HomePage)"   HorizontalAlignment="Left" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" Click="Button_AddPage_Click"   Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">
                         <TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="White"/>
                     </Button>
                     <!--<Rectangle Width="1" Fill="Gray" />-->
-                 </StackPanel>
+                </StackPanel>
             </DockPanel>
         </Grid>
     </fw:AcrylicWindow.TitleBar>
     <DockPanel>
         <!--<Separator DockPanel.Dock="Top"/>-->
-         <Frame x:Name="PageContainer" NavigationUIVisibility="Hidden"/>
-  </DockPanel>
+        <Frame x:Name="PageContainer" NavigationUIVisibility="Hidden"/>
+    </DockPanel>
 </fw:AcrylicWindow>
