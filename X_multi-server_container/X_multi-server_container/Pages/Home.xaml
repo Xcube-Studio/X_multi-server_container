@@ -12,11 +12,23 @@
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="Wheat" />
         </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource ButtonAccentRevealStyle}">
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="Margin" Value="10" />
+        </Style>
     </Page.Resources>
-    <DockPanel>
+    <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" DockPanel.Dock="Top">
             <TextBlock Text="Home Page"  FontSize="40" HorizontalAlignment="Center"/>
-            <TextBlock Text="{Binding uuid}"  FontSize="20"/>
+            <TextBlock Text="{Binding uuid}"  FontSize="10" HorizontalAlignment="Center" Foreground="Gray"/>
         </StackPanel>
-    </DockPanel>
+        <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
+            <Button>
+                <TextBlock Text="新建控制台面板"  FontSize="20"/>
+            </Button>
+            <Button Click="CreateProcessContainer_Button_Click">
+                <TextBlock Text="新建进程容器"  FontSize="20"/>
+            </Button> 
+        </WrapPanel>
+    </Grid>
 </Page>
