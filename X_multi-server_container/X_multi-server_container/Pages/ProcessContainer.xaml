@@ -15,6 +15,7 @@
         </Style>
         <Style TargetType="Button" BasedOn="{StaticResource ButtonRevealStyle}">
             <Setter Property="FontSize" Value="15" />
+            <Setter Property="Padding" Value="10,2" />
         </Style>
         <Style TargetType="TextBox" BasedOn="{StaticResource   TextBoxRevealStyle}">
             <Setter Property="FontSize" Value="15" />
@@ -25,15 +26,16 @@
         <Expander DockPanel.Dock="Top">
             <Expander.Header>
                 <DockPanel Width="{Binding ElementName=ExpanderContentWidth,Path=ActualWidth}">
-                    <Button Content="启动" DockPanel.Dock="Right" Padding="10,2"/>
+                    <Button Content="启动" DockPanel.Dock="Right" Click="StartButton_Click"/>
+                    <TextBlock x:Name="StartInfoText" Text="点击运行=>" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="10,0"/>
                     <TextBlock Text="设置" DockPanel.Dock="Left" FontSize="18" VerticalAlignment="Center"/>
                 </DockPanel>
             </Expander.Header>
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="目标程序(控制台程序): " VerticalAlignment="Center"/>
-                    <TextBox x:Name="programmarPath" MinWidth="100" Margin="5,0,0,0"/>
-                    <Button Content="打开" Margin="5,0,0,0" Click="Button_Click"/>
+                    <Button Content="查找" Margin="5,0,0,0" Click="Button_Click"/>
+                    <TextBlock Text="目标程序(控制台程序):" VerticalAlignment="Center"/>
+                    <TextBox Text="C:\Users\gaoxi\source\repos\CQ-ConnectTo-BDX\bdxt\bedrock_server.exe" x:Name="programmarPath" MinWidth="100" Margin="5,0,0,0"/>
                 </StackPanel>
             </StackPanel>
         </Expander>
@@ -43,9 +45,9 @@
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox />
-            <Button Content="发送" Grid.Column="2" Padding="10,5"/>
+            <TextBox x:Name="Input"/>
+            <Button Content="发送" Grid.Column="2" Padding="10,5" Click="SendButton_Click"/>
         </Grid>
-        <RichTextBox Background="{x:Null}" DockPanel.Dock="Top" Margin="7"/>
+        <RichTextBox x:Name="Cos" Background="{x:Null}" DockPanel.Dock="Top" Margin="7" Foreground="AliceBlue" Block.LineHeight="1"/>
     </DockPanel>
 </Page>

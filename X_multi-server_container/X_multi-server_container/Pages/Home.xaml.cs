@@ -25,16 +25,25 @@ namespace X_multi_server_container.Pages
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void CreateBDS_Button_Click(object sender, RoutedEventArgs e)
+        private void CreateProcessContainer_Button_Click(object sender, RoutedEventArgs e)
         {
             PageManager.ReplacePage(
                 ((Application.Current.MainWindow as MainWindow).ListView_Page.SelectedItem as PageItemModel).uuid,
-                 new Pages.CreateSolution(), "新建解决方案(BDS服务器模板)");
+                 new Pages.ProcessContainer(), "进程容器");
         }
-    }
+
+        private void GotoSetupPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageManager.ReplacePage(
+              ((Application.Current.MainWindow as MainWindow).ListView_Page.SelectedItem as PageItemModel).uuid,
+               new Pages.Setup(), "启动页");
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            PageManager.ReplacePage(
+             ((Application.Current.MainWindow as MainWindow).ListView_Page.SelectedItem as PageItemModel).uuid,
+             new Pages.NativeConsole(), "Console");
+        }
+     }
 }
