@@ -31,7 +31,12 @@
             <Grid/>
             <Grid>
                 <Button Click="CreateProcessContainer_Button_Click">
-                <TextBlock Text="新建进程容器"  FontSize="20"/>
+                    <TextBlock Text="新建进程容器"  FontSize="20"/>
+                </Button>
+            </Grid>
+            <Grid>
+                <Button  >
+                    <TextBlock Text="没卵用的按钮"  FontSize="20"/>
                 </Button>
             </Grid>
         </TabPanel>
