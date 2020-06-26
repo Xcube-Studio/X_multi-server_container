@@ -80,7 +80,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button HorizontalAlignment="Left" FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE700;" Width="48" Foreground="White" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" />
+            <Button x:Name="Ctrl" HorizontalAlignment="Left" FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE700;" Width="48" Foreground="White" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" />
             <!--<Rectangle Width="1" Fill="Gray" Grid.Column="1" />-->
             <Grid x:Name="PageTabAreaReference" Margin="0,0,62,0" Grid.Column="2"/>
             <DockPanel  Grid.Column="2">

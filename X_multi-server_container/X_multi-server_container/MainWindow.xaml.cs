@@ -23,12 +23,14 @@ namespace X_multi_server_container
     /// </summary>
     public partial class MainWindow : AcrylicWindow
     {
+        public static Button Button;
         public MainWindow()
         {
             InitializeComponent();
             ListView_Page.ItemsSource = PageManager.PageItems;
             PageContainer.Navigate(PageManager.AddPage(new Pages.Setup(), "Welcome"));
             ListView_Page.SelectedIndex = 0;
+            Button = Ctrl;
         }
         private void Button_AddPage_Click(object sender, RoutedEventArgs e)
         {

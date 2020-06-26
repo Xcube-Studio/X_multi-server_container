@@ -7,7 +7,7 @@
       xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ProcessContainer">
+      Title="ProcessContainer" Loaded="Page_Loaded" Unloaded="Page_Unloaded">
     <Page.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="Wheat" />
@@ -17,43 +17,62 @@
             <Setter Property="FontSize" Value="15" />
             <Setter Property="Padding" Value="10,2" />
         </Style>
-        <Style TargetType="TextBox" BasedOn="{StaticResource   TextBoxRevealStyle}">
-            <Setter Property="FontSize" Value="15" />
+        <SolidColorBrush x:Key="TextBox.Static.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="TextBox.Focus.Border" Color="Transparent"/>
+        <Style x:Key="TextBoxStyle1" TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                </MultiTrigger>
+            </Style.Triggers>
         </Style>
     </Page.Resources>
-    <DockPanel>
-        <Grid x:Name="ExpanderContentWidth" Margin="30,0,0,0" DockPanel.Dock="Top"/>
-        <Expander DockPanel.Dock="Top">
-            <Expander.Header>
-                <DockPanel Width="{Binding ElementName=ExpanderContentWidth,Path=ActualWidth}">
-                    <Button x:Name="StartButton" Content="启动" DockPanel.Dock="Right" Click="StartButton_Click"/>
-                    <TextBlock x:Name="StartInfoText" Text="点击运行=>" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="10,-8"/>
-                    <TextBlock Text="设置" DockPanel.Dock="Left" FontSize="18" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Expander.Header>
-            <StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="查找" Margin="5,0,0,0" Click="FindFileButton_Click"/>
-                    <TextBlock Text="目标程序(控制台程序):" VerticalAlignment="Center"/>
-                    <TextBox Text="cmd.exe" x:Name="programmarPath" MinWidth="100" Margin="5,0,0,0"/>
-                </StackPanel>
-            </StackPanel>
-        </Expander>
-        <Grid DockPanel.Dock="Bottom" Margin="7">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Button Content="↑" Background="{x:Null}" Grid.Column="0" Padding="10,5" FontFamily="Microsoft YaHei" Click="UP_Button_Click"/>
-            <Button Content="↓" Background="{x:Null}" Grid.Column="2" Padding="10,5" FontFamily="Microsoft YaHei" Click="DOWN_Button_Click"/>
-            <TextBox x:Name="Input" Grid.Column="4" Style="{StaticResource TextBoxRevealStyle}" Background="{x:Null}" Foreground="Wheat" PreviewKeyUp="Input_PreviewKeyDown"  Tag="0"/>
-            <Button Content="发送" Background="{x:Null}" Grid.Column="6" Padding="10,5" Click="SendButton_Click"/>
-        </Grid>
-        <TextBox x:Name="Cos" Background="{x:Null}" DockPanel.Dock="Top" Margin="7" Foreground="AliceBlue" Block.LineHeight="1"/>
-    </DockPanel>
+    <Grid>
+        <Border BorderThickness="1" CornerRadius="2" x:Name="Board" Height="30" VerticalAlignment="Bottom" Background="#19FFFFFF" BorderBrush="#3FFFFFFF" Margin="1,0,1,1" >
+            <Grid>
+                <Button Content="&#xE74A;" Background="{x:Null}" Padding="10,5" FontFamily="Segoe MDL2 Assets" Click="UP_Button_Click" HorizontalAlignment="Left" FontSize="12" Width="40"/>
+                <Button Content="&#xE74B;" Background="{x:Null}" Padding="10,5" FontFamily="Segoe MDL2 Assets" Click="DOWN_Button_Click" HorizontalAlignment="Left" Margin="40,0,0,0" FontSize="12" Width="40"/>
+                <fw:AcrylicPanel Margin="80,0,49,0" TintColor="White" NoiseOpacity="0">
+                    <TextBox Style="{StaticResource TextBoxStyle1}" x:Name="Input" Foreground="Wheat" PreviewKeyUp="Input_PreviewKeyDown"  Tag="0" Background="{x:Null}" VerticalContentAlignment="Center" FontSize="14" CaretBrush="White"/>
+                </fw:AcrylicPanel>
+                <Button Content="发送" Background="{x:Null}" Padding="10,5" Click="SendButton_Click" HorizontalAlignment="Right" VerticalAlignment="Top" Height="31" FontSize="12" FontFamily="Microsoft YaHei UI Light" Width="49"/>
+            </Grid>
+        </Border>
+        <TextBox TextWrapping="Wrap" VerticalScrollBarVisibility="Hidden" IsReadOnly="True" x:Name="Cos" Background="{x:Null}" DockPanel.Dock="Top" Margin="10,10,10,30" Foreground="White" Block.LineHeight="1" Style="{DynamicResource TextBoxStyle1}" FontFamily="Consolas" CaretBrush="#FFFFF7E8" HorizontalScrollBarVisibility="Disabled" FontSize="13"/>
+    </Grid>
 </Page>
