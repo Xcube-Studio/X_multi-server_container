@@ -28,14 +28,15 @@
                     <TextBlock Text="   打开启动页   "  FontSize="20"/>
                 </Button>
             </Grid>
+            <Grid/>
             <Grid>
-                <Button Click="Button_Click">
-                <TextBlock Text="新建控制台面板"  FontSize="20" />
+                <Button Click="CreateProcessContainer_Button_Click">
+                    <TextBlock Text="新建进程容器"  FontSize="20"/>
                 </Button>
             </Grid>
             <Grid>
-                <Button Click="CreateProcessContainer_Button_Click">
-                <TextBlock Text="新建进程容器"  FontSize="20"/>
+                <Button  >
+                    <TextBlock Text="没卵用的按钮"  FontSize="20"/>
                 </Button>
             </Grid>
         </TabPanel>

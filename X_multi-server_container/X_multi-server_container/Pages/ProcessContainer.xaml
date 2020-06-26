@@ -26,28 +26,34 @@
         <Expander DockPanel.Dock="Top">
             <Expander.Header>
                 <DockPanel Width="{Binding ElementName=ExpanderContentWidth,Path=ActualWidth}">
-                    <Button Content="启动" DockPanel.Dock="Right" Click="StartButton_Click"/>
-                    <TextBlock x:Name="StartInfoText" Text="点击运行=>" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="10,0"/>
+                    <Button x:Name="StartButton" Content="启动" DockPanel.Dock="Right" Click="StartButton_Click"/>
+                    <TextBlock x:Name="StartInfoText" Text="点击运行=>" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="10,-8"/>
                     <TextBlock Text="设置" DockPanel.Dock="Left" FontSize="18" VerticalAlignment="Center"/>
                 </DockPanel>
             </Expander.Header>
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="查找" Margin="5,0,0,0" Click="Button_Click"/>
+                    <Button Content="查找" Margin="5,0,0,0" Click="FindFileButton_Click"/>
                     <TextBlock Text="目标程序(控制台程序):" VerticalAlignment="Center"/>
-                    <TextBox Text="C:\Users\gaoxi\source\repos\CQ-ConnectTo-BDX\bdxt\bedrock_server.exe" x:Name="programmarPath" MinWidth="100" Margin="5,0,0,0"/>
+                    <TextBox Text="cmd.exe" x:Name="programmarPath" MinWidth="100" Margin="5,0,0,0"/>
                 </StackPanel>
             </StackPanel>
         </Expander>
         <Grid DockPanel.Dock="Bottom" Margin="7">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="Input"/>
-            <Button Content="发送" Grid.Column="2" Padding="10,5" Click="SendButton_Click"/>
+            <Button Content="↑" Background="{x:Null}" Grid.Column="0" Padding="10,5" FontFamily="Microsoft YaHei" Click="UP_Button_Click"/>
+            <Button Content="↓" Background="{x:Null}" Grid.Column="2" Padding="10,5" FontFamily="Microsoft YaHei" Click="DOWN_Button_Click"/>
+            <TextBox x:Name="Input" Grid.Column="4" Style="{StaticResource TextBoxRevealStyle}" Background="{x:Null}" Foreground="Wheat" PreviewKeyUp="Input_PreviewKeyDown"  Tag="0"/>
+            <Button Content="发送" Background="{x:Null}" Grid.Column="6" Padding="10,5" Click="SendButton_Click"/>
         </Grid>
-        <RichTextBox x:Name="Cos" Background="{x:Null}" DockPanel.Dock="Top" Margin="7" Foreground="AliceBlue" Block.LineHeight="1"/>
+        <TextBox x:Name="Cos" Background="{x:Null}" DockPanel.Dock="Top" Margin="7" Foreground="AliceBlue" Block.LineHeight="1"/>
     </DockPanel>
 </Page>

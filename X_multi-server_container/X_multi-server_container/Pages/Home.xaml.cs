@@ -38,12 +38,5 @@ namespace X_multi_server_container.Pages
               ((Application.Current.MainWindow as MainWindow).ListView_Page.SelectedItem as PageItemModel).uuid,
                new Pages.Setup(), "启动页");
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            PageManager.ReplacePage(
-             ((Application.Current.MainWindow as MainWindow).ListView_Page.SelectedItem as PageItemModel).uuid,
-             new Pages.NativeConsole(), "Console");
-        }
      }
 }
