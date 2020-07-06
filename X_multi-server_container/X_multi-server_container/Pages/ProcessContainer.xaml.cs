@@ -42,81 +42,86 @@ namespace X_multi_server_container.Pages
             CosViewer.ScrollToEnd();
         }
 
-        private void StartButton_Click(object sender, RoutedEventArgs e)
-        {
-            /*
-            string bdspath = programmarPath.Text;
-            StartInfoText.Text = "正在启动";
-            if (pState != false)
-            {
-                StartInfoText.Text = "正在终止\n" + p.Id.ToString();
-                p.Close();
-                 pState = false;
-                StartInfoText.Text = "已终止";
-                StartButton.Content = "启动";
-                 return;
-            }
-            pState = null;
-             StartButton.Content = "终止";
-            _ = Task.Run(() =>
-             {
-                 try
-                 {
-                     p = new Process();
-                     p.StartInfo.FileName = bdspath;//控制台程序的路径
-                     p.StartInfo.WorkingDirectory = Path.GetDirectoryName(bdspath);
-                     p.StartInfo.UseShellExecute = false;
-                     p.StartInfo.RedirectStandardOutput = true;
-                     p.StartInfo.RedirectStandardInput = true;
-                     p.StartInfo.RedirectStandardError = true;
-                     p.StartInfo.CreateNoWindow = true;
-                     p.EnableRaisingEvents = true;
-                     p.Start();
-                     p.BeginErrorReadLine();
-                     p.ErrorDataReceived += (_s, _e) => WL(_e.Data);
-                     p.BeginOutputReadLine();
-                     p.OutputDataReceived += (_s, _e) => WL(_e.Data);
-                     p.Exited += (_s, _e) =>
-                    {
-                        WL("---Exited---");
-                        Dispatcher.Invoke(() => StartInfoText.Text = "已退出");
-                        pState = false;
-                    };
-                     Dispatcher.Invoke(() => StartInfoText.Text = "已启动" + p.ProcessName + "\n进程ID:" + p.Id);
-                     pState = true;
-                 }
-                 catch (Exception err)
-                 { Dispatcher.Invoke(() => StartInfoText.Text = "启动失败\n" + err.Message); pState = false; }
-             });
-             */
-        }
+        //private void StartButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    /*
+        //    string bdspath = programmarPath.Text;
+        //    StartInfoText.Text = "正在启动";
+        //    if (pState != false)
+        //    {
+        //        StartInfoText.Text = "正在终止\n" + p.Id.ToString();
+        //        p.Close();
+        //         pState = false;
+        //        StartInfoText.Text = "已终止";
+        //        StartButton.Content = "启动";
+        //         return;
+        //    }
+        //    pState = null;
+        //     StartButton.Content = "终止";
+        //    _ = Task.Run(() =>
+        //     {
+        //         try
+        //         {
+        //             p = new Process();
+        //             p.StartInfo.FileName = bdspath;//控制台程序的路径
+        //             p.StartInfo.WorkingDirectory = Path.GetDirectoryName(bdspath);
+        //             p.StartInfo.UseShellExecute = false;
+        //             p.StartInfo.RedirectStandardOutput = true;
+        //             p.StartInfo.RedirectStandardInput = true;
+        //             p.StartInfo.RedirectStandardError = true;
+        //             p.StartInfo.CreateNoWindow = true;
+        //             p.EnableRaisingEvents = true;
+        //             p.Start();
+        //             p.BeginErrorReadLine();
+        //             p.ErrorDataReceived += (_s, _e) => WL(_e.Data);
+        //             p.BeginOutputReadLine();
+        //             p.OutputDataReceived += (_s, _e) => WL(_e.Data);
+        //             p.Exited += (_s, _e) =>
+        //            {
+        //                WL("---Exited---");
+        //                Dispatcher.Invoke(() => StartInfoText.Text = "已退出");
+        //                pState = false;
+        //            };
+        //             Dispatcher.Invoke(() => StartInfoText.Text = "已启动" + p.ProcessName + "\n进程ID:" + p.Id);
+        //             pState = true;
+        //         }
+        //         catch (Exception err)
+        //         { Dispatcher.Invoke(() => StartInfoText.Text = "启动失败\n" + err.Message); pState = false; }
+        //     });
+        //     */
+        //}
         #endregion
         #region 输入逻辑
         List<string> cmdHistory = new List<string>() { "" };
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
-            string cmd = Input.Text;
+            if (SendCMDButton.Content.ToString() == "发送")
+            {
+                string cmd = Input.Text;
 #if DEBUG //输入回显
             WriteLine(">" + cmd);
 #endif
-            int index = int.Parse(Input.Tag.ToString());
-            if (index < cmdHistory.Count - 1)
-            {
-                string tmpHis = cmdHistory[index];
-                for (int i = index + 1; i < cmdHistory.Count; i++)
+                int index = int.Parse(Input.Tag.ToString());
+                if (index < cmdHistory.Count - 1)
                 {
-                    cmdHistory[i - 1] = cmdHistory[i];
+                    string tmpHis = cmdHistory[index];
+                    for (int i = index + 1; i < cmdHistory.Count; i++)
+                        cmdHistory[i - 1] = cmdHistory[i];
+                    cmdHistory[cmdHistory.Count - 1] = tmpHis;
                 }
-                cmdHistory[cmdHistory.Count - 1] = tmpHis;
+                Input.Clear();
+                Input.Tag = cmdHistory.Count;
+                cmdHistory.Add("");
+                try
+                {
+                    p.StandardInput.WriteLine(cmd);
+                }
+                catch (Exception) { }
             }
-            Input.Clear();
-            Input.Tag = cmdHistory.Count;
-            cmdHistory.Add("");
-            try
+            else
             {
-                p.StandardInput.WriteLine(cmd);
+                HideInputPanel();
             }
-            catch (Exception) { }
         }
         private void Input_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -125,7 +130,19 @@ namespace X_multi_server_container.Pages
                 case Key.Up: UPSend(); break;
                 case Key.Down: DOWNSend(); break;
                 case Key.Enter: SendCMDButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent)); ; break;
-                default: cmdHistory[int.Parse(Input.Tag.ToString())] = Input.Text; break;
+                default:
+                    cmdHistory[int.Parse(Input.Tag.ToString())] = Input.Text;
+                    if (Input.Text.Length == 0)
+                    {
+                        SendCMDButton.Content = "︾";
+                        SendCMDButton.FontSize = 21;
+                    }
+                    else
+                    {
+                        SendCMDButton.Content = "发送";
+                        SendCMDButton.FontSize = 14;
+                    }
+                    break;
             }
         }
         private void UP_Button_Click(object sender, RoutedEventArgs e) => UPSend();
@@ -137,7 +154,6 @@ namespace X_multi_server_container.Pages
             Input.Text = cmdHistory[index];
             if (index + 2 == cmdHistory.Count && string.IsNullOrEmpty(cmdHistory.Last()))
                 cmdHistory.RemoveAt(index + 1);
-
         }
         private void DOWNSend()
         {
@@ -215,5 +231,14 @@ namespace X_multi_server_container.Pages
             MainWindow.Button.Click -= Button_Click;
         }
         #endregion
+
+        private void Cos_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (a==false)
+            {
+            EchoInputPanel();
+            Input.Focus();
+             }
+        }
     }
 }
