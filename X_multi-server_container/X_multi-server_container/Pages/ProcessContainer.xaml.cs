@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using Newtonsoft.Json.Linq;
 using SourceChord.FluentWPF;
 
 namespace X_multi_server_container.Pages
@@ -23,12 +25,23 @@ namespace X_multi_server_container.Pages
     /// </summary>
     public partial class ProcessContainer : Page
     {
+        #region 启动参数
+        public JObject StPar = new JObject() {
+            new JProperty("basicFilePath", "cmd")
+        };
+        #endregion
         public ProcessContainer()
         {
             InitializeComponent();
         }
         #region Main   
         private Process p;
+        public void WriteLine(object content)
+        {
+            Cos.AppendText(content.ToString().TrimEnd(' ', '\n', '\r') + Environment.NewLine);
+            CosViewer.ScrollToEnd();
+        }
+
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             /*
@@ -77,11 +90,25 @@ namespace X_multi_server_container.Pages
              });
              */
         }
-
+        #endregion
+        #region 输入逻辑
         List<string> cmdHistory = new List<string>() { "" };
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             string cmd = Input.Text;
+#if DEBUG //输入回显
+            WriteLine(">" + cmd);
+#endif
+            int index = int.Parse(Input.Tag.ToString());
+            if (index < cmdHistory.Count - 1)
+            {
+                string tmpHis = cmdHistory[index];
+                for (int i = index + 1; i < cmdHistory.Count; i++)
+                {
+                    cmdHistory[i - 1] = cmdHistory[i];
+                }
+                cmdHistory[cmdHistory.Count - 1] = tmpHis;
+            }
             Input.Clear();
             Input.Tag = cmdHistory.Count;
             cmdHistory.Add("");
@@ -91,13 +118,13 @@ namespace X_multi_server_container.Pages
             }
             catch (Exception) { }
         }
-        #endregion
         private void Input_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
             {
                 case Key.Up: UPSend(); break;
                 case Key.Down: DOWNSend(); break;
+                case Key.Enter: SendCMDButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent)); ; break;
                 default: cmdHistory[int.Parse(Input.Tag.ToString())] = Input.Text; break;
             }
         }
@@ -108,22 +135,27 @@ namespace X_multi_server_container.Pages
             int index = Math.Max(0, int.Parse(Input.Tag.ToString()) - 1);
             Input.Tag = index;
             Input.Text = cmdHistory[index];
+            if (index + 2 == cmdHistory.Count && string.IsNullOrEmpty(cmdHistory.Last()))
+                cmdHistory.RemoveAt(index + 1);
 
         }
         private void DOWNSend()
         {
-            int index = Math.Min(cmdHistory.Count - 1, int.Parse(Input.Tag.ToString()) + 1);
+            int index = int.Parse(Input.Tag.ToString()) + 1;
+            if (index == cmdHistory.Count && !string.IsNullOrEmpty(cmdHistory.Last()))
+                cmdHistory.Add("");
+            index = Math.Min(cmdHistory.Count - 1, index);
             Input.Tag = index;
             Input.Text = cmdHistory[index];
         }
-
+        #endregion
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             MainWindow.Button.Click += Button_Click;
             if (p == null)
             {
                 p = new Process();
-                p.StartInfo.FileName = "cmd";
+                p.StartInfo.FileName = StPar.Value<string>("basicFilePath");
                 p.StartInfo.WorkingDirectory = Path.GetDirectoryName(p.StartInfo.FileName);
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.RedirectStandardOutput = true;
@@ -131,71 +163,57 @@ namespace X_multi_server_container.Pages
                 p.StartInfo.RedirectStandardError = true;
                 p.StartInfo.CreateNoWindow = true;
                 p.EnableRaisingEvents = true;
-
                 p.Start();
-
-                p.BeginErrorReadLine(); p.BeginOutputReadLine();
-                p.OutputDataReceived += P_OutputDataReceived;
-                p.ErrorDataReceived += P_ErrorDataReceived;
+                p.BeginErrorReadLine();
+                p.ErrorDataReceived += (_s, _e) => Dispatcher.Invoke((() => { WriteLine(_e.Data); }));
+                p.BeginOutputReadLine();
+                p.OutputDataReceived += (_s, _e) => Dispatcher.Invoke((() => { WriteLine(_e.Data); }));
             }
-
-            Storyboard sb = new Storyboard();//首先实例化一个故事板
-            DoubleAnimation yd5 = new DoubleAnimation(Board.ActualWidth, 0, new Duration(TimeSpan.FromSeconds(0.35)));//浮点动画定义了开始值和起始值
-            Board.RenderTransform = new TranslateTransform();//在二维x-y坐标系统内平移(移动)对象
-            yd5.AutoReverse = false;//设置可以进行反转
-            Storyboard.SetTarget(yd5, Board);//绑定动画为这个按钮执行的浮点动画
-            Storyboard.SetTargetProperty(yd5, new PropertyPath("RenderTransform.X"));//依赖的属性
-            sb.Children.Add(yd5);//向故事板中加入此浮点动画
-            sb.Begin();//播放此动画
+            Board.Height = 0;
+            EchoInputPanel();
+        }
+        #region 面板动画
+        bool a;
+        private void EchoInputPanel()
+        {
+            Storyboard storyboard = new Storyboard();
+            DoubleAnimationUsingKeyFrames keyFramesAnimation = new DoubleAnimationUsingKeyFrames();
+            keyFramesAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(33, TimeSpan.FromSeconds(0.35)));
+            Storyboard.SetTarget(keyFramesAnimation, Board);
+            Storyboard.SetTargetProperty(keyFramesAnimation, new PropertyPath("(FrameworkElement.Height)"));
+            storyboard.Children.Add(keyFramesAnimation);
+            storyboard.Begin();
             a = true;
         }
-        private void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        private void HideInputPanel()
         {
-            Dispatcher.Invoke(() =>
-            {
-                Cos.AppendText(e.Data + Environment.NewLine);
-                Cos.ScrollToEnd();
-            });
+            #region 旧的参考
+            //Storyboard sb = new Storyboard();//首先实例化一个故事板
+            //DoubleAnimation yd5 = new DoubleAnimation(Board.ActualHeight, 0, new Duration(TimeSpan.FromSeconds(0.35)));//浮点动画定义了开始值和起始值
+            //Board.RenderTransform = new TranslateTransform();//在二维x-y坐标系统内平移(移动)对象
+            //yd5.AutoReverse = false;//设置可以进行反转
+            //Storyboard.SetTarget(yd5, Board);//绑定动画为这个按钮执行的浮点动画
+            //Storyboard.SetTargetProperty(yd5, new PropertyPath("RenderTransform.Y"));//依赖的属性
+            //sb.Children.Add(yd5);//向故事板中加入此浮点动画
+            //sb.Begin();//播放此动画
+            #endregion
+            Storyboard storyboard = new Storyboard();
+            DoubleAnimationUsingKeyFrames keyFramesAnimation = new DoubleAnimationUsingKeyFrames();
+            keyFramesAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(0, TimeSpan.FromSeconds(0.35)));
+            Storyboard.SetTarget(keyFramesAnimation, Board);
+            Storyboard.SetTargetProperty(keyFramesAnimation, new PropertyPath("(FrameworkElement.Height)"));
+            storyboard.Children.Add(keyFramesAnimation);
+            storyboard.Begin();
+            a = false;
         }
-        private void P_OutputDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                Cos.AppendText(e.Data + Environment.NewLine);
-                Cos.ScrollToEnd();
-            });
-        }
-        bool a;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (a)
-            {
-                Storyboard sb = new Storyboard();//首先实例化一个故事板
-                DoubleAnimation yd5 = new DoubleAnimation(0, Board.ActualWidth, new Duration(TimeSpan.FromSeconds(0.35)));//浮点动画定义了开始值和起始值
-                Board.RenderTransform = new TranslateTransform();//在二维x-y坐标系统内平移(移动)对象
-                yd5.AutoReverse = false;//设置可以进行反转
-                Storyboard.SetTarget(yd5, Board);//绑定动画为这个按钮执行的浮点动画
-                Storyboard.SetTargetProperty(yd5, new PropertyPath("RenderTransform.X"));//依赖的属性
-                sb.Children.Add(yd5);//向故事板中加入此浮点动画
-                sb.Begin();//播放此动画
-                a = true; a = false;
-            }
-            else
-            {
-                Storyboard sb = new Storyboard();//首先实例化一个故事板
-                DoubleAnimation yd5 = new DoubleAnimation(Board.ActualWidth, 0, new Duration(TimeSpan.FromSeconds(0.35)));//浮点动画定义了开始值和起始值
-                Board.RenderTransform = new TranslateTransform();//在二维x-y坐标系统内平移(移动)对象
-                yd5.AutoReverse = false;//设置可以进行反转
-                Storyboard.SetTarget(yd5, Board);//绑定动画为这个按钮执行的浮点动画
-                Storyboard.SetTargetProperty(yd5, new PropertyPath("RenderTransform.X"));//依赖的属性
-                sb.Children.Add(yd5);//向故事板中加入此浮点动画
-                sb.Begin();//播放此动画
-                a = true;
-            }
+            if (a) HideInputPanel(); else EchoInputPanel();
         }
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
             MainWindow.Button.Click -= Button_Click;
         }
+        #endregion
     }
 }

@@ -24,5 +24,15 @@ namespace X_multi_server_container.Pages
         {
             InitializeComponent();
         }
+
+        private void OpenSlnButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BDSTemplateButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
