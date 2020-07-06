@@ -506,19 +506,22 @@
                                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
                             </Border.Background>
                         </Border>
-                        <Button Style="{StaticResource ButtonRevealStyle}" x:Name="button3" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Top" Margin="10,76,10,0" Padding="0" FontSize="18">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <TextBlock Text=" 适用于Minecraft:Java Edition的方案" FontSize="13"/>
-                            </StackPanel>
-                        </Button>
-                        <Button Style="{StaticResource ButtonRevealStyle}" x:Name="button4" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Top" Margin="10,104,10,0" Padding="0" FontSize="18">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <TextBlock Text=" 适用于Minecraft:Bedrock Edition的方案" FontSize="13"/>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
+                        <StackPanel VerticalAlignment="Top" Margin="10,76,10,0" HorizontalAlignment="Left">
+                            <Button Style="{StaticResource ButtonRevealStyle}"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"  Padding="0" FontSize="18">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <TextBlock Text=" 适用于基于java核心的启动方案模板" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Style="{StaticResource ButtonRevealStyle}"   Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"  Padding="0" FontSize="18">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <TextBlock Text=" 适用于基于BDS核心的启动方案模板" FontSize="13"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                     </Grid>
                 </fw:AcrylicPanel>
                 <!--#endregion-->
             </Grid>
