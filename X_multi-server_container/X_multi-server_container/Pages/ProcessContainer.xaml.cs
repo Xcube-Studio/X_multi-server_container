@@ -35,6 +35,17 @@ namespace X_multi_server_container.Pages
         #endregion
         #region Main   
         private Process p;
+#if DEBUG
+        public void WriteLineDEBUG(object content)
+        {
+            if (content == null) return;
+            Dispatcher.Invoke((() =>
+            {
+                Cos.AppendText("[DEBUG]=>" + content.ToString().TrimEnd(' ', '\n', '\r') + Environment.NewLine);
+                CosViewer.ScrollToEnd();
+            }));
+        }
+#endif 
         public void WriteLine(object content)
         {
             if (content == null) return;
@@ -114,13 +125,14 @@ namespace X_multi_server_container.Pages
             { SendCMDButton.Content = "发送"; SendCMDButton.FontSize = 14; }
         }
         List<string> cmdHistory = new List<string>() { "" };
+        private void SendCMD(string cmd) => p.StandardInput.WriteLine(cmd);
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             if (SendCMDButton.Content.ToString() == "发送")
             {
                 string cmd = Input.Text;
 #if DEBUG //输入回显
-                WriteLine(">" + cmd);
+                WriteLineDEBUG("输入命令 >" + cmd);
 #endif
                 int index = int.Parse(Input.Tag.ToString());
                 if (index < cmdHistory.Count - 1)
@@ -135,7 +147,7 @@ namespace X_multi_server_container.Pages
                 cmdHistory.Add("");
                 try
                 {
-                    p.StandardInput.WriteLine(cmd);
+                    SendCMD(cmd);
                 }
                 catch (Exception) { }
             }
@@ -205,10 +217,12 @@ namespace X_multi_server_container.Pages
                             //WS断开连接
                             socket.OnClose = () => { webSocketClients.Remove(socket); };
                             //WS收到信息
-                            socket.OnMessage = rece => { };
+                            socket.OnMessage = rece => { OnClientMessage(rece); };
                             //WS出错
                             socket.OnError = rece => { WriteLine(rece.ToString()); };
                         });
+                        WriteLine("WS服务器端启动成功！");
+                        WriteLine(StPar.Value<string>("WebsocketAPI"));
                     }
                 }
                 catch (Exception err) { WriteLine("WS服务器启动失败!\n" + err.ToString()); }
@@ -287,64 +301,106 @@ namespace X_multi_server_container.Pages
         {
             if (intext == null) return;
             string text = intext.ToString();
-            webSocketClients.ForEach(ws => ws.Send(text));
+            webSocketClients.ForEach(ws =>
+            {
+                try {/* Task.Run(() =>*/ ws.Send(text)/*)*/; }
+                catch (Exception) { }
+            });
         }
         private void OnConsoleReadLine(string rece)
         {
             WriteLine(rece);
-            int type = StPar.Value<int>("Type");
-            if (type == 0)//BDS
+            if (webSocketClients.Count > 0)
             {
-                var match1 = Regex.Match(rece, @"{?\[\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\s(?<type>\w*?)\]\s?(?<Content>.*)");
-                string msgtype = match1.Groups["type"].Value;
-                if (!string.IsNullOrEmpty(msgtype))
+                int type = StPar.Value<int>("Type");
+                if (type == 0)//BDS
                 {
-                    string content = match1.Groups["Content"].Value;
-                    if (msgtype == "INFO")
+                    var match1 = Regex.Match(rece, @"{?\[\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\s(?<type>\w*?)\]\s?(?<Content>.*)");
+                    string msgtype = match1.Groups["type"].Value;
+
+                    if (!string.IsNullOrEmpty(msgtype))
                     {
-                        var match2 = Regex.Match(rece, @"^Player\s(?<dis>dis?)connected:\s(?<Player>.*?),\sxuid:\s(?<xuid>\d*)");
-                        if (match2.Groups["Player"].Success)
+                        string content = match1.Groups["Content"].Value;
+#if DEBUG
+                        WriteLineDEBUG(msgtype + ":" + content);
+#endif
+                        if (msgtype == "INFO")
                         {
-                            if (match2.Groups["dis"].Success)
+                            var match2 = Regex.Match(content, @"^Player\s(?<dis>dis)?connected:\s(?<Player>.*?)\sxuid:\s(?<xuid>\d*)");
+#if DEBUG
+                            WriteLineDEBUG(match2.Groups["Player"].Value + ":" + match2.Groups["dis"]);
+#endif
+                            if (match2.Groups["Player"].Success)
                             {
-                                SendToAll(new JObject(){
+                                if (match2.Groups["dis"].Success)
+                                {
+                                    SendToAll(new JObject(){
                                     new JProperty("operate","onleft"),
                                     new JProperty( "target",match2.Groups["Player"].Value ),
                                     new JProperty( "text",match2.Groups["xuid"].Value )
-                             });
-                            }
-                            else
-                            {
-                                SendToAll(new JObject(){
+                                 });
+                                }
+                                else
+                                {
+                                    SendToAll(new JObject(){
                                     new JProperty("operate","onjoin"),
                                     new JProperty( "target",match2.Groups["Player"].Value ),
                                     new JProperty( "text",match2.Groups["xuid"].Value )
+                                 });
+                                }
+                            }
+                        }
+                        else if (msgtype == "Chat")
+                        {
+                            var match2 = Regex.Match(content, @"^(?!Server|服务器)(?<Player>.*?)(?<!Server|服务器)\s说:\s(?<text>.+)");
+                            if (match2.Groups["Player"].Success)
+                            {
+                                SendToAll(new JObject()
+                            {
+                                new JProperty("operate","onmsg"),
+                                new JProperty( "target",match2.Groups["Player"].Value ),
+                                new JProperty( "text",match2.Groups["text"].Value )
                              });
                             }
                         }
                     }
-                    else if (msgtype == "Chat")
-                    {
-                        var match2 = Regex.Match(rece, @"^(?<Player>.*?)(?<!Server|服务器)\s说:\s(?<text>.*)");
-                        if (match2.Groups["Player"].Success)
-                        {
-                            SendToAll(new JObject()
-                            {
-                                new JProperty("operate","onjoin"),
-                                new JProperty( "target",match2.Groups["Player"].Value ),
-                                new JProperty( "text",match2.Groups["xuid"].Value )
-                             });
-                        }
-                    }
+                }
+                else if (type == 1)
+                {
+
+                }
+                else if (type == 2)
+                {
+
                 }
             }
-            else if (type == 1)
+        }
+        private void OnClientMessage(string rece)
+        {
+            try
             {
-
+                var receive = JObject.Parse(rece);
+                // {"operate":"runcmd","passwd":"CD92DDCEBFB8D3FB1913073783FAC0A1","cmd":"in_game command here"}
+                if (receive.Value<string>("operate") == "runcmd")
+                {
+                    SendCMD(receive.Value<string>("cmd"));
+                }
+                //new JProperty("cmd", cmd),
+                //new JProperty("msgid", Operation.RandomUUID),
+                //new JProperty("passwd", "")
+                //Dispatcher.Invoke(() =>
+                //{    
+                //}); 
             }
-            else if (type == 2)
+            catch (Exception
+#if DEBUG
+            err
+#endif
+            )
             {
-
+#if DEBUG
+                WriteLineDEBUG(err);
+#endif
             }
         }
         #endregion

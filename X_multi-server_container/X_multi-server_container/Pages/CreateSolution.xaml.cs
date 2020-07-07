@@ -34,7 +34,7 @@ namespace X_multi_server_container.Pages
             processContainerPage.StPar = new JObject() {
                 new JProperty("basicFilePath", targetPath.Text),
                 new JProperty("Encoding", Encoding.UTF8.ToString()),
-                new JProperty("WebsocketAPI",   WSAPIToggle.IsChecked==true?"ws://0.0.0.0:29132/xsba":null),
+                new JProperty("WebsocketAPI",   WSAPIToggle.IsChecked==true?"ws://0.0.0.0:29132/xsbasurXXXgxh":null),
                 new JProperty("Type",   pubblishedTemplate.SelectedIndex)
             };
             PageManager.AddPage(processContainerPage, "进程启动器");
