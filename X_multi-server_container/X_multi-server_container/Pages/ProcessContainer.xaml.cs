@@ -213,9 +213,9 @@ namespace X_multi_server_container.Pages
                         webSocketServer.Start(socket =>
                         {
                             //WS建立连接
-                            socket.OnOpen = () => { webSocketClients.Add(socket); };
+                            socket.OnOpen = () => { webSocketClients.Add(socket); WriteLine("[websocket]连接已建立"); };
                             //WS断开连接
-                            socket.OnClose = () => { webSocketClients.Remove(socket); };
+                            socket.OnClose = () => { webSocketClients.Remove(socket); WriteLine("[websocket]连接已断开"); };
                             //WS收到信息
                             socket.OnMessage = rece => { OnClientMessage(rece); };
                             //WS出错
@@ -328,7 +328,7 @@ namespace X_multi_server_container.Pages
                         {
                             var match2 = Regex.Match(content, @"^Player\s(?<dis>dis)?connected:\s(?<Player>.*?)\sxuid:\s(?<xuid>\d*)");
 #if DEBUG
-                            WriteLineDEBUG(match2.Groups["Player"].Value + ":" + match2.Groups["dis"]);
+                            WriteLineDEBUG(match2.Groups["Player"].Value + ":" + match2.Groups["xuid"]);
 #endif
                             if (match2.Groups["Player"].Success)
                             {
@@ -352,7 +352,7 @@ namespace X_multi_server_container.Pages
                         }
                         else if (msgtype == "Chat")
                         {
-                            var match2 = Regex.Match(content, @"^(?!Server|服务器)(?<Player>.*?)(?<!Server|服务器)\s说:\s(?<text>.+)");
+                            var match2 = Regex.Match(content, @"^玩家\s(?!Server|服务器)(?<Player>.*?)(?<!Server|服务器)\s说:(?<text>.+)");
                             if (match2.Groups["Player"].Success)
                             {
                                 SendToAll(new JObject()
