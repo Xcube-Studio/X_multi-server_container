@@ -4,19 +4,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using Newtonsoft.Json.Linq;
-using SourceChord.FluentWPF;
+using Fleck;
+using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace X_multi_server_container.Pages
 {
@@ -25,27 +21,29 @@ namespace X_multi_server_container.Pages
     /// </summary>
     public partial class ProcessContainer : Page
     {
-        #region 启动参数
-        public JObject StPar = new JObject{
-            new JProperty("basicFilePath", "cmd"),
-            new JProperty("Encoding", Encoding.Default.ToString()),
-            new JProperty("WebsocketAPI",false)
-        };
-
-        #endregion
         public ProcessContainer()
         {
             InitializeComponent();
         }
+        #region 启动参数
+        public JObject StPar = new JObject{
+            new JProperty("basicFilePath", "cmd"),
+            new JProperty("Encoding", Encoding.Default.ToString()),
+            new JProperty("Type",-1),
+            new JProperty("WebsocketAPI",false)
+        };
+        #endregion
         #region Main   
         private Process p;
         public void WriteLine(object content)
         {
             if (content == null) return;
-            Cos.AppendText(content.ToString().TrimEnd(' ', '\n', '\r') + Environment.NewLine);
-            CosViewer.ScrollToEnd();
+            Dispatcher.Invoke((() =>
+            {
+                Cos.AppendText(content.ToString().TrimEnd(' ', '\n', '\r') + Environment.NewLine);
+                CosViewer.ScrollToEnd();
+            }));
         }
-
         //private void StartButton_Click(object sender, RoutedEventArgs e)
         //{
         //    /*
@@ -96,6 +94,25 @@ namespace X_multi_server_container.Pages
         //}
         #endregion
         #region 输入逻辑
+        private void Input_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Up: UPSend(); break;
+                case Key.Down: DOWNSend(); break;
+                case Key.Enter: if (SendCMDButton.Content.ToString() == "发送") SendCMDButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent)); break;
+                default:
+                    break;
+            }
+        }
+        private void Input_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            cmdHistory[int.Parse(Input.Tag.ToString())] = Input.Text;
+            if (Input.Text.Length == 0)
+            { SendCMDButton.Content = "︾"; SendCMDButton.FontSize = 21; }
+            else
+            { SendCMDButton.Content = "发送"; SendCMDButton.FontSize = 14; }
+        }
         List<string> cmdHistory = new List<string>() { "" };
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
@@ -114,8 +131,6 @@ namespace X_multi_server_container.Pages
                     cmdHistory[cmdHistory.Count - 1] = tmpHis;
                 }
                 Input.Clear();
-                SendCMDButton.Content = "︾";
-                SendCMDButton.FontSize = 21;
                 Input.Tag = cmdHistory.Count;
                 cmdHistory.Add("");
                 try
@@ -127,22 +142,6 @@ namespace X_multi_server_container.Pages
             else
             {
                 HideInputPanel();
-            }
-        }
-        private void Input_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case Key.Up: UPSend(); break;
-                case Key.Down: DOWNSend(); break;
-                case Key.Enter: if (SendCMDButton.Content.ToString() == "发送") SendCMDButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent)); break;
-                default:
-                    cmdHistory[int.Parse(Input.Tag.ToString())] = Input.Text;
-                    if (Input.Text.Length == 0)
-                    { SendCMDButton.Content = "︾"; SendCMDButton.FontSize = 21; }
-                    else
-                    { SendCMDButton.Content = "发送"; SendCMDButton.FontSize = 14; }
-                    break;
             }
         }
         private void UP_Button_Click(object sender, RoutedEventArgs e) => UPSend();
@@ -167,6 +166,7 @@ namespace X_multi_server_container.Pages
         #endregion
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            #region 界面/进程
             try
             {
                 MainWindow.Button.Click += Button_Click;
@@ -182,20 +182,41 @@ namespace X_multi_server_container.Pages
                     p.StartInfo.CreateNoWindow = true;
                     p.EnableRaisingEvents = true;
                     p.StartInfo.StandardOutputEncoding = GetEncoding(StPar.Value<string>("Encoding"));
-                    WriteLine("当前编码:"+p.StartInfo.StandardOutputEncoding);
+                    WriteLine("当前编码:" + p.StartInfo.StandardOutputEncoding);
                     p.Start();
                     p.BeginErrorReadLine();
-                    p.ErrorDataReceived += (_s, _e) => Dispatcher.Invoke((() => { WriteLine(_e.Data); }));
+                    p.ErrorDataReceived += (_s, _e) => WriteLine(_e.Data);
                     p.BeginOutputReadLine();
-                    p.OutputDataReceived += (_s, _e) => Dispatcher.Invoke((() => { WriteLine(_e.Data); }));
+                    p.OutputDataReceived += (_s, _e) => OnConsoleReadLine(_e.Data);
                 }
                 Board.Height = 0;
                 EchoInputPanel();
+                #endregion
+                #region WS
+                try
+                {
+                    try { if (webSocketServer == null) webSocketServer = new WebSocketServer(StPar.Value<string>("WebsocketAPI")) { RestartAfterListenError = true }; } catch (Exception) { }
+                    if (webSocketServer != null)
+                    {
+                        webSocketServer.Start(socket =>
+                        {
+                            //WS建立连接
+                            socket.OnOpen = () => { webSocketClients.Add(socket); };
+                            //WS断开连接
+                            socket.OnClose = () => { webSocketClients.Remove(socket); };
+                            //WS收到信息
+                            socket.OnMessage = rece => { };
+                            //WS出错
+                            socket.OnError = rece => { WriteLine(rece.ToString()); };
+                        });
+                    }
+                }
+                catch (Exception err) { WriteLine("WS服务器启动失败!\n" + err.ToString()); }
             }
             catch (Exception err)
             { WriteLine("启动失败!\n" + err.ToString()); }
+            #endregion  
         }
-
         private Encoding GetEncoding(string v)
         {
             switch (v)
@@ -251,7 +272,6 @@ namespace X_multi_server_container.Pages
             MainWindow.Button.Click -= Button_Click;
         }
         #endregion
-
         private void Cos_KeyUp(object sender, KeyEventArgs e)
         {
             if (a == false)
@@ -260,5 +280,73 @@ namespace X_multi_server_container.Pages
                 Input.Focus();
             }
         }
+        #region WebsocketAPI
+        WebSocketServer webSocketServer = null;
+        List<IWebSocketConnection> webSocketClients = new List<IWebSocketConnection>();
+        private void SendToAll(object intext)
+        {
+            if (intext == null) return;
+            string text = intext.ToString();
+            webSocketClients.ForEach(ws => ws.Send(text));
+        }
+        private void OnConsoleReadLine(string rece)
+        {
+            WriteLine(rece);
+            int type = StPar.Value<int>("Type");
+            if (type == 0)//BDS
+            {
+                var match1 = Regex.Match(rece, @"{?\[\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\s(?<type>\w*?)\]\s?(?<Content>.*)");
+                string msgtype = match1.Groups["type"].Value;
+                if (!string.IsNullOrEmpty(msgtype))
+                {
+                    string content = match1.Groups["Content"].Value;
+                    if (msgtype == "INFO")
+                    {
+                        var match2 = Regex.Match(rece, @"^Player\s(?<dis>dis?)connected:\s(?<Player>.*?),\sxuid:\s(?<xuid>\d*)");
+                        if (match2.Groups["Player"].Success)
+                        {
+                            if (match2.Groups["dis"].Success)
+                            {
+                                SendToAll(new JObject(){
+                                    new JProperty("operate","onleft"),
+                                    new JProperty( "target",match2.Groups["Player"].Value ),
+                                    new JProperty( "text",match2.Groups["xuid"].Value )
+                             });
+                            }
+                            else
+                            {
+                                SendToAll(new JObject(){
+                                    new JProperty("operate","onjoin"),
+                                    new JProperty( "target",match2.Groups["Player"].Value ),
+                                    new JProperty( "text",match2.Groups["xuid"].Value )
+                             });
+                            }
+                        }
+                    }
+                    else if (msgtype == "Chat")
+                    {
+                        var match2 = Regex.Match(rece, @"^(?<Player>.*?)(?<!Server|服务器)\s说:\s(?<text>.*)");
+                        if (match2.Groups["Player"].Success)
+                        {
+                            SendToAll(new JObject()
+                            {
+                                new JProperty("operate","onjoin"),
+                                new JProperty( "target",match2.Groups["Player"].Value ),
+                                new JProperty( "text",match2.Groups["xuid"].Value )
+                             });
+                        }
+                    }
+                }
+            }
+            else if (type == 1)
+            {
+
+            }
+            else if (type == 2)
+            {
+
+            }
+        }
+        #endregion
     }
 }
