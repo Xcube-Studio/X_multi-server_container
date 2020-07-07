@@ -6,19 +6,62 @@
       xmlns:local="clr-namespace:X_multi_server_container.Pages"
     xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
     mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="250" d:DesignWidth="400"
       Title="CreateSolution">
-    <DockPanel>
-        <TextBlock Text="新建启动方案" DockPanel.Dock="Top" FontSize="30"/>
+    <DockPanel Margin="10">
+        <TextBlock Name="Title" Text="新建启动方案" DockPanel.Dock="Top" FontSize="30"/>
+        <DockPanel DockPanel.Dock="Bottom">
+            <Button Content="在新标签页启动" DockPanel.Dock="Right" Click="LaunchInNewTabButton_Click"/>
+            <Button Content="保存启动方案" Click="SaveSlnButton_Click"/>
+            <Grid/>
+        </DockPanel>
         <StackPanel>
-            <StackPanel>
-                <Button Content="2"/>
-            </StackPanel>
+            <DockPanel>
+                <TextBlock Text="程序路径" DockPanel.Dock="Left"/>
+                <Button Content="选择" DockPanel.Dock="Right"  Click="SelectPathButton_Click"/>
+                <TextBox Name="targetPath" />
+            </DockPanel>
+            <DockPanel>
+                <TextBlock Text="预制模板"  />
+                <ComboBox x:Name="pubblishedTemplate">
+                    <ComboBoxItem Content="原版BDS" IsSelected="True"/>
+                    <ComboBoxItem Content="BDS-Element-zero"/>
+                </ComboBox>
+             </DockPanel>
+            <!--#region WS接口-->
+            <GroupBox>
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="WebsocketAPI:" FontSize="16"/>
+                        <CheckBox x:Name="WSAPIToggle" VerticalAlignment="Center" Checked="WSAPIToggle_Checked" Unchecked="WSAPIToggle_Unchecked">
+                            <TextBlock Text="关" Margin="0,0.5,0,0"/>
+                        </CheckBox>
+                    </StackPanel>
+                </GroupBox.Header>
+                <Button Content="建设中..."/>
+            </GroupBox>
+            <!--#endregion-->
         </StackPanel>
     </DockPanel>
     <Page.Resources>
+        <Style TargetType="ComboBox"  >
+            <Setter Property="Margin" Value="2" />
+        </Style>
         <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="2" />
             <Setter Property="Foreground" Value="Wheat" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxRevealStyle}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Padding" Value="2" />
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource ButtonAccentRevealStyle}">
+            <Setter Property="Padding" Value="8,2" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="2" />
         </Style>
         <!--#region ListViewItem-->
         <Style x:Key="FocusVisual">

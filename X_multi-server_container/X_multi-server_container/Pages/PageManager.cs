@@ -35,6 +35,7 @@ namespace X_multi_server_container
             UUIDTemp = CreateNewUUID;
             page.DataContext = PageInfo;
             PageItems.Add(PageInfo);
+            Dispatcher.CurrentDispatcher.Invoke(() => (Application.Current.MainWindow as MainWindow).ListView_Page.SelectedIndex = PageItems.Count - 1);
             return page;
         }
         /// <summary>
@@ -73,12 +74,7 @@ namespace X_multi_server_container
             page.DataContext = PageInfo;
             int index = PageItems.IndexOf(PageItems.First(l => l.uuid == uuid));
             PageItems[index] = PageInfo;
-            Dispatcher.CurrentDispatcher.Invoke(() =>
-            {
-                (Application.Current.MainWindow as MainWindow).PageContainer.Navigate(page);
-                try { (Application.Current.MainWindow as MainWindow).PageContainer.RemoveBackEntry(); } catch { }
-                (Application.Current.MainWindow as MainWindow).ListView_Page.SelectedIndex = index;
-            });
+            Dispatcher.CurrentDispatcher.Invoke(() => (Application.Current.MainWindow as MainWindow).ListView_Page.SelectedIndex = index);
             GC.Collect();
             //返回Page的Index
             return index;

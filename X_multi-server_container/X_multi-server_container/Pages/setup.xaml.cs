@@ -32,7 +32,10 @@ namespace X_multi_server_container.Pages
 
         private void BDSTemplateButton_Click(object sender, RoutedEventArgs e)
         {
-
+            CreateSolution createPage = new CreateSolution();
+            createPage.Title.Text = "BDS启动模板";
+            createPage.targetPath.Text = "mc_start.bat";
+            PageManager.ReplacePage((DataContext as PageItemModel).uuid, createPage, "新建启动方案(BDS模板)");
         }
     }
 }

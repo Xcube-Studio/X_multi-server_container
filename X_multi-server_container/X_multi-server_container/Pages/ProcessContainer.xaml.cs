@@ -26,9 +26,12 @@ namespace X_multi_server_container.Pages
     public partial class ProcessContainer : Page
     {
         #region 启动参数
-        public JObject StPar = new JObject() {
-            new JProperty("basicFilePath", "cmd")
+        public JObject StPar = new JObject{
+            new JProperty("basicFilePath", "cmd"),
+            new JProperty("Encoding", Encoding.Default.ToString()),
+            new JProperty("WebsocketAPI",false)
         };
+
         #endregion
         public ProcessContainer()
         {
@@ -38,6 +41,7 @@ namespace X_multi_server_container.Pages
         private Process p;
         public void WriteLine(object content)
         {
+            if (content == null) return;
             Cos.AppendText(content.ToString().TrimEnd(' ', '\n', '\r') + Environment.NewLine);
             CosViewer.ScrollToEnd();
         }
@@ -99,7 +103,7 @@ namespace X_multi_server_container.Pages
             {
                 string cmd = Input.Text;
 #if DEBUG //输入回显
-            WriteLine(">" + cmd);
+                WriteLine(">" + cmd);
 #endif
                 int index = int.Parse(Input.Tag.ToString());
                 if (index < cmdHistory.Count - 1)
@@ -110,6 +114,8 @@ namespace X_multi_server_container.Pages
                     cmdHistory[cmdHistory.Count - 1] = tmpHis;
                 }
                 Input.Clear();
+                SendCMDButton.Content = "︾";
+                SendCMDButton.FontSize = 21;
                 Input.Tag = cmdHistory.Count;
                 cmdHistory.Add("");
                 try
@@ -129,19 +135,13 @@ namespace X_multi_server_container.Pages
             {
                 case Key.Up: UPSend(); break;
                 case Key.Down: DOWNSend(); break;
-                case Key.Enter: SendCMDButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent)); ; break;
+                case Key.Enter: if (SendCMDButton.Content.ToString() == "发送") SendCMDButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent)); break;
                 default:
                     cmdHistory[int.Parse(Input.Tag.ToString())] = Input.Text;
                     if (Input.Text.Length == 0)
-                    {
-                        SendCMDButton.Content = "︾";
-                        SendCMDButton.FontSize = 21;
-                    }
+                    { SendCMDButton.Content = "︾"; SendCMDButton.FontSize = 21; }
                     else
-                    {
-                        SendCMDButton.Content = "发送";
-                        SendCMDButton.FontSize = 14;
-                    }
+                    { SendCMDButton.Content = "发送"; SendCMDButton.FontSize = 14; }
                     break;
             }
         }
@@ -167,26 +167,46 @@ namespace X_multi_server_container.Pages
         #endregion
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            MainWindow.Button.Click += Button_Click;
-            if (p == null)
+            try
             {
-                p = new Process();
-                p.StartInfo.FileName = StPar.Value<string>("basicFilePath");
-                p.StartInfo.WorkingDirectory = Path.GetDirectoryName(p.StartInfo.FileName);
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.RedirectStandardInput = true;
-                p.StartInfo.RedirectStandardError = true;
-                p.StartInfo.CreateNoWindow = true;
-                p.EnableRaisingEvents = true;
-                p.Start();
-                p.BeginErrorReadLine();
-                p.ErrorDataReceived += (_s, _e) => Dispatcher.Invoke((() => { WriteLine(_e.Data); }));
-                p.BeginOutputReadLine();
-                p.OutputDataReceived += (_s, _e) => Dispatcher.Invoke((() => { WriteLine(_e.Data); }));
+                MainWindow.Button.Click += Button_Click;
+                if (p == null)
+                {
+                    p = new Process();
+                    p.StartInfo.FileName = StPar.Value<string>("basicFilePath");
+                    p.StartInfo.WorkingDirectory = Path.GetDirectoryName(p.StartInfo.FileName);
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.RedirectStandardInput = true;
+                    p.StartInfo.RedirectStandardError = true;
+                    p.StartInfo.CreateNoWindow = true;
+                    p.EnableRaisingEvents = true;
+                    p.StartInfo.StandardOutputEncoding = GetEncoding(StPar.Value<string>("Encoding"));
+                    WriteLine("当前编码:"+p.StartInfo.StandardOutputEncoding);
+                    p.Start();
+                    p.BeginErrorReadLine();
+                    p.ErrorDataReceived += (_s, _e) => Dispatcher.Invoke((() => { WriteLine(_e.Data); }));
+                    p.BeginOutputReadLine();
+                    p.OutputDataReceived += (_s, _e) => Dispatcher.Invoke((() => { WriteLine(_e.Data); }));
+                }
+                Board.Height = 0;
+                EchoInputPanel();
             }
-            Board.Height = 0;
-            EchoInputPanel();
+            catch (Exception err)
+            { WriteLine("启动失败!\n" + err.ToString()); }
+        }
+
+        private Encoding GetEncoding(string v)
+        {
+            switch (v)
+            {
+                case "System.Text.ASCIIEncoding": return Encoding.ASCII;
+                case "System.Text.UTF8Encoding": return Encoding.UTF8;
+                case "System.Text.UTF7Encoding": return Encoding.UTF7;
+                case "System.Text.UTF32Encoding": return Encoding.UTF32;
+                case "System.Text.UnicodeEncoding": return Encoding.Unicode;
+                default: return Encoding.Default;
+            }
         }
         #region 面板动画
         bool a;
@@ -234,11 +254,11 @@ namespace X_multi_server_container.Pages
 
         private void Cos_KeyUp(object sender, KeyEventArgs e)
         {
-            if (a==false)
+            if (a == false)
             {
-            EchoInputPanel();
-            Input.Focus();
-             }
+                EchoInputPanel();
+                Input.Focus();
+            }
         }
     }
 }

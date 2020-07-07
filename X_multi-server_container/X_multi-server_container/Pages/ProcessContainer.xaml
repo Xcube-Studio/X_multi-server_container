@@ -386,7 +386,7 @@
                 </Grid>
             </Border>
         </Grid>
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled"  x:Name="CosViewer" Margin="10,0,0,2">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled"  x:Name="CosViewer" Margin="10,0,0,0">
             <TextBox  TextWrapping="Wrap" IsReadOnly="True" x:Name="Cos" Background="{x:Null}" KeyUp="Cos_KeyUp" Foreground="White" Block.LineHeight="1" Style="{DynamicResource TextBoxStyle1}" FontFamily="Consolas" CaretBrush="#FFFFF7E8" HorizontalScrollBarVisibility="Disabled" FontSize="13" IsUndoEnabled="False"/>
         </ScrollViewer>
     </DockPanel>

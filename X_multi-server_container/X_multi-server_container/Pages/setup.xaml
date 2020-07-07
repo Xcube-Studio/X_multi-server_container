@@ -506,18 +506,18 @@
                                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
                             </Border.Background>
                         </Border>
-                        <StackPanel VerticalAlignment="Top" Margin="10,76,10,0" HorizontalAlignment="Left" >
-                            <Button HorizontalAlignment="Left" Style="{StaticResource ButtonRevealStyle}"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"  Padding="0" FontSize="18">
+                        <StackPanel  Margin="10,76,10,10"  ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <Button HorizontalContentAlignment="Left" Style="{StaticResource ButtonRevealStyle}"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"  Padding="0" FontSize="18">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16"   VerticalAlignment="Center"/>
                                     <TextBlock Text=" 基于java核心的启动方案模板" FontSize="13"/>
                                 </StackPanel>
                             </Button>
-                            <Button HorizontalAlignment="Left" Style="{StaticResource ButtonRevealStyle}"   Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"  Padding="0" FontSize="18" Click="BDSTemplateButton_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Button HorizontalContentAlignment="Left" Style="{StaticResource ButtonRevealStyle}"   Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"  Padding="0" FontSize="18" Click="BDSTemplateButton_Click">
+                                <DockPanel>
+                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16"  VerticalAlignment="Center"/>
                                     <TextBlock Text=" 基于BDS核心的启动方案模板" FontSize="13"/>
-                                </StackPanel>
+                                </DockPanel>
                             </Button>
                         </StackPanel>
                     </Grid>
