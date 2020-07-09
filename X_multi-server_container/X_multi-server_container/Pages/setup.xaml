@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:X_multi_server_container.Pages"
       mc:Ignorable="d"
       xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+      xmlns:model="clr-namespace:X_multi_server_container.Pages"
       d:DesignHeight="450" d:DesignWidth="800"   FontFamily="Comic Sans MS"
       Title="setup">
     <Page.Resources>
@@ -424,7 +425,7 @@
                             </Border.Background>
                         </Border>
                         <TextBlock Text="最近" Margin="5" FontSize="30" Foreground="SkyBlue" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <ListView x:Name="listView" Style="{StaticResource ListBoxRevealStyle}" Background="{x:Null}" BorderBrush="{x:Null}" Margin="10,52,10,10" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                        <ListView x:Name="recentListView"   PreviewMouseDoubleClick="recentListView_PreviewMouseDoubleClick" Style="{StaticResource ListBoxRevealStyle}" Background="{x:Null}" BorderBrush="{x:Null}" Margin="10,52,10,10" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Vertical" />
@@ -432,22 +433,19 @@
                             </ListBox.ItemsPanel>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Height="50" Width="400" >
+                                    <Grid Height="50" Width="400"  >
                                         <StackPanel Margin="10,0,0,0" Orientation="Horizontal">
                                             <TextBlock Text="&#xE990;" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Foreground="Wheat" FontSize="32"/>
                                             <StackPanel Orientation="Vertical" Margin="10,5,0,5">
-                                                <TextBlock Text="{Binding Path=Content}" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Wheat" FontSize="18"/>
-                                                <TextBlock Text="{Binding Path=Tag}" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Wheat" FontSize="12"/>
+                                                <TextBlock Text="{Binding Path=title}" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Wheat" FontSize="18"/>
+                                                <TextBlock Text="{Binding Path=subtitle}" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Wheat" FontSize="12"/>
                                             </StackPanel>
                                         </StackPanel>
                                         <Button Margin="0,0,10,0" Content="&#xE711;" HorizontalAlignment="Right" Padding="0" Width="30" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Height="30" />
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
-                            <Button Content="XMCL.Sln" Tag="C:\Users\20441\Desktop\XMCL\3"/>
-                            <Button Content="XMCL.Sln" Tag="C:\Users\20441\Desktop\XMCL\3"/>
-                            <Button Content="XMCL.Sln" Tag="C:\Users\20441\Desktop\XMCL\3"/>
-                            <Button Content="XMCL.Sln" Tag="C:\Users\20441\Desktop\XMCL\3"/>
+                            <!--<model:HistoryModel subtitle="运行当前目录下的mc_start.bat" StartINFO="233" title="相对路径快速启动"/>-->
                         </ListView>
                     </Grid>
                 </fw:AcrylicPanel>

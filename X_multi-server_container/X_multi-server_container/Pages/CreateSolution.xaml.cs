@@ -55,8 +55,7 @@ namespace X_multi_server_container.Pages
             {
 
             }
-        }
-
+        } 
         private void WSAPIToggle_Checked(object sender, RoutedEventArgs e) => ((TextBlock)WSAPIToggle.Content).Text = "开";
         private void WSAPIToggle_Unchecked(object sender, RoutedEventArgs e) => ((TextBlock)WSAPIToggle.Content).Text = "关";
     }

@@ -51,6 +51,8 @@ namespace X_multi_server_container
         /// <returns>返回关闭的Page的位置</returns>
         public static int ClosePage(string uuid)
         {
+            if (pages[uuid] is Pages.ProcessContainer)
+                ((Pages.ProcessContainer)pages[uuid]).DisposePage();//如果是进程容器则对进程和ws进行关闭
             pages[uuid].Content = null;
             pages.Remove(uuid);
             int index = PageItems.IndexOf(PageItems.First(l => l.uuid == uuid));
@@ -122,4 +124,4 @@ namespace X_multi_server_container
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-}
+ }
