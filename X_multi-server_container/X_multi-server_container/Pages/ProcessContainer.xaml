@@ -372,22 +372,23 @@
         </Style>
         <!--endregion 滚动条 -->
     </Page.Resources>
-
-    <DockPanel>
-        <Grid DockPanel.Dock="Bottom">
-            <Border BorderThickness="1"  CornerRadius="2" x:Name="Board"  VerticalAlignment="Bottom" Background="#19FFFFFF" BorderBrush="#3FFFFFFF" Margin="1,0,1,1" Grid.Row="1" >
-                <Grid>
-                    <Button Content="&#xE74A;" Background="{x:Null}" Padding="10,5" FontFamily="Segoe MDL2 Assets" Click="UP_Button_Click" HorizontalAlignment="Left" FontSize="12" Width="40"/>
-                    <Button Content="&#xE74B;" Background="{x:Null}" Padding="10,5" FontFamily="Segoe MDL2 Assets" Click="DOWN_Button_Click" HorizontalAlignment="Left" Margin="40,0,0,0" FontSize="12" Width="40"/>
-                    <fw:AcrylicPanel Margin="80,0,49,0" TintColor="White" NoiseOpacity="0">
-                        <TextBox Style="{StaticResource TextBoxStyle1}" x:Name="Input" Foreground="Wheat" PreviewKeyUp="Input_PreviewKeyDown" TextChanged="Input_TextChanged" Tag="0" Background="{x:Null}" VerticalContentAlignment="Center" FontSize="14" CaretBrush="White"/>
-                    </fw:AcrylicPanel>
-                    <Button x:Name="SendCMDButton" Content="︾"  Background="{x:Null}" Padding="10,5" Click="SendButton_Click" HorizontalAlignment="Right" VerticalAlignment="Top"   FontSize="21" Height="33" FontFamily="Microsoft YaHei UI Light" />
-                </Grid>
-            </Border>
-        </Grid>
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled"  x:Name="CosViewer" Margin="10,0,0,0">
-            <TextBox  TextWrapping="Wrap" IsReadOnly="True" x:Name="Cos" Background="{x:Null}" KeyUp="Cos_KeyUp" Foreground="White" Block.LineHeight="1" Style="{DynamicResource TextBoxStyle1}" FontFamily="Consolas" CaretBrush="#FFFFF7E8" HorizontalScrollBarVisibility="Disabled" FontSize="13" IsUndoEnabled="False"/>
-        </ScrollViewer>
-    </DockPanel>
+    <Grid> 
+        <DockPanel>
+            <Grid DockPanel.Dock="Bottom">
+                <Border BorderThickness="1"  CornerRadius="2" x:Name="Board"  VerticalAlignment="Bottom" Background="#19FFFFFF" BorderBrush="#3FFFFFFF" Margin="1,0,1,1" Grid.Row="1" >
+                    <Grid>
+                        <Button Content="&#xE74A;" Background="{x:Null}" Padding="10,5" FontFamily="Segoe MDL2 Assets" Click="UP_Button_Click" HorizontalAlignment="Left" FontSize="12" Width="40"/>
+                        <Button Content="&#xE74B;" Background="{x:Null}" Padding="10,5" FontFamily="Segoe MDL2 Assets" Click="DOWN_Button_Click" HorizontalAlignment="Left" Margin="40,0,0,0" FontSize="12" Width="40"/>
+                        <fw:AcrylicPanel Margin="80,0,49,0" TintColor="White" NoiseOpacity="0">
+                            <TextBox Style="{StaticResource TextBoxStyle1}" x:Name="Input" Foreground="Wheat" PreviewKeyUp="Input_PreviewKeyDown" TextChanged="Input_TextChanged" Tag="0" Background="{x:Null}" VerticalContentAlignment="Center" FontSize="14" CaretBrush="White"/>
+                        </fw:AcrylicPanel>
+                        <Button x:Name="SendCMDButton" Content="︾"  Background="{x:Null}" Padding="10,5" Click="SendButton_Click" HorizontalAlignment="Right" VerticalAlignment="Top"   FontSize="21" Height="33" FontFamily="Microsoft YaHei UI Light" />
+                    </Grid>
+                </Border>
+            </Grid>
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled"  x:Name="CosViewer" Margin="10,0,0,0">
+                <TextBox  TextWrapping="Wrap" SelectionBrush="{x:Static fw:AccentColors.ImmersiveSystemAccentLight1Brush}" IsReadOnly="True" x:Name="Cos" Background="{x:Null}" KeyUp="Cos_KeyUp" Foreground="White" Block.LineHeight="1" Style="{DynamicResource TextBoxStyle1}" FontFamily="Consolas" CaretBrush="#FFFFF7E8" HorizontalScrollBarVisibility="Disabled" FontSize="13" IsUndoEnabled="False"/>
+            </ScrollViewer>
+        </DockPanel>
+    </Grid>
 </Page>

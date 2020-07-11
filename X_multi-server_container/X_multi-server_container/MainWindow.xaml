@@ -11,6 +11,7 @@
         fw:AcrylicWindow.AcrylicWindowStyle="NoIcon"
         fw:AcrylicWindow.NoiseOpacity="0.01"
         Background="Transparent"
+                  Closing="AcrylicWindow_Closing"
         Height="450" Width="800" fw:AcrylicWindow.FallbackColor="Black" fw:AcrylicWindow.TintColor="Black">
     <Window.Resources>
         <Style x:Key="FocusVisual">

@@ -40,8 +40,8 @@ namespace X_multi_server_container
         }
         private void Button_ClosePage_Click(object sender, RoutedEventArgs e)
         {
-            if (ListView_Page.Items.Count == 1)
-                App.Current.Shutdown();
+            //if (ListView_Page.Items.Count == 1)
+            //    App.Current.Shutdown();
             int index = ListView_Page.SelectedIndex;
             try
             {
@@ -51,7 +51,7 @@ namespace X_multi_server_container
             }
             catch (Exception) { }
         }
-        private int nextPage = 0; 
+        private int nextPage = 0;
         private void ListView_Page_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -63,6 +63,17 @@ namespace X_multi_server_container
                 }
             }
             catch (Exception) { ListView_Page.SelectedIndex = nextPage; }
+        }
+        private void AcrylicWindow_Closing(object sender, CancelEventArgs e)
+        {
+            ListView_Page.Items.OfType<PageItemModel>().ToList().ForEach(item =>
+           {
+               try
+               {
+                   _ = PageManager.ClosePage(item.uuid);
+               }
+               catch (Exception) { }
+           });
         }
     }
 }

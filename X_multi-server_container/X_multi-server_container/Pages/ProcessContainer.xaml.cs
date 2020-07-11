@@ -13,6 +13,8 @@ using Newtonsoft.Json.Linq;
 using Fleck;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Timers;
+using System.Windows.Media;
 
 namespace X_multi_server_container.Pages
 {
@@ -24,6 +26,35 @@ namespace X_multi_server_container.Pages
         public ProcessContainer()
         {
             InitializeComponent();
+#if DEBUG 
+            var debugbutton = new Button()
+            {
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Content = "DEBUG",
+                Margin = new Thickness(0, 0, 20, 0)
+            };
+            var debugtext = new TextBox()
+            {
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Text = "DEBUG",
+                Margin = new Thickness(0, 30, 20, 0)
+            };
+            debugbutton.Click += (sender, e) =>
+            {
+                try
+                {
+                    debugtext.Text = Cos.SelectedText;
+                    debugtext.Text += ClearText;
+                    //Cos.SelectionBrush = new SolidColorBrush(Colors.Yellow);
+                    Cos.IsInactiveSelectionHighlightEnabled = true;
+                }
+                catch (Exception err) { debugtext.Text += "\n" + err.ToString(); }
+            };
+            ((Grid)this.Content).Children.Add(debugbutton);
+            ((Grid)this.Content).Children.Add(debugtext);
+#endif
         }
         #region 启动参数
         public JObject StPar = new JObject{
@@ -181,6 +212,14 @@ namespace X_multi_server_container.Pages
             #region 界面/进程
             try
             {
+#if DEBUG
+                WriteLine("当前参数\n" + StPar.ToString());
+#endif
+                if (!ClearTimer.Enabled)
+                {
+                    ClearTimer.Elapsed += ClearTimer_Elapsed;
+                    ClearTimer.Start();
+                }
                 MainWindow.Button.Click += Button_Click;
                 if (p == null)
                 {
@@ -193,7 +232,9 @@ namespace X_multi_server_container.Pages
                     p.StartInfo.RedirectStandardError = true;
                     p.StartInfo.CreateNoWindow = true;
                     p.EnableRaisingEvents = true;
-                    p.StartInfo.StandardOutputEncoding = GetEncoding(StPar.Value<string>("Encoding"));
+                    var encoding = GetEncoding(StPar.Value<string>("Encoding"));
+                    p.StartInfo.StandardOutputEncoding = encoding;
+                    p.StartInfo.StandardErrorEncoding = encoding;
                     WriteLine("当前编码:" + p.StartInfo.StandardOutputEncoding);
                     p.Start();
                     p.BeginErrorReadLine();
@@ -212,16 +253,29 @@ namespace X_multi_server_container.Pages
                     {
                         webSocketServer.Start(socket =>
                         {
-                            //WS建立连接
-                            socket.OnOpen = () => { webSocketClients.Add(socket); WriteLine("[websocket]连接已建立"); };
-                            //WS断开连接
-                            socket.OnClose = () => { webSocketClients.Remove(socket); WriteLine("[websocket]连接已断开"); };
-                            //WS收到信息
-                            socket.OnMessage = rece => { OnClientMessage(rece); };
-                            //WS出错
-                            socket.OnError = rece => { WriteLine(rece.ToString()); };
+                            try
+                            {
+                                //WS建立连接
+                                socket.OnOpen = () => { try { webSocketClients.Add(socket); WriteLine("[websocket]连接已建立"); } catch (Exception) { } };
+                                //WS断开连接
+                                socket.OnClose = () => { try { webSocketClients.Remove(socket); WriteLine("[websocket]连接已断开"); } catch (Exception) { } };
+                                //WS收到信息
+                                socket.OnMessage = rece => { OnClientMessage(rece); };
+                                //WS出错
+                                socket.OnError = rece => { WriteLine(rece.ToString()); };
+                            }
+                            catch (Exception
+#if DEBUG
+            err
+#endif
+            )
+                            {
+#if DEBUG
+                                WriteLineDEBUG("[ERROR]ws底层\n" + err);
+#endif
+                            }
                         });
-                        WriteLine("WS服务器端启动成功！");
+                        WriteLine("WS服务器端启动成功！by gxh");
                         WriteLine(StPar.Value<string>("WebsocketAPI"));
                     }
                 }
@@ -297,6 +351,20 @@ namespace X_multi_server_container.Pages
         #region WebsocketAPI
         WebSocketServer webSocketServer = null;
         List<IWebSocketConnection> webSocketClients = new List<IWebSocketConnection>();
+        #region 关闭页面释放资源
+        public void DisposePage()
+        {
+            try
+            {
+                webSocketClients.ForEach(ws => ws.Close());
+                webSocketClients.Clear();
+                webSocketServer.Dispose();
+            }
+            catch (Exception) { }
+            p.Kill();
+            p.Dispose();
+        }
+        #endregion
         private void SendToAll(object intext)
         {
             if (intext == null) return;
@@ -326,7 +394,7 @@ namespace X_multi_server_container.Pages
 #endif
                         if (msgtype == "INFO")
                         {
-                            var match2 = Regex.Match(content, @"^Player\s(?<dis>dis)?connected:\s(?<Player>.*?)\sxuid:\s(?<xuid>\d*)");
+                            var match2 = Regex.Match(content, @"^Player\s(?<dis>dis)?connected:\s(?<Player>.*?),\sxuid:\s(?<xuid>\d*)");
 #if DEBUG
                             WriteLineDEBUG(match2.Groups["Player"].Value + ":" + match2.Groups["xuid"]);
 #endif
@@ -352,7 +420,7 @@ namespace X_multi_server_container.Pages
                         }
                         else if (msgtype == "Chat")
                         {
-                            var match2 = Regex.Match(content, @"^玩家\s(?!Server|服务器)(?<Player>.*?)(?<!Server|服务器)\s说:(?<text>.+)");
+                            var match2 = Regex.Match(content, @"^(玩家\s)?(?!(玩家\s)?(Server|服务器))(?<Player>.*?)(?<!Server|服务器|\s悄悄地对.*)\s说:\s?(?<text>.+)");
                             if (match2.Groups["Player"].Success)
                             {
                                 SendToAll(new JObject()
@@ -399,9 +467,29 @@ namespace X_multi_server_container.Pages
             )
             {
 #if DEBUG
-                WriteLineDEBUG(err);
+                WriteLineDEBUG("[ERROR]ws接收消息\n" + err);
 #endif
             }
+        }
+        #endregion
+        #region 定时清屏
+        private Timer ClearTimer = new Timer(1800000) { AutoReset = true, Enabled = false };/**/
+        private int ClearText = 0;
+        private void ClearTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            try
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    if (ClearText < Cos.Text.Length)
+                    {
+                        Cos.Text = Cos.Text.Substring(ClearText);
+                        Cos.ScrollToEnd();
+                    }
+                    ClearText = Cos.Text.Length;
+                });
+            }
+            catch (Exception) { }
         }
         #endregion
     }
