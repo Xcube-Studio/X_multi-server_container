@@ -467,7 +467,7 @@ namespace X_multi_server_container.Pages
                         {
                             string content = match1.Groups["Content"].Value;
 #if DEBUG
-                            WriteLineDEBUG(msgtype + ":" + content);
+                          WriteLineDEBUG(msgtype + ":" + content);
 #endif
                             if (msgtype == "INFO")
                             {
