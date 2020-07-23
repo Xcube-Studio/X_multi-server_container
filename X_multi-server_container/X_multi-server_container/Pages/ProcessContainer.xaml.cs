@@ -26,7 +26,8 @@ namespace X_multi_server_container.Pages
         public ProcessContainer()
         {
             InitializeComponent();
-#if DEBUG 
+            #region DEBUG
+#if DEBUG
             var debugbutton = new Button()
             {
                 VerticalAlignment = VerticalAlignment.Top,
@@ -54,7 +55,13 @@ namespace X_multi_server_container.Pages
             };
             ((Grid)this.Content).Children.Add(debugbutton);
             ((Grid)this.Content).Children.Add(debugtext);
-#endif
+            Task.Run(() => {
+                System.Threading.Thread.Sleep(5000);
+                
+            WriteLine("当前参数\n" + StPar.ToString());
+            });
+#endif 
+            #endregion
         }
         #region 启动参数
         public JObject StPar = new JObject{
@@ -76,7 +83,7 @@ namespace X_multi_server_container.Pages
                 CosViewer.ScrollToEnd();
             }));
         }
-#endif 
+#endif
         public void WriteLine(object content)
         {
             if (content == null) return;
@@ -138,22 +145,50 @@ namespace X_multi_server_container.Pages
         #region 输入逻辑
         private void Input_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.Key)
+            try
             {
-                case Key.Up: UPSend(); break;
-                case Key.Down: DOWNSend(); break;
-                case Key.Enter: if (SendCMDButton.Content.ToString() == "发送") SendCMDButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent)); break;
-                default:
-                    break;
+                switch (e.Key)
+                {
+                    case Key.Up: UPSend(); break;
+                    case Key.Down: DOWNSend(); break;
+                    case Key.Enter: if (SendCMDButton.Content.ToString() == "发送") SendCMDButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent)); break;
+                    default:
+                        cmdHistory[int.Parse(Input.Tag.ToString())] = Input.Text;
+                        break;
+                }
             }
+            catch (Exception
+#if DEBUG
+            err
+#endif
+            )
+            {
+#if DEBUG
+                WriteLineDEBUG("[ERROR]输入逻辑Input_PreviewKeyDown\n" + err);
+#endif
+            }
+
         }
         private void Input_TextChanged(object sender, TextChangedEventArgs e)
         {
-            cmdHistory[int.Parse(Input.Tag.ToString())] = Input.Text;
-            if (Input.Text.Length == 0)
-            { SendCMDButton.Content = "︾"; SendCMDButton.FontSize = 21; }
-            else
-            { SendCMDButton.Content = "发送"; SendCMDButton.FontSize = 14; }
+            try
+            {
+                if (!string.IsNullOrEmpty(Input.Text)) cmdHistory[int.Parse(Input.Tag.ToString())] = Input.Text;
+                if (Input.Text.Length == 0)
+                { SendCMDButton.Content = "︾"; SendCMDButton.FontSize = 21; }
+                else
+                { SendCMDButton.Content = "发送"; SendCMDButton.FontSize = 14; }
+            }
+            catch (Exception
+#if DEBUG
+            err
+#endif
+            )
+            {
+#if DEBUG
+                WriteLineDEBUG("[ERROR]输入逻辑Input_TextChanged\n" + err);
+#endif
+            }
         }
         List<string> cmdHistory = new List<string>() { "" };
         private void SendCMD(string cmd) => p.StandardInput.WriteLine(cmd);
@@ -187,8 +222,39 @@ namespace X_multi_server_container.Pages
                 HideInputPanel();
             }
         }
-        private void UP_Button_Click(object sender, RoutedEventArgs e) => UPSend();
-        private void DOWN_Button_Click(object sender, RoutedEventArgs e) => DOWNSend();
+        private void UP_Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                UPSend();
+            }
+            catch (Exception
+#if DEBUG
+            err
+#endif
+            )
+            {
+#if DEBUG
+                WriteLineDEBUG("[ERROR]输入逻辑UP_Button_Click\n" + err);
+#endif
+            }
+        }
+        private void DOWN_Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            { DOWNSend(); }
+            catch (Exception
+#if DEBUG
+            err
+#endif
+            )
+            {
+#if DEBUG
+                WriteLineDEBUG("[ERROR]输入逻辑DOWN_Button_Click\n" + err);
+#endif
+            }
+
+        }
         private void UPSend()
         {
             int index = Math.Max(0, int.Parse(Input.Tag.ToString()) - 1);
@@ -212,9 +278,6 @@ namespace X_multi_server_container.Pages
             #region 界面/进程
             try
             {
-#if DEBUG
-                WriteLine("当前参数\n" + StPar.ToString());
-#endif
                 if (!ClearTimer.Enabled)
                 {
                     ClearTimer.Elapsed += ClearTimer_Elapsed;
@@ -230,7 +293,17 @@ namespace X_multi_server_container.Pages
                     p.StartInfo.RedirectStandardOutput = true;
                     p.StartInfo.RedirectStandardInput = true;
                     p.StartInfo.RedirectStandardError = true;
-                    p.StartInfo.CreateNoWindow = true;
+                    if (StPar.ContainsKey("showWindow"))
+                    {
+                        if (!StPar.Value<bool>("showWindow"))
+                        {
+#if DEBUG
+                            p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+#else
+                            p.StartInfo.CreateNoWindow = true;
+#endif
+                        }
+                    }
                     p.EnableRaisingEvents = true;
                     var encoding = GetEncoding(StPar.Value<string>("Encoding"));
                     p.StartInfo.StandardOutputEncoding = encoding;
@@ -241,49 +314,51 @@ namespace X_multi_server_container.Pages
                     p.ErrorDataReceived += (_s, _e) => WriteLine(_e.Data);
                     p.BeginOutputReadLine();
                     p.OutputDataReceived += (_s, _e) => OnConsoleReadLine(_e.Data);
-                }
-                Board.Height = 0;
-                EchoInputPanel();
-                #endregion
-                #region WS
-                try
-                {
-                    try { if (webSocketServer == null) webSocketServer = new WebSocketServer(StPar.Value<string>("WebsocketAPI")) { RestartAfterListenError = true }; } catch (Exception) { }
-                    if (webSocketServer != null)
+                    #region WS
+                    try
                     {
-                        webSocketServer.Start(socket =>
+                        try { if (webSocketServer == null) webSocketServer = new WebSocketServer(StPar.Value<string>("WebsocketAPI")) { RestartAfterListenError = true }; } catch (Exception) { }
+                        if (webSocketServer != null)
                         {
-                            try
+                            webSocketServer.Start(socket =>
                             {
-                                //WS建立连接
-                                socket.OnOpen = () => { try { webSocketClients.Add(socket); WriteLine("[websocket]连接已建立"); } catch (Exception) { } };
-                                //WS断开连接
-                                socket.OnClose = () => { try { webSocketClients.Remove(socket); WriteLine("[websocket]连接已断开"); } catch (Exception) { } };
-                                //WS收到信息
-                                socket.OnMessage = rece => { OnClientMessage(rece); };
-                                //WS出错
-                                socket.OnError = rece => { WriteLine(rece.ToString()); };
-                            }
-                            catch (Exception
+                                try
+                                {
+                                    //WS建立连接
+                                    socket.OnOpen = () => { try { webSocketClients.Add(socket); WriteLine("[websocket]连接已建立"); } catch (Exception) { } };
+                                    //WS断开连接
+                                    socket.OnClose = () => { try { webSocketClients.Remove(socket); WriteLine("[websocket]连接已断开"); } catch (Exception) { } };
+                                    //WS收到信息
+                                    socket.OnMessage = rece => { OnClientMessage(rece); };
+                                    //WS出错
+                                    socket.OnError = rece => { WriteLine(rece.ToString()); };
+                                }
+                                catch (Exception
 #if DEBUG
             err
 #endif
             )
-                            {
+                                {
 #if DEBUG
-                                WriteLineDEBUG("[ERROR]ws底层\n" + err);
+                                    WriteLineDEBUG("[ERROR]ws底层\n" + err);
 #endif
-                            }
-                        });
-                        WriteLine("WS服务器端启动成功！by gxh");
-                        WriteLine(StPar.Value<string>("WebsocketAPI"));
+                                }
+                            });
+                            WriteLine("WS服务器端启动成功！by gxh");
+                            WriteLine(StPar.Value<string>("WebsocketAPI"));
+                        }
                     }
+                    catch (Exception err) { WriteLine("WS服务器启动失败!\n" + err.ToString()); }
+                    #endregion
+
                 }
-                catch (Exception err) { WriteLine("WS服务器启动失败!\n" + err.ToString()); }
+                Board.Height = 0;
+                EchoInputPanel();
+                #endregion
             }
             catch (Exception err)
             { WriteLine("启动失败!\n" + err.ToString()); }
-            #endregion  
+
         }
         private Encoding GetEncoding(string v)
         {
@@ -377,70 +452,83 @@ namespace X_multi_server_container.Pages
         }
         private void OnConsoleReadLine(string rece)
         {
-            WriteLine(rece);
-            if (webSocketClients.Count > 0)
+            try
             {
-                int type = StPar.Value<int>("Type");
-                if (type == 0)//BDS
+                WriteLine(rece);
+                if (webSocketClients.Count > 0)
                 {
-                    var match1 = Regex.Match(rece, @"{?\[\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\s(?<type>\w*?)\]\s?(?<Content>.*)");
-                    string msgtype = match1.Groups["type"].Value;
-
-                    if (!string.IsNullOrEmpty(msgtype))
+                    int type = StPar.Value<int>("Type");
+                    if (type == 0)//BDS
                     {
-                        string content = match1.Groups["Content"].Value;
-#if DEBUG
-                        WriteLineDEBUG(msgtype + ":" + content);
-#endif
-                        if (msgtype == "INFO")
+                        var match1 = Regex.Match(rece, @"{?\[\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\s(?<type>\w*?)\]\s?(?<Content>.*)");
+                        string msgtype = match1.Groups["type"].Value;
+
+                        if (!string.IsNullOrEmpty(msgtype))
                         {
-                            var match2 = Regex.Match(content, @"^Player\s(?<dis>dis)?connected:\s(?<Player>.*?),\sxuid:\s(?<xuid>\d*)");
+                            string content = match1.Groups["Content"].Value;
 #if DEBUG
-                            WriteLineDEBUG(match2.Groups["Player"].Value + ":" + match2.Groups["xuid"]);
+                            WriteLineDEBUG(msgtype + ":" + content);
 #endif
-                            if (match2.Groups["Player"].Success)
+                            if (msgtype == "INFO")
                             {
-                                if (match2.Groups["dis"].Success)
+                                var match2 = Regex.Match(content, @"^Player\s(?<dis>dis)?connected:\s(?<Player>.*?),\sxuid:\s(?<xuid>\d*)");
+#if DEBUG
+                                WriteLineDEBUG(match2.Groups["Player"].Value + ":" + match2.Groups["xuid"]);
+#endif
+                                if (match2.Groups["Player"].Success)
                                 {
-                                    SendToAll(new JObject(){
+                                    if (match2.Groups["dis"].Success)
+                                    {
+                                        SendToAll(new JObject(){
                                     new JProperty("operate","onleft"),
                                     new JProperty( "target",match2.Groups["Player"].Value ),
                                     new JProperty( "text",match2.Groups["xuid"].Value )
                                  });
-                                }
-                                else
-                                {
-                                    SendToAll(new JObject(){
+                                    }
+                                    else
+                                    {
+                                        SendToAll(new JObject(){
                                     new JProperty("operate","onjoin"),
                                     new JProperty( "target",match2.Groups["Player"].Value ),
                                     new JProperty( "text",match2.Groups["xuid"].Value )
                                  });
+                                    }
                                 }
                             }
-                        }
-                        else if (msgtype == "Chat")
-                        {
-                            var match2 = Regex.Match(content, @"^(玩家\s)?(?!(玩家\s)?(Server|服务器))(?<Player>.*?)(?<!Server|服务器|\s悄悄地对.*)\s说:\s?(?<text>.+)");
-                            if (match2.Groups["Player"].Success)
+                            else if (msgtype == "Chat")
                             {
-                                SendToAll(new JObject()
+                                var match2 = Regex.Match(content, @"^(玩家\s)?(?!(玩家\s)?(Server|服务器))(?<Player>.*?)(?<!Server|服务器|\s悄悄地对.*)\s说:\s?(?<text>.+)");
+                                if (match2.Groups["Player"].Success)
+                                {
+                                    SendToAll(new JObject()
                             {
                                 new JProperty("operate","onmsg"),
                                 new JProperty( "target",match2.Groups["Player"].Value ),
                                 new JProperty( "text",match2.Groups["text"].Value )
                              });
+                                }
                             }
                         }
                     }
-                }
-                else if (type == 1)
-                {
+                    else if (type == 1)
+                    {
 
-                }
-                else if (type == 2)
-                {
+                    }
+                    else if (type == 2)
+                    {
 
+                    }
                 }
+            }
+            catch (Exception
+#if DEBUG
+            err
+#endif
+            )
+            {
+#if DEBUG
+                WriteLineDEBUG("[ERROR]输入逻辑Input_TextChanged\n" + err);
+#endif
             }
         }
         private void OnClientMessage(string rece)

@@ -1,19 +1,11 @@
-﻿using Newtonsoft.Json.Linq;
+﻿#define U1
+using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 
 namespace X_multi_server_container.Pages
@@ -27,12 +19,33 @@ namespace X_multi_server_container.Pages
         {
             InitializeComponent();
 #if DEBUG
-            recentListView.Items.Add(new HistoryModel("相对路径快速启动BDS", "[DEBUG]运行当前目录下的mc_start.bat", new JObject() {
-                new JProperty("basicFilePath",  "mc_start.bat"),
+#if U1
+            string path = "bedrock_server.exe";
+#else
+            string path = "mc_start.bat";
+#endif 
+            recentListView.Items.Add(new HistoryModel("相对路径快速启动BDS", "[DEBUG]运行当前目录下的" + path, new JObject() {
+                new JProperty("basicFilePath",  path),
                 new JProperty("Encoding", Encoding.UTF8.ToString()),
-                new JProperty("WebsocketAPI",   "ws://0.0.0.0:29132/xsbasurXXXgxh"),
-                new JProperty("Type",  0)
+                new JProperty("showWindow", true), 
+#if U1
+               new JProperty("WebsocketAPI",  "ws://0.0.0.0:26481/moyuxu"),
+#else
+               new JProperty("WebsocketAPI",  "ws://0.0.0.0:29132/xsbasurXXXgxh"),  
+#endif 
+            new JProperty("Type", 0)
             }));
+            //            throw new Exception((new JObject() {
+            //                new JProperty("basicFilePath",  path),
+            //                new JProperty("Encoding", Encoding.UTF8.ToString()),
+            //                new JProperty("showWindow", true), 
+            //#if U1
+            //               new JProperty("WebsocketAPI",  "ws://0.0.0.0:26481/moyuxu"),
+            //#else
+            //               new JProperty("WebsocketAPI",  "ws://0.0.0.0:29132/xsbasurXXXgxh"),  
+            //#endif 
+            //            new JProperty("Type", 0)
+            //            }).ToString());
 #endif
         }
         #region 最近       
@@ -42,6 +55,7 @@ namespace X_multi_server_container.Pages
             {
                 ProcessContainer processContainerPage = new ProcessContainer();
                 processContainerPage.StPar = (recentListView.SelectedItem as HistoryModel).StartINFO;
+                //    throw new Exception(processContainerPage.StPar.ToString());
                 PageManager.AddPage(processContainerPage, "进程启动器");
             }
             catch (Exception) { }

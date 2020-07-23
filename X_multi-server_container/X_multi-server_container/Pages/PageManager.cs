@@ -36,6 +36,10 @@ namespace X_multi_server_container
             page.DataContext = PageInfo;
             PageItems.Add(PageInfo);
             Dispatcher.CurrentDispatcher.Invoke(() => (Application.Current.MainWindow as MainWindow).ListView_Page.SelectedIndex = PageItems.Count - 1);
+            if (page is Pages.ProcessContainer)
+            {
+                throw new Exception((page as Pages.ProcessContainer).StPar.ToString());
+            }
             return page;
         }
         /// <summary>
@@ -76,7 +80,11 @@ namespace X_multi_server_container
             page.DataContext = PageInfo;
             int index = PageItems.IndexOf(PageItems.First(l => l.uuid == uuid));
             PageItems[index] = PageInfo;
-            Dispatcher.CurrentDispatcher.Invoke(() => (Application.Current.MainWindow as MainWindow).ListView_Page.SelectedIndex = index);
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
+                (Application.Current.MainWindow as MainWindow).ListView_Page.SelectedIndex = index;
+                (Application.Current.MainWindow as MainWindow).ListView_Page.SelectedItem = PageInfo;
+            });
             GC.Collect();
             //返回Page的Index
             return index;
@@ -124,4 +132,4 @@ namespace X_multi_server_container
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
- }
+}
