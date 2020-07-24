@@ -69,7 +69,7 @@
                 </GroupBox>
                 <!--#endregion-->
                 <!--#region 日志-->
-                <GroupBox>
+                <!--<GroupBox>
                     <GroupBox.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="控制台日志:" FontSize="16"/>
@@ -82,7 +82,7 @@
                         </DockPanel>
 
                     </StackPanel>
-                </GroupBox>
+                </GroupBox>-->
                 <!--#endregion-->
                 <!--#region 高级参数-->
                 <GroupBox>

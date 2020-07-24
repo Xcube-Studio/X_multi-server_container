@@ -71,6 +71,7 @@ namespace X_multi_server_container.Pages
             #endregion
         }
         #region 启动参数
+        public string SlnPath = "";
         public JObject StPar = new JObject{
             new JProperty("basicFilePath", "cmd"),
             new JProperty("OutPutEncoding", Encoding.Default.ToString()),
@@ -471,7 +472,7 @@ namespace X_multi_server_container.Pages
         #region WebsocketAPI
         WebSocketServer webSocketServer = null;
         List<IWebSocketConnection> webSocketClients = new List<IWebSocketConnection>();
-        #region 关闭页面释放资源
+        #region 开关
         public void DisposePage()
         {
             try
@@ -515,7 +516,7 @@ namespace X_multi_server_container.Pages
                 { }
             }
             p = new Process();
-            p.StartInfo.FileName = StPar.Value<string>("basicFilePath");
+            p.StartInfo.FileName = Regex.Replace(StPar.Value<string>("basicFilePath"), @"^~\\?", SlnPath + "\\");
             p.StartInfo.WorkingDirectory = Path.GetDirectoryName(p.StartInfo.FileName);
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
@@ -528,7 +529,7 @@ namespace X_multi_server_container.Pages
 #if DEBUG
                     p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
 #else
-                            p.StartInfo.CreateNoWindow = true;
+                    p.StartInfo.CreateNoWindow = true;
 #endif
                 }
             }
@@ -768,6 +769,7 @@ namespace X_multi_server_container.Pages
         #region 定时清屏
         private Timer ClearTimer = new Timer(1800000) { AutoReset = true, Enabled = false };/**/
         private int ClearText = 0;
+
         private void ClearTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             try

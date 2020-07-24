@@ -29,11 +29,13 @@ namespace X_multi_server_container.Pages
             {
                 ProcessContainer processContainerPage = new ProcessContainer();
                 var item = recentListView.SelectedItem as HistoryModel;
-                processContainerPage.StPar = JObject.Parse(File.ReadAllText(item.subtitle + "\\" + item.title));
+                string slnPath = item.subtitle + "\\" + item.title;
+                processContainerPage.StPar = JObject.Parse(File.ReadAllText(slnPath));
+                processContainerPage.SlnPath = slnPath;
                 //    throw new Exception(processContainerPage.StPar.ToString());
                 PageManager.AddPage(processContainerPage, "进程启动器");
             }
-            catch (Exception err) { Tools.DialogAPI.MessageBoxShow("打开失败！", err.ToString() ); }
+            catch (Exception err) { Tools.DialogAPI.MessageBoxShow("打开失败！", err.ToString()); }
         }
         //模型
         #endregion
@@ -56,7 +58,7 @@ namespace X_multi_server_container.Pages
             PageManager.ReplacePage((DataContext as PageItemModel).uuid, createPage, "新建启动方案(BDS模板)");
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void DelectRecentButton_Click(object sender, RoutedEventArgs e)
         {
             string uuid = (sender as Button).Tag.ToString();
             int i = Data.HistoryList.ToList().FindIndex(l => l.uuid == uuid);
