@@ -22,14 +22,14 @@
                 <Button Content="选择" DockPanel.Dock="Right"  Click="SelectPathButton_Click"/>
                 <TextBox Name="targetPath" />
             </DockPanel>
-          
+
             <!--#region WS接口-->
             <GroupBox>
                 <GroupBox.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="WebsocketAPI:" FontSize="16"/>
                         <CheckBox   x:Name="WSAPIToggle" VerticalAlignment="Center" Checked="Toggle_Checked" Unchecked="Toggle_Unchecked">
-                             <TextBlock Text="关" Margin="0,-1,0,0" Foreground="Beige"/>
+                            <TextBlock Text="关" Margin="0,-1,0,0" Foreground="Beige"/>
                         </CheckBox>
                     </StackPanel>
                 </GroupBox.Header>
@@ -50,8 +50,12 @@
                         <TextBlock Text="Websocket端点(EndPoint)"  />
                         <TextBox x:Name="endpointTB"  Text="mcws" TextChanged="endpointTB_TextChanged"/>
                     </DockPanel>
+                    <DockPanel>
+                        <TextBlock Text="WS执行指令交换密匙"  />
+                        <TextBox x:Name="wsPwd"  Text="password"/>
+                    </DockPanel>
                     <DockPanel HorizontalAlignment="Center">
-                        <TextBlock Text="预览访问地址:" HorizontalAlignment="Center"/>
+                        <TextBlock Text="访问地址预览:" HorizontalAlignment="Center"/>
                         <TextBox x:Name="PreviewAddressTB" IsReadOnly="True" Foreground="Yellow" BorderBrush="{x:Null}" Margin="-3" Text="ws://127.0.0.1:29132/mcws" >
                             <TextBox.Background>
                                 <SolidColorBrush  Opacity="0.5" Color="SkyBlue"/>
@@ -88,13 +92,20 @@
                             <TextBlock Text="From:" Margin="2,4,2,3"/>
                             <TextBox  x:Name="inputEncodingCBF"  Text="UTF-8" Grid.Column="1"/>
                             <TextBlock Text="To:" Grid.Column="2" Margin="2,4,2,3"/>
-                            <TextBox  x:Name="inputEncodingCBT"  Grid.Column ="3" Text="GBK"/>  
+                            <TextBox  x:Name="inputEncodingCBT"  Grid.Column ="3" Text="GBK"/>
                         </Grid>
                     </DockPanel>
                     <DockPanel>
                         <TextBlock Text="终止命令:"/>
                         <TextBox  x:Name="exitCMD"  Text="stop"/>
                     </DockPanel>
+                    <DockPanel>
+                        <TextBlock Text="快速重启按钮"/>
+                        <CheckBox   x:Name="rbtshow"  Checked="Toggle_Checked" Unchecked="Toggle_Unchecked" VerticalAlignment="Center" Margin="0,3,0,0">
+                            <TextBlock Text="关" Margin="0" Foreground="Beige"/>
+                        </CheckBox>
+                    </DockPanel>
+
                 </StackPanel>
             </GroupBox>
             <!--#endregion-->
@@ -245,7 +256,7 @@
                                 </MultiDataTrigger.Conditions>
                                 <Setter Property="Background" TargetName="border" Value="#FF404040"/>
                                 <Setter Property="BorderBrush" TargetName="border" Value="#FF404040"/>
-                            </MultiDataTrigger> 
+                            </MultiDataTrigger>
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsPressed}" Value="true"/>

@@ -48,6 +48,7 @@ namespace X_multi_server_container.Pages
                 Match wsInfo = Regex.Match(config["WebsocketAPI"].ToString(), @"ws://0\.0\.0\.0:?(?<port>\d{1,5})/?(?<ep>.*)");
                 portTB.Text = wsInfo.Groups["port"].Success ? wsInfo.Groups["port"].ToString() : "";
                 endpointTB.Text = wsInfo.Groups["ep"].Success ? wsInfo.Groups["ep"].ToString() : "";
+                wsPwd.Text = config["WebsocketPassword"].ToString();
             }
             if (config.ContainsKey("InPutEncoding"))
             {
@@ -137,9 +138,12 @@ namespace X_multi_server_container.Pages
                 new JProperty("basicFilePath", targetPath.Text),
                 new JProperty("OutPutEncoding",   outputEncodingCB.Text),
                 new JProperty("WebsocketAPI",   WSAPIToggle.IsChecked==true?"ws://0.0.0.0" + (portTB.Text.Length > 0 ? ":" : "") + portTB.Text + "/" + endpointTB.Text:null),
+              new JProperty("WebsocketPassword", WSAPIToggle.IsChecked == true ? wsPwd.Text : ""),
                 new JProperty("ExitCMD", exitCMD.Text),
+                new JProperty("ShowRebootButton",rbtshow.IsChecked==true),
                 new JProperty("Type",   pubblishedTemplate.SelectedIndex)
             };
+
             if (InPutEncodingConverntCB.IsChecked == true)
             {
                 config.Add(new JProperty("InPutEncoding", new JObject {

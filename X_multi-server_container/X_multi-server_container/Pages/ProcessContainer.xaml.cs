@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Timers;
 using System.Windows.Media;
+using X_multi_server_container.Tools;
+using System.Threading;
+using Timer = System.Timers.Timer;
 
 namespace X_multi_server_container.Pages
 {
@@ -46,10 +49,14 @@ namespace X_multi_server_container.Pages
             {
                 try
                 {
-                    debugtext.Text = Cos.SelectedText;
-                    debugtext.Text += ClearText;
-                    //Cos.SelectionBrush = new SolidColorBrush(Colors.Yellow);
-                    Cos.IsInactiveSelectionHighlightEnabled = true;
+                    debugtext.Text += p.ProcessName + "\n";
+                    debugtext.Text += p.SessionId + "\n";
+                    debugtext.Text += p.Id + "\n";
+                    debugtext.Text += p.HandleCount + "\n";
+                    debugtext.Text += p.HasExited + "\n";
+                    p.Kill();
+                    debugtext.Text += p.HasExited + "\n";
+                    debugtext.Text += p.HandleCount + "\n";
                 }
                 catch (Exception err) { debugtext.Text += "\n" + err.ToString(); }
             };
@@ -58,7 +65,6 @@ namespace X_multi_server_container.Pages
             Task.Run(() =>
             {
                 System.Threading.Thread.Sleep(5000);
-
                 WriteLine("当前参数\n" + StPar.ToString());
             });
 #endif 
@@ -296,34 +302,7 @@ namespace X_multi_server_container.Pages
                 MainWindow.Button.Click += Button_Click;
                 if (p == null)
                 {
-                    p = new Process();
-                    p.StartInfo.FileName = StPar.Value<string>("basicFilePath");
-                    p.StartInfo.WorkingDirectory = Path.GetDirectoryName(p.StartInfo.FileName);
-                    p.StartInfo.UseShellExecute = false;
-                    p.StartInfo.RedirectStandardOutput = true;
-                    p.StartInfo.RedirectStandardInput = true;
-                    p.StartInfo.RedirectStandardError = true;
-                    if (StPar.ContainsKey("showWindow"))
-                    {
-                        if (!StPar.Value<bool>("showWindow"))
-                        {
-#if DEBUG
-                            p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-#else
-                            p.StartInfo.CreateNoWindow = true;
-#endif
-                        }
-                    }
-                    p.EnableRaisingEvents = true;
-                    var encoding = GetEncoding(StPar.Value<string>("OutPutEncoding"));
-                    p.StartInfo.StandardOutputEncoding = encoding;
-                    p.StartInfo.StandardErrorEncoding = encoding;
-                    WriteLine("当前编码:" + p.StartInfo.StandardOutputEncoding);
-                    p.Start();
-                    p.BeginErrorReadLine();
-                    p.ErrorDataReceived += (_s, _e) => WriteLine(_e.Data);
-                    p.BeginOutputReadLine();
-                    p.OutputDataReceived += (_s, _e) => OnConsoleReadLine(_e.Data);
+                    StartProcess();
                     #region WS
                     try
                     {
@@ -360,6 +339,57 @@ namespace X_multi_server_container.Pages
                     }
                     catch (Exception err) { WriteLine("WS服务器启动失败!\n" + err.ToString()); }
                     #endregion
+                    if (StPar.ContainsKey("ShowRebootButton"))
+                    {
+                        if (StPar.Value<bool>("ShowRebootButton"))
+                        {
+                            RebootButtonBorder.Visibility = Visibility.Visible;
+                            Button rebootButton = new Button() { Content = "重启" };
+                            rebootButton.Click += (sender_, e_) =>
+                            {
+                                p.Exited += (s, b) => { };
+                                StopProcess();
+                                rebootButton.Content = "正在终止...";
+                                rebootButton.IsEnabled = false;
+                                Task.Run(() =>
+                                {
+                                    Thread.Sleep(500);
+                                    int state = 0;
+                                    for (int i = 0; i < 200; i++)
+                                    {
+                                        p.OutputDataReceived += (s, b) => state = 0;
+                                        //WriteLine(p.HasExited);
+                                        if (p.HasExited) { state++; }
+                                        p.WaitForExit(1000);
+                                        try
+                                        {
+                                            p.StandardInput.WriteLine(StPar["ExitCMD"].ToString());
+                                        }
+                                        catch (Exception) { }
+                                        Thread.Sleep(100);
+                                        if (state > 50)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    Thread.Sleep(1000);
+                                    Dispatcher.Invoke(() =>
+                                 {
+                                     rebootButton.Content = "正在启动进程...";
+                                     rebootButton.IsEnabled = false;
+                                     StartProcess();
+                                 });
+                                    Thread.Sleep(1000);
+                                    Dispatcher.Invoke(() =>
+                                    {
+                                        rebootButton.Content = "重启";
+                                        rebootButton.IsEnabled = true;
+                                    });
+                                });
+                            };
+                            RebootButtonBorder.Child = rebootButton;
+                        }
+                    }
 
                 }
                 Board.Height = 0;
@@ -367,7 +397,9 @@ namespace X_multi_server_container.Pages
                 #endregion
             }
             catch (Exception err)
-            { WriteLine("启动失败!\n" + err.ToString()); }
+            {
+                WriteLine("启动失败!\n" + err.ToString());
+            }
 
         }
         public Encoding GetEncoding(string v)
@@ -449,11 +481,90 @@ namespace X_multi_server_container.Pages
                 webSocketServer.Dispose();
             }
             catch (Exception) { }
+            StopProcess();
+        }
+        private void StopProcess()
+        {
             try
             {
-                SendCMD(StPar["ExitCMD"].ToString());
-                p.Kill();
-                p.Dispose();
+                try { SendCMD(StPar["ExitCMD"].ToString()); } catch (Exception) { }
+                try
+                {
+                    if (p.MainWindowHandle != IntPtr.Zero)
+                    {
+                        User32API.ShowWindow(p.MainWindowHandle, User32API.SW_SHOWNA);
+                    }
+                }
+                catch (Exception) { }
+                //p.StartInfo.RedirectStandardOutput = false;
+                //p.StartInfo.RedirectStandardInput = false;  
+            
+            }
+            catch (Exception) { }
+        }
+        private void StartProcess()
+        {
+            if (p != null)
+            {
+                try
+                {
+                    p.Kill();
+                    p.Dispose();
+                }
+                catch (Exception)
+                { }
+            }
+            p = new Process();
+            p.StartInfo.FileName = StPar.Value<string>("basicFilePath");
+            p.StartInfo.WorkingDirectory = Path.GetDirectoryName(p.StartInfo.FileName);
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardInput = true;
+            p.StartInfo.RedirectStandardError = true;
+            if (StPar.ContainsKey("showWindow"))
+            {
+                if (!StPar.Value<bool>("showWindow"))
+                {
+#if DEBUG
+                    p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+#else
+                            p.StartInfo.CreateNoWindow = true;
+#endif
+                }
+            }
+            p.EnableRaisingEvents = true;
+            var encoding = GetEncoding(StPar.Value<string>("OutPutEncoding"));
+            p.StartInfo.StandardOutputEncoding = encoding;
+            p.StartInfo.StandardErrorEncoding = encoding;
+            WriteLine("当前编码:" + p.StartInfo.StandardOutputEncoding);
+            p.Start();
+            p.BeginErrorReadLine();
+            p.ErrorDataReceived += (_s, _e) => WriteLine(_e.Data);
+            p.BeginOutputReadLine();
+            p.OutputDataReceived += (_s, _e) => OnConsoleReadLine(_e.Data);
+            p.Exited += (_s, _e) =>
+            {
+                WriteLine("---Main Process Exited---");
+            };
+            try
+            {
+                Task.Run(() =>
+                {
+                    for (int i = 0; i < 2000; i++)
+                    {
+                        Thread.Sleep(10);
+                        if (p.MainWindowHandle != IntPtr.Zero)
+                        {
+                            User32API.ShowWindow(p.MainWindowHandle, User32API.SW_HIDE);
+                            break;
+                        }
+                        if (p.HasExited) break;
+                    }
+                    //WriteLine(p.HandleCount);
+                    //WriteLine(p.MainWindowHandle);
+                    User32API.ShowWindow(p.Handle, User32API.SW_MINIMIZE);
+                    //User32API.ShowWindow(User32API.GetPWindowHandle(p.Id), User32API.SW_MINIMIZE);
+                });
             }
             catch (Exception) { }
         }
