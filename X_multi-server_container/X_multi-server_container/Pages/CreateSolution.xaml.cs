@@ -35,8 +35,8 @@ namespace X_multi_server_container.Pages
                 if (find_i != -1)
                 {
                     Data.HistoryListRemove(find_i);
-                    Data.HistoryListAdd(addModel);
                 }
+                Data.HistoryListAdd(addModel);
             }
             catch (Exception err)
             { MessageBoxShow("打开启动方案失败", err.ToString()); }

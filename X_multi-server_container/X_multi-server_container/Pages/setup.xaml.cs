@@ -1,5 +1,4 @@
-﻿#define U1
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel;
@@ -21,38 +20,7 @@ namespace X_multi_server_container.Pages
         public Setup()
         {
             InitializeComponent();
-            recentListView.ItemsSource = Data.HistoryList;
-
-#if DEBUG
-#if U1
-            string path = "bedrock_server.exe";
-#else
-            string path = "mc_start.bat";
-#endif
-
-            recentListView.Items.Add(new HistoryModel("相对路径快速启动BDS", "[DEBUG]运行当前目录下的" + path, new JObject() {
-                new JProperty("basicFilePath",  path),
-                new JProperty("OutPutEncoding", Encoding.UTF8.ToString()),
-                new JProperty("showWindow", true), 
-#if U1
-               new JProperty("WebsocketAPI",  "ws://0.0.0.0:26481/moyuxu"),
-#else
-               new JProperty("WebsocketAPI",  "ws://0.0.0.0:29132/xsbasurXXXgxh"),  
-#endif
-            new JProperty("Type", 0)
-            }));
-            //            throw new Exception((new JObject() {
-            //                new JProperty("basicFilePath",  path),
-            //                new JProperty("OutPutEncoding", Encoding.UTF8.ToString()),
-            //                new JProperty("showWindow", true), 
-            //#if U1
-            //               new JProperty("WebsocketAPI",  "ws://0.0.0.0:26481/moyuxu"),
-            //#else
-            //               new JProperty("WebsocketAPI",  "ws://0.0.0.0:29132/xsbasurXXXgxh"),  
-            //#endif 
-            //            new JProperty("Type", 0)
-            //            }).ToString());
-#endif
+            recentListView.ItemsSource = Data.HistoryList; 
         }
         #region 最近       
         private void recentListView_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)

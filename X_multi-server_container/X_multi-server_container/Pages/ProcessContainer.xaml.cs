@@ -48,7 +48,7 @@ namespace X_multi_server_container.Pages
             debugbutton.Click += (sender, e) =>
             {
                 try
-                { 
+                {
                     debugtext.Text += p.ProcessName + "\n";
                     debugtext.Text += p.SessionId + "\n";
                     debugtext.Text += p.Id + "\n";
@@ -586,65 +586,141 @@ namespace X_multi_server_container.Pages
                 WriteLine(rece);
                 if (webSocketClients.Count > 0)
                 {
-                    int type = StPar.Value<int>("Type");
-                    if (type == 0)//BDS
+                    switch (StPar.Value<int>("Type"))
                     {
-                        var match1 = Regex.Match(rece, @"{?\[\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\s(?<type>\w*?)\]\s?(?<Content>.*)");
-                        string msgtype = match1.Groups["type"].Value;
-
-                        if (!string.IsNullOrEmpty(msgtype))
-                        {
-                            string content = match1.Groups["Content"].Value;
-#if DEBUG
-                            WriteLineDEBUG(msgtype + ":" + content);
-#endif
-                            if (msgtype == "INFO")
+                        case 0://BDS
+                        case 2://MG
+                            try
                             {
-                                var match2 = Regex.Match(content, @"^Player\s(?<dis>dis)?connected:\s(?<Player>.*?),\sxuid:\s(?<xuid>\d*)");
-#if DEBUG
-                                WriteLineDEBUG(match2.Groups["Player"].Value + ":" + match2.Groups["xuid"]);
-#endif
-                                if (match2.Groups["Player"].Success)
+                                var match1 = Regex.Match(rece, @"{?\[\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\s(?<type>\w*?)\]\s?(?<Content>.*)");
+                                string msgtype = match1.Groups["type"].Value;
+                                if (!string.IsNullOrEmpty(msgtype))
                                 {
-                                    if (match2.Groups["dis"].Success)
+                                    string content = match1.Groups["Content"].Value;
+#if DEBUG
+                                    WriteLineDEBUG(msgtype + ":" + content);
+#endif
+                                    if (msgtype == "INFO")
                                     {
-                                        SendToAll(new JObject(){
+                                        var match2 = Regex.Match(content, @"^Player\s(?<dis>dis)?connected:\s(?<Player>.*?),\sxuid:\s(?<xuid>\d*)");
+#if DEBUG
+                                        WriteLineDEBUG(match2.Groups["Player"].Value + ":" + match2.Groups["xuid"]);
+#endif
+                                        if (match2.Groups["Player"].Success)
+                                        {
+                                            if (match2.Groups["dis"].Success)
+                                            {
+                                                SendToAll(new JObject(){
                                     new JProperty("operate","onleft"),
                                     new JProperty( "target",match2.Groups["Player"].Value ),
                                     new JProperty( "text",match2.Groups["xuid"].Value )
                                  });
-                                    }
-                                    else
-                                    {
-                                        SendToAll(new JObject(){
+                                            }
+                                            else
+                                            {
+                                                SendToAll(new JObject(){
                                     new JProperty("operate","onjoin"),
                                     new JProperty( "target",match2.Groups["Player"].Value ),
                                     new JProperty( "text",match2.Groups["xuid"].Value )
                                  });
+                                            }
+                                        }
                                     }
-                                }
-                            }
-                            else if (msgtype == "Chat")
-                            {
-                                var match2 = Regex.Match(content, @"^(玩家\s)?(?!(玩家\s)?(Server|服务器))(?<Player>.*?)(?<!Server|服务器|\s悄悄地对.*)\s说:\s?(?<text>.+)");
-                                if (match2.Groups["Player"].Success)
-                                {
-                                    SendToAll(new JObject()
+                                    else if (msgtype == "Chat")
+                                    {
+                                        var match2 = Regex.Match(content, @"^(玩家\s)?(?!(玩家\s)?(Server|服务器))(?<Player>.*?)(?<!Server|服务器|\s悄悄地对.*)\s说:\s?(?<text>.+)");
+                                        if (match2.Groups["Player"].Success)
+                                        {
+                                            SendToAll(new JObject()
                             {
                                 new JProperty("operate","onmsg"),
                                 new JProperty( "target",match2.Groups["Player"].Value ),
                                 new JProperty( "text",match2.Groups["text"].Value )
                              });
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    }
-                    else if (type == 1)
-                    {
 
-                    }
-                    else if (type == 2)
-                    {
+
+                            catch (Exception
+#if DEBUG
+            err
+#endif
+            )
+                            {
+#if DEBUG
+                                WriteLineDEBUG("[ERROR]OnConsoleReadLine\n" + err);
+#endif
+                            }
+                            break;
+                        case 1://EZ
+                            try
+                            {
+                                var match1 = Regex.Match(rece, @"\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\s\w\s\[(?<type>\w+?)\]\s\(.+?\)\s(?<Content>.*)");
+                                string msgtype = match1.Groups["type"].Value;
+                                if (!string.IsNullOrEmpty(msgtype))
+                                {
+                                    string content = match1.Groups["Content"].Value;
+#if DEBUG
+                                    WriteLineDEBUG(msgtype + ":" + content);
+#endif
+                                    if (msgtype == "SERVER")
+                                    {
+                                        var match2 = Regex.Match(content, @"^Player\s(?<dis>dis)?connected:\s(?<Player>.*?),\sxuid:\s(?<xuid>\d*)");
+#if DEBUG
+                                        WriteLineDEBUG(match2.Groups["Player"].Value + ":" + match2.Groups["xuid"]);
+#endif
+                                        if (match2.Groups["Player"].Success)
+                                        {
+                                            if (match2.Groups["dis"].Success)
+                                            {
+                                                SendToAll(new JObject(){
+                                    new JProperty("operate","onleft"),
+                                    new JProperty( "target",match2.Groups["Player"].Value ),
+                                    new JProperty( "text",match2.Groups["xuid"].Value )
+                                 });
+                                            }
+                                            else
+                                            {
+                                                SendToAll(new JObject(){
+                                    new JProperty("operate","onjoin"),
+                                    new JProperty( "target",match2.Groups["Player"].Value ),
+                                    new JProperty( "text",match2.Groups["xuid"].Value )
+                                 });
+                                            }
+                                        }
+                                    }
+                                    else if (msgtype == "CHAT")
+                                    {
+                                        var match2 = Regex.Match(content, @"\[(?<Player>.+?)\]\s(?<text>.+)");
+                                        if (match2.Groups["Player"].Success)
+                                        {
+                                            SendToAll(new JObject()
+                            {
+                                new JProperty("operate","onmsg"),
+                                new JProperty( "target",match2.Groups["Player"].Value ),
+                                new JProperty( "text",match2.Groups["text"].Value )
+                             });
+                                        }
+                                    }
+                                }
+                            }
+
+
+                            catch (Exception
+#if DEBUG
+            err
+#endif
+            )
+                            {
+#if DEBUG
+                                WriteLineDEBUG("[ERROR]OnConsoleReadLine\n" + err);
+#endif
+                            }
+                            break;
+                        default:
+                            break;
 
                     }
                 }

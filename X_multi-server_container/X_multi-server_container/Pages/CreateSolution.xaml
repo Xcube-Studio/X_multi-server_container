@@ -31,7 +31,7 @@
                     <GroupBox.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="WebsocketAPI:" FontSize="16"/>
-                            <CheckBox   x:Name="WSAPIToggle" VerticalAlignment="Center" Checked="Toggle_Checked" Unchecked="Toggle_Unchecked">
+                            <CheckBox  IsChecked="True" x:Name="WSAPIToggle" VerticalAlignment="Center" Checked="Toggle_Checked" Unchecked="Toggle_Unchecked">
                                 <TextBlock Text="关" Margin="0,-1,0,0" Foreground="Beige"/>
                             </CheckBox>
                         </StackPanel>
