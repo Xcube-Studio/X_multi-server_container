@@ -90,6 +90,7 @@
     </ApplicationDefinition>
     <Compile Include="Pages\Data.cs" />
     <Compile Include="Pages\Models.cs" />
+    <Compile Include="Tools\Dialog.cs" />
     <Compile Include="Tools\User32API.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

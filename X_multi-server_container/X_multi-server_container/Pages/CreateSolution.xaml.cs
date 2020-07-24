@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using X_multi_server_container.Tools;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 
@@ -30,8 +31,8 @@ namespace X_multi_server_container.Pages
             try
             {
                 LoadFromConfig(JObject.Parse(File.ReadAllText(path)));
-                var addModel = new HistoryModel(Path.GetFileName(path), Path.GetDirectoryName(path), GetConfigJson());
-                int find_i = Data.HistoryList.ToList().FindIndex(l => l.title == addModel.title && l.subtitle == addModel.subtitle && l.StartINFO.ToString() == addModel.StartINFO.ToString());
+                var addModel = new HistoryModel(Path.GetFileName(path), Path.GetDirectoryName(path));
+                int find_i = Data.HistoryList.ToList().FindIndex(l => l.title == addModel.title && l.subtitle == addModel.subtitle);/*&&l.StartINFO.ToString() == addModel.StartINFO.ToString()*/
                 if (find_i != -1)
                 {
                     Data.HistoryListRemove(find_i);
@@ -39,7 +40,7 @@ namespace X_multi_server_container.Pages
                 Data.HistoryListAdd(addModel);
             }
             catch (Exception err)
-            { MessageBoxShow("打开启动方案失败", err.ToString()); }
+            { Tools.DialogAPI.MessageBoxShow("打开启动方案失败", err.ToString()); }
         }
         public void LoadFromConfig(JObject config)
         {
@@ -85,17 +86,6 @@ namespace X_multi_server_container.Pages
 
             PageManager.AddPage(processContainerPage, "进程启动器");
         }
-        private void MessageBoxShow(string title, string content)
-        {
-            using (TaskDialog dialog = new TaskDialog())
-            {
-                dialog.WindowTitle = title;
-                dialog.MainInstruction = title;
-                dialog.Content = content;
-                dialog.Buttons.Add(new TaskDialogButton(ButtonType.Close));
-                dialog.ShowDialog(Application.Current.MainWindow);
-            }
-        }
         private void SaveSlnButton_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
@@ -126,12 +116,12 @@ namespace X_multi_server_container.Pages
                             try
                             {
                                 File.WriteAllText(saveFileName, GetConfigJson().ToString());
-                                MessageBoxShow("保存成功", "文件已保存至" + saveFileName);
-                                Data.HistoryListAdd(new HistoryModel(Path.GetFileName(saveFileName), Path.GetDirectoryName(saveFileName), GetConfigJson()));
+                     Tools.DialogAPI.          MessageBoxShow("保存成功", "文件已保存至" + saveFileName);
+                                Data.HistoryListAdd(new HistoryModel(Path.GetFileName(saveFileName), Path.GetDirectoryName(saveFileName)));
                             }
                             catch (Exception err)
                             {
-                                MessageBoxShow("保存失败", "错误信息\n" + err.ToString());
+                                Tools.DialogAPI.MessageBoxShow("保存失败", "错误信息\n" + err.ToString());
                             }
                         }
                     }

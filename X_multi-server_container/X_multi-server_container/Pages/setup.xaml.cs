@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
+using X_multi_server_container.Tools;
 
 namespace X_multi_server_container.Pages
 {
@@ -20,7 +20,7 @@ namespace X_multi_server_container.Pages
         public Setup()
         {
             InitializeComponent();
-            recentListView.ItemsSource = Data.HistoryList; 
+            recentListView.ItemsSource = Data.HistoryList;
         }
         #region 最近       
         private void recentListView_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -28,11 +28,12 @@ namespace X_multi_server_container.Pages
             try
             {
                 ProcessContainer processContainerPage = new ProcessContainer();
-                processContainerPage.StPar = (recentListView.SelectedItem as HistoryModel).StartINFO;
+                var item = recentListView.SelectedItem as HistoryModel;
+                processContainerPage.StPar = JObject.Parse(File.ReadAllText(item.subtitle + "\\" + item.title));
                 //    throw new Exception(processContainerPage.StPar.ToString());
                 PageManager.AddPage(processContainerPage, "进程启动器");
             }
-            catch (Exception) { }
+            catch (Exception err) { Tools.DialogAPI.MessageBoxShow("打开失败！", err.ToString() ); }
         }
         //模型
         #endregion
@@ -45,7 +46,7 @@ namespace X_multi_server_container.Pages
                 createPage.LoadFromFile(fileDialog.FileName);
                 createPage.Title.Text = "已打开启动方案";
                 PageManager.ReplacePage((DataContext as PageItemModel).uuid, createPage, Path.GetFileName(fileDialog.FileName));
-             }
+            }
         }
         private void BDSTemplateButton_Click(object sender, RoutedEventArgs e)
         {

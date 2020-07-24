@@ -68,6 +68,22 @@
                     </StackPanel>
                 </GroupBox>
                 <!--#endregion-->
+                <!--#region 日志-->
+                <GroupBox>
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="控制台日志:" FontSize="16"/>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <StackPanel>
+                        <DockPanel>
+                            <TextBlock Text="控制台输出编码:"/>
+                            <TextBox Text="UTF-8"/>
+                        </DockPanel>
+
+                    </StackPanel>
+                </GroupBox>
+                <!--#endregion-->
                 <!--#region 高级参数-->
                 <GroupBox>
                     <GroupBox.Header>
@@ -99,7 +115,7 @@
                             </Grid>
                         </DockPanel>
                         <DockPanel>
-                            <TextBlock Text="终止命令:"/>
+                            <TextBlock Text="终止命令(请务必正确填写):"/>
                             <TextBox  x:Name="exitCMD"  Text="stop"/>
                         </DockPanel>
                         <DockPanel>
@@ -107,8 +123,7 @@
                             <CheckBox  IsChecked="True" x:Name="rbtshow"  Checked="Toggle_Checked" Unchecked="Toggle_Unchecked" VerticalAlignment="Center" Margin="0,3,0,0">
                                 <TextBlock Text="关" Margin="0" Foreground="Beige"/>
                             </CheckBox>
-                        </DockPanel>
-
+                        </DockPanel> 
                     </StackPanel>
                 </GroupBox>
                 <!--#endregion-->

@@ -10,6 +10,7 @@ using System.Windows;
 
 namespace X_multi_server_container.Pages
 {
+   
     public static class Data
     {
         public static ObservableCollection<HistoryModel> _historyList = null;
@@ -55,7 +56,8 @@ namespace X_multi_server_container.Pages
             {
                 try
                 {
-                    _historyList.Add(new HistoryModel(l.Value<string>("Title"), l.Value<string>("SubTitle"), l["StartINFO"] as JObject));
+                    string path = l.Value<string>("Path");
+                    _historyList.Add(new HistoryModel(Path.GetFileName(path),Path.GetDirectoryName(path)));
                 }
                 catch (Exception) { }
             });
@@ -75,7 +77,7 @@ namespace X_multi_server_container.Pages
             //{ 
             //_historyList.Add(new HistoryModel("dsadasdsaddsa", "dassdsdsdad", new JObject()));
             JArray historyJArr = new JArray();
-            _historyList.ToList().ForEach(l => historyJArr.Add(new JObject { new JProperty("Title", l.title), new JProperty("SubTitle", l.subtitle), new JProperty("StartINFO", l.StartINFO) }));
+            _historyList.ToList().ForEach(l => historyJArr.Add(new JObject { new JProperty("Path", l.subtitle + "\\" + l.title) }));
             File.WriteAllText(Environment.CurrentDirectory + "\\history.json", historyJArr.ToString());
 
             //}

@@ -419,7 +419,7 @@
                 <!--#region 左下分区 -->
                 <fw:AcrylicPanel Grid.Row="3">
                     <Grid>
-                        <Border Height="1" VerticalAlignment="Top" >
+                        <Border x:Name="receItemWidth" Height="1" VerticalAlignment="Top" >
                             <Border.Background>
                                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
                             </Border.Background>
@@ -433,15 +433,21 @@
                             </ListBox.ItemsPanel>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Height="50" Width="400"  >
-                                        <StackPanel Margin="10,0,0,0" Orientation="Horizontal">
-                                            <TextBlock Text="&#xE990;" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Foreground="Wheat" FontSize="32"/>
-                                            <StackPanel Orientation="Vertical" Margin="10,5,0,5">
-                                                <TextBlock Text="{Binding Path=title}" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Wheat" FontSize="18"/>
-                                                <TextBlock Text="{Binding Path=subtitle}" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Wheat" FontSize="12"/>
-                                            </StackPanel>
-                                        </StackPanel>
-                                        <Button Margin="0,0,10,0" Tag="{Binding Path=uuid}" Content="&#xE711;" HorizontalAlignment="Right" Padding="0" Width="30" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Height="30" Click="Button_Click"/>
+                                    <Grid Width="{Binding ElementName=receItemWidth,Path=ActualWidth,Mode=OneWay}">
+                                        <Grid  Height="50" Margin="0,0,50,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <DockPanel Margin="10,0,0,0"  >
+                                                <TextBlock Text="&#xE990;" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Foreground="Wheat" FontSize="32"/>
+                                                <StackPanel Margin="10,5,0,5">
+                                                    <TextBlock Text="{Binding Path=title}"  Foreground="Wheat" FontSize="18"/>
+                                                    <TextBlock Text="{Binding Path=subtitle}"  Foreground="Wheat" FontSize="12"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                            <Button   Grid.Column="1"  Tag="{Binding Path=uuid}" Content="&#xE711;"   Padding="0" Width="30" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Height="30" Click="Button_Click"/>
+                                        </Grid>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
