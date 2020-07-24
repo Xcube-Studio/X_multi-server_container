@@ -130,8 +130,10 @@ namespace X_multi_server_container.Pages
                 catch (Exception) { }
             }
         }
-        private void Toggle_Checked(object sender, RoutedEventArgs e) => ((TextBlock)((CheckBox)sender).Content).Text = "开";
-        private void Toggle_Unchecked(object sender, RoutedEventArgs e) => ((TextBlock)((CheckBox)sender).Content).Text = "关";
+        private void Toggle_Checked(object sender, RoutedEventArgs e) { try { ((TextBlock)((CheckBox)sender).Content).Text = "开"; } catch (Exception) { } }
+
+        private void Toggle_Unchecked(object sender, RoutedEventArgs e) { try { ((TextBlock)((CheckBox)sender).Content).Text = "关"; } catch (Exception) { } }
+
         private JObject GetConfigJson()
         {
             JObject config = new JObject() {
@@ -192,6 +194,11 @@ namespace X_multi_server_container.Pages
             switch (pubblishedTemplate.SelectedIndex)
             {
                 case 0:
+                    InPutEncodingConverntCB.IsChecked = false;
+                    outputEncodingCB.Text = "UTF-8";
+                    inputEncodingCBF.Text = "UTF-8";
+                    inputEncodingCBT.Text = "GBK";
+                    break;
                 case 1:
                 case 2:
                     InPutEncodingConverntCB.IsChecked = true;

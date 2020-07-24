@@ -376,11 +376,11 @@
     <Grid>
         <DockPanel>
             <Grid DockPanel.Dock="Bottom">
-                <DockPanel>
+                <DockPanel x:Name="BottomDP"  >
                     <Border Visibility="Collapsed" x:Name="RebootButtonBorder" BorderThickness="1" DockPanel.Dock="Left"   Background="#19FFFFFF" BorderBrush="#3FFFFFFF" Margin="1,0,1,1" Grid.Row="1" >
                      
                     </Border>
-                    <Border BorderThickness="1" DockPanel.Dock="Right" x:Name="Board"  VerticalAlignment="Bottom" Background="#19FFFFFF" BorderBrush="#3FFFFFFF" Margin="1,0,1,1" Grid.Row="1" >
+                    <Border BorderThickness="1" DockPanel.Dock="Right"  Background="#19FFFFFF" BorderBrush="#3FFFFFFF" Margin="1,0,1,1" Grid.Row="1" >
                         <Grid>
                             <Button Content="&#xE74A;" Padding="10,5" FontFamily="Segoe MDL2 Assets" Click="UP_Button_Click" HorizontalAlignment="Left" FontSize="12" Width="40"/>
                             <Button Content="&#xE74B;" Padding="10,5" FontFamily="Segoe MDL2 Assets" Click="DOWN_Button_Click" HorizontalAlignment="Left" Margin="40,0,0,0" FontSize="12" Width="40"/>

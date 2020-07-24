@@ -392,7 +392,7 @@ namespace X_multi_server_container.Pages
                     }
 
                 }
-                Board.Height = 0;
+                BottomDP.Height = 0;
                 EchoInputPanel();
                 #endregion
             }
@@ -424,7 +424,7 @@ namespace X_multi_server_container.Pages
             Storyboard storyboard = new Storyboard();
             DoubleAnimationUsingKeyFrames keyFramesAnimation = new DoubleAnimationUsingKeyFrames();
             keyFramesAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(33, TimeSpan.FromSeconds(0.35)));
-            Storyboard.SetTarget(keyFramesAnimation, Board);
+            Storyboard.SetTarget(keyFramesAnimation, BottomDP);
             Storyboard.SetTargetProperty(keyFramesAnimation, new PropertyPath("(FrameworkElement.Height)"));
             storyboard.Children.Add(keyFramesAnimation);
             storyboard.Begin();
@@ -445,7 +445,7 @@ namespace X_multi_server_container.Pages
             Storyboard storyboard = new Storyboard();
             DoubleAnimationUsingKeyFrames keyFramesAnimation = new DoubleAnimationUsingKeyFrames();
             keyFramesAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(0, TimeSpan.FromSeconds(0.35)));
-            Storyboard.SetTarget(keyFramesAnimation, Board);
+            Storyboard.SetTarget(keyFramesAnimation, BottomDP);
             Storyboard.SetTargetProperty(keyFramesAnimation, new PropertyPath("(FrameworkElement.Height)"));
             storyboard.Children.Add(keyFramesAnimation);
             storyboard.Begin();

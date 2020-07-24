@@ -16,100 +16,103 @@
             <Button Content="保存启动方案" Click="SaveSlnButton_Click"/>
             <Grid/>
         </DockPanel>
-        <StackPanel>
-            <DockPanel>
-                <TextBlock Text="程序路径" DockPanel.Dock="Left"/>
-                <Button Content="选择" DockPanel.Dock="Right"  Click="SelectPathButton_Click"/>
-                <TextBox Name="targetPath" />
-            </DockPanel>
 
-            <!--#region WS接口-->
-            <GroupBox>
-                <GroupBox.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="WebsocketAPI:" FontSize="16"/>
-                        <CheckBox   x:Name="WSAPIToggle" VerticalAlignment="Center" Checked="Toggle_Checked" Unchecked="Toggle_Unchecked">
-                            <TextBlock Text="关" Margin="0,-1,0,0" Foreground="Beige"/>
-                        </CheckBox>
+        <Border DockPanel.Dock="Bottom" Height="1" Margin="0,5"  Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+             <StackPanel>
+                <DockPanel>
+                    <TextBlock Text="程序路径" DockPanel.Dock="Left"/>
+                    <Button Content="选择" DockPanel.Dock="Right"  Click="SelectPathButton_Click"/>
+                    <TextBox Name="targetPath" />
+                </DockPanel>
+                 <!--#region WS接口--> 
+                <GroupBox>
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="WebsocketAPI:" FontSize="16"/>
+                            <CheckBox   x:Name="WSAPIToggle" VerticalAlignment="Center" Checked="Toggle_Checked" Unchecked="Toggle_Unchecked">
+                                <TextBlock Text="关" Margin="0,-1,0,0" Foreground="Beige"/>
+                            </CheckBox>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <StackPanel>
+                        <DockPanel>
+                            <TextBlock Text="预制输出模板"  />
+                            <ComboBox x:Name="pubblishedTemplate"  >
+                                <ComboBoxItem Content="原版BDS (无法获取聊天输出)" IsSelected="True"/>
+                                <ComboBoxItem Content="Element-Zero + (ChatAPI)"/>
+                                <ComboBoxItem Content="梦之故里 + Chat.dll"/>
+                            </ComboBox>
+                        </DockPanel>
+                        <DockPanel>
+                            <TextBlock Text="Websocket端口(Port)" />
+                            <TextBox x:Name="portTB" Text="29132" TextChanged="portTB_TextChanged"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <TextBlock Text="Websocket端点(EndPoint)"  />
+                            <TextBox x:Name="endpointTB"  Text="mcws" TextChanged="endpointTB_TextChanged"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <TextBlock Text="WS执行指令交换密匙"  />
+                            <TextBox x:Name="wsPwd"  Text="password"/>
+                        </DockPanel>
+                        <DockPanel HorizontalAlignment="Center">
+                            <TextBlock Text="访问地址预览:" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="PreviewAddressTB" IsReadOnly="True" Foreground="Yellow" BorderBrush="{x:Null}" Margin="-3" Text="ws://127.0.0.1:29132/mcws" >
+                                <TextBox.Background>
+                                    <SolidColorBrush  Opacity="0.5" Color="SkyBlue"/>
+                                </TextBox.Background>
+                            </TextBox>
+                        </DockPanel>
                     </StackPanel>
-                </GroupBox.Header>
-                <StackPanel>
-                    <DockPanel>
-                        <TextBlock Text="预制输出模板"  />
-                        <ComboBox x:Name="pubblishedTemplate"  >
-                            <ComboBoxItem Content="原版BDS (无法获取聊天输出)" IsSelected="True"/>
-                            <ComboBoxItem Content="Element-Zero + (ChatAPI)"/>
-                            <ComboBoxItem Content="梦之故里 + Chat.dll"/>
-                        </ComboBox>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock Text="Websocket端口(Port)" />
-                        <TextBox x:Name="portTB" Text="29132" TextChanged="portTB_TextChanged"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock Text="Websocket端点(EndPoint)"  />
-                        <TextBox x:Name="endpointTB"  Text="mcws" TextChanged="endpointTB_TextChanged"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock Text="WS执行指令交换密匙"  />
-                        <TextBox x:Name="wsPwd"  Text="password"/>
-                    </DockPanel>
-                    <DockPanel HorizontalAlignment="Center">
-                        <TextBlock Text="访问地址预览:" HorizontalAlignment="Center"/>
-                        <TextBox x:Name="PreviewAddressTB" IsReadOnly="True" Foreground="Yellow" BorderBrush="{x:Null}" Margin="-3" Text="ws://127.0.0.1:29132/mcws" >
-                            <TextBox.Background>
-                                <SolidColorBrush  Opacity="0.5" Color="SkyBlue"/>
-                            </TextBox.Background>
-                        </TextBox>
-                    </DockPanel>
-                </StackPanel>
-            </GroupBox>
-            <!--#endregion-->
-            <!--#region 高级参数-->
-            <GroupBox>
-                <GroupBox.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="高级参数:" FontSize="16"/>
-                    </StackPanel>
-                </GroupBox.Header>
-                <StackPanel>
-                    <DockPanel>
-                        <TextBlock Text="控制台输出编码:"/>
-                        <TextBox  x:Name="outputEncodingCB"  Text="UTF-8"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock Text="控制台输入编码转换"/>
-                        <CheckBox   x:Name="InPutEncodingConverntCB"  Checked="Toggle_Checked" Unchecked="Toggle_Unchecked" VerticalAlignment="Center" Margin="0,3,0,0">
-                            <TextBlock Text="关" Margin="0" Foreground="Beige"/>
-                        </CheckBox>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="From:" Margin="2,4,2,3"/>
-                            <TextBox  x:Name="inputEncodingCBF"  Text="UTF-8" Grid.Column="1"/>
-                            <TextBlock Text="To:" Grid.Column="2" Margin="2,4,2,3"/>
-                            <TextBox  x:Name="inputEncodingCBT"  Grid.Column ="3" Text="GBK"/>
-                        </Grid>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock Text="终止命令:"/>
-                        <TextBox  x:Name="exitCMD"  Text="stop"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock Text="快速重启按钮"/>
-                        <CheckBox   x:Name="rbtshow"  Checked="Toggle_Checked" Unchecked="Toggle_Unchecked" VerticalAlignment="Center" Margin="0,3,0,0">
-                            <TextBlock Text="关" Margin="0" Foreground="Beige"/>
-                        </CheckBox>
-                    </DockPanel>
+                </GroupBox>
+                <!--#endregion-->
+                <!--#region 高级参数-->
+                <GroupBox>
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="高级参数:" FontSize="16"/>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <StackPanel>
+                        <DockPanel>
+                            <TextBlock Text="控制台输出编码:"/>
+                            <TextBox  x:Name="outputEncodingCB"  Text="UTF-8"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <TextBlock Text="控制台输入编码转换"/>
+                            <CheckBox   x:Name="InPutEncodingConverntCB"  Checked="Toggle_Checked" Unchecked="Toggle_Unchecked" VerticalAlignment="Center" Margin="0,3,0,0">
+                                <TextBlock Text="关" Margin="0" Foreground="Beige"/>
+                            </CheckBox>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="From:" Margin="2,4,2,3"/>
+                                <TextBox  x:Name="inputEncodingCBF"  Text="UTF-8" Grid.Column="1"/>
+                                <TextBlock Text="To:" Grid.Column="2" Margin="2,4,2,3"/>
+                                <TextBox  x:Name="inputEncodingCBT"  Grid.Column ="3" Text="GBK"/>
+                            </Grid>
+                        </DockPanel>
+                        <DockPanel>
+                            <TextBlock Text="终止命令:"/>
+                            <TextBox  x:Name="exitCMD"  Text="stop"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <TextBlock Text="快速重启按钮"/>
+                            <CheckBox  IsChecked="True" x:Name="rbtshow"  Checked="Toggle_Checked" Unchecked="Toggle_Unchecked" VerticalAlignment="Center" Margin="0,3,0,0">
+                                <TextBlock Text="关" Margin="0" Foreground="Beige"/>
+                            </CheckBox>
+                        </DockPanel>
 
-                </StackPanel>
-            </GroupBox>
-            <!--#endregion-->
-        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                <!--#endregion-->
+            </StackPanel>
+        </ScrollViewer>
     </DockPanel>
     <Page.Resources>
         <Style TargetType="ComboBox"  >
