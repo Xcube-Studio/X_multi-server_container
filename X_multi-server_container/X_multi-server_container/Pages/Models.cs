@@ -1,18 +1,44 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
+using System.ComponentModel;
 
 namespace X_multi_server_container.Pages
 {
-    internal class HistoryModel
+    public class HistoryModel : INotifyPropertyChanged
     {
-        private string v1;
-        private string v2;
-        private JObject jObjects;
-
-        public HistoryModel(string v1, string v2, JObject jObjects)
+        public HistoryModel(string title_, string subtitile_, JObject StartINFO_)
         {
-            this.v1 = v1;
-            this.v2 = v2;
-            this.jObjects = jObjects;
+            _title = title_;
+            _subtitle = subtitile_;
+            _StartINFO = StartINFO_;
+            _uuid = Guid.NewGuid().ToString();
         }
+        private string _title;
+        public string title
+        {
+            get { return _title; }
+            set { _title = value; FirePropertyChanged("title"); }
+        }
+        private string _uuid;
+        public string uuid
+        {
+            get { return _uuid; }
+            set { _uuid = value; FirePropertyChanged("uuid"); }
+        }
+        private string _subtitle;
+        public string subtitle
+        {
+            get { return _subtitle; }
+            set { _subtitle = value; FirePropertyChanged("subtitle"); }
+        }
+        private JObject _StartINFO;
+        public JObject StartINFO
+        {
+            get { return _StartINFO; }
+            set { _StartINFO = value; FirePropertyChanged("StartINFO"); }
+        }
+        public virtual event PropertyChangedEventHandler PropertyChanged;
+        public virtual void FirePropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
 }

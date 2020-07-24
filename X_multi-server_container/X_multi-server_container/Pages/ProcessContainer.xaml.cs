@@ -48,7 +48,7 @@ namespace X_multi_server_container.Pages
             debugbutton.Click += (sender, e) =>
             {
                 try
-                {
+                { 
                     debugtext.Text += p.ProcessName + "\n";
                     debugtext.Text += p.SessionId + "\n";
                     debugtext.Text += p.Id + "\n";
@@ -487,7 +487,7 @@ namespace X_multi_server_container.Pages
         {
             try
             {
-                try { SendCMD(StPar["ExitCMD"].ToString()); } catch (Exception) { }
+                try { SendCMD(StPar["ExitCMD"].ToString()); } catch (Exception) { p.Kill(); }
                 try
                 {
                     if (p.MainWindowHandle != IntPtr.Zero)
@@ -498,7 +498,7 @@ namespace X_multi_server_container.Pages
                 catch (Exception) { }
                 //p.StartInfo.RedirectStandardOutput = false;
                 //p.StartInfo.RedirectStandardInput = false;  
-            
+
             }
             catch (Exception) { }
         }

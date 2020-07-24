@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using Ookii.Dialogs.Wpf;
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -29,6 +30,13 @@ namespace X_multi_server_container.Pages
             try
             {
                 LoadFromConfig(JObject.Parse(File.ReadAllText(path)));
+                var addModel = new HistoryModel(Path.GetFileName(path), Path.GetDirectoryName(path), GetConfigJson());
+                int find_i = Data.HistoryList.ToList().FindIndex(l => l.title == addModel.title && l.subtitle == addModel.subtitle && l.StartINFO.ToString() == addModel.StartINFO.ToString());
+                if (find_i != -1)
+                {
+                    Data.HistoryListRemove(find_i);
+                    Data.HistoryListAdd(addModel);
+                }
             }
             catch (Exception err)
             { MessageBoxShow("打开启动方案失败", err.ToString()); }
@@ -119,6 +127,7 @@ namespace X_multi_server_container.Pages
                             {
                                 File.WriteAllText(saveFileName, GetConfigJson().ToString());
                                 MessageBoxShow("保存成功", "文件已保存至" + saveFileName);
+                                Data.HistoryListAdd(new HistoryModel(Path.GetFileName(saveFileName), Path.GetDirectoryName(saveFileName), GetConfigJson()));
                             }
                             catch (Exception err)
                             {

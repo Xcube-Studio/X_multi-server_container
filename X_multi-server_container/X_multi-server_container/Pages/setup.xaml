@@ -441,7 +441,7 @@
                                                 <TextBlock Text="{Binding Path=subtitle}" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Wheat" FontSize="12"/>
                                             </StackPanel>
                                         </StackPanel>
-                                        <Button Margin="0,0,10,0" Content="&#xE711;" HorizontalAlignment="Right" Padding="0" Width="30" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Height="30" />
+                                        <Button Margin="0,0,10,0" Tag="{Binding Path=uuid}" Content="&#xE711;" HorizontalAlignment="Right" Padding="0" Width="30" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Height="30" Click="Button_Click"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>

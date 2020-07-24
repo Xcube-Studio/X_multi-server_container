@@ -11,6 +11,7 @@
     <DockPanel Margin="10">
         <TextBlock Name="Title" Text="新建启动方案" DockPanel.Dock="Top" FontSize="30"/>
         <TextBlock Name="SubTitle" Text="位于" DockPanel.Dock="Top" FontSize="15" Margin="20,0,0,0" Visibility="Collapsed"/>
+        <Border DockPanel.Dock="Top" Height="1" Margin="0,5"  Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
         <DockPanel DockPanel.Dock="Bottom">
             <Button Content="在新标签页启动" DockPanel.Dock="Right" Click="LaunchInNewTabButton_Click"/>
             <Button Content="保存启动方案" Click="SaveSlnButton_Click"/>

@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,12 +21,15 @@ namespace X_multi_server_container.Pages
         public Setup()
         {
             InitializeComponent();
+            recentListView.ItemsSource = Data.HistoryList;
+
 #if DEBUG
 #if U1
             string path = "bedrock_server.exe";
 #else
             string path = "mc_start.bat";
-#endif 
+#endif
+
             recentListView.Items.Add(new HistoryModel("相对路径快速启动BDS", "[DEBUG]运行当前目录下的" + path, new JObject() {
                 new JProperty("basicFilePath",  path),
                 new JProperty("OutPutEncoding", Encoding.UTF8.ToString()),
@@ -34,7 +38,7 @@ namespace X_multi_server_container.Pages
                new JProperty("WebsocketAPI",  "ws://0.0.0.0:26481/moyuxu"),
 #else
                new JProperty("WebsocketAPI",  "ws://0.0.0.0:29132/xsbasurXXXgxh"),  
-#endif 
+#endif
             new JProperty("Type", 0)
             }));
             //            throw new Exception((new JObject() {
@@ -54,9 +58,9 @@ namespace X_multi_server_container.Pages
         private void recentListView_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             try
-            {   
+            {
                 ProcessContainer processContainerPage = new ProcessContainer();
-                processContainerPage.StPar = (recentListView.SelectedItem as  HistoryModel).StartINFO;
+                processContainerPage.StPar = (recentListView.SelectedItem as HistoryModel).StartINFO;
                 //    throw new Exception(processContainerPage.StPar.ToString());
                 PageManager.AddPage(processContainerPage, "进程启动器");
             }
@@ -72,8 +76,8 @@ namespace X_multi_server_container.Pages
                 CreateSolution createPage = new CreateSolution();
                 createPage.LoadFromFile(fileDialog.FileName);
                 createPage.Title.Text = "已打开启动方案";
-                PageManager.ReplacePage((DataContext as PageItemModel).uuid, createPage,  Path.GetFileName(fileDialog.FileName));
-            }
+                PageManager.ReplacePage((DataContext as PageItemModel).uuid, createPage, Path.GetFileName(fileDialog.FileName));
+             }
         }
         private void BDSTemplateButton_Click(object sender, RoutedEventArgs e)
         {
@@ -81,6 +85,13 @@ namespace X_multi_server_container.Pages
             createPage.Title.Text = "BDS启动模板";
             createPage.targetPath.Text = "mc_start.bat";
             PageManager.ReplacePage((DataContext as PageItemModel).uuid, createPage, "新建启动方案(BDS模板)");
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string uuid = (sender as Button).Tag.ToString();
+            int i = Data.HistoryList.ToList().FindIndex(l => l.uuid == uuid);
+            Data.HistoryListRemove(i);
         }
     }
 }

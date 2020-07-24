@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,37 +12,77 @@ namespace X_multi_server_container.Pages
 {
     public static class Data
     {
-        private static List<HistoryModel> _historyList = null;
-        public static List<HistoryModel> HistoryList
+        public static ObservableCollection<HistoryModel> _historyList = null;
+
+        //private static List<HistoryModel> _historyList = null;
+        //public static List<HistoryModel> HistoryList
+        public static ObservableCollection<HistoryModel> HistoryList
         {
-            get { return _historyList; }
-            set { _historyList = value; }
+            get
+            {
+                if (_historyList == null) { ReadHistoryModel(); SaveHistoryModel(); }
+                return _historyList;
+            }
+            //set { _historyList = value; }
         }
         public static void HistoryListRemove(int i)
         {
             if (_historyList == null) { ReadHistoryModel(); }
             _historyList.RemoveAt(i);
+            SaveHistoryModel();
         }
         public static void HistoryListAdd(HistoryModel model)
         {
             if (_historyList == null) { ReadHistoryModel(); }
-            _historyList.Add(model);
+            var addhead = new List<HistoryModel>();
+            addhead.Add(model);
+            addhead.AddRange(_historyList.ToList());
+            _historyList.Clear();
+            addhead.ForEach(l => _historyList.Add(l));
+            SaveHistoryModel();
         }
         private static void ReadHistoryModel()
         {
-            var historyJArr = new JArray();
+            JArray historyJArr = new JArray();
             try
             {
                 historyJArr = JArray.Parse(File.ReadAllText(Environment.CurrentDirectory + "\\history.json"));
             }
             catch (Exception) { }
-
+            _historyList = new ObservableCollection<HistoryModel>();
+            _historyList.CollectionChanged += _historyList_CollectionChanged;
+            historyJArr.ToList().ForEach(l =>
+            {
+                try
+                {
+                    _historyList.Add(new HistoryModel(l.Value<string>("Title"), l.Value<string>("SubTitle"), l["StartINFO"] as JObject));
+                }
+                catch (Exception) { }
+            });
+            //_historyList= historyJArr.ToList().ConvertAll(l=>new HistoryModel(l.Value<string>))
 
             //_historyList=
         }
+
+        private static void _historyList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
         private static void SaveHistoryModel()
         {
+            //try
+            //{ 
+            //_historyList.Add(new HistoryModel("dsadasdsaddsa", "dassdsdsdad", new JObject()));
+            JArray historyJArr = new JArray();
+            _historyList.ToList().ForEach(l => historyJArr.Add(new JObject { new JProperty("Title", l.title), new JProperty("SubTitle", l.subtitle), new JProperty("StartINFO", l.StartINFO) }));
+            File.WriteAllText(Environment.CurrentDirectory + "\\history.json", historyJArr.ToString());
 
+            //}
+            //catch (Exception err)
+            //{
+            //    File.WriteAllText(Environment.CurrentDirectory + "\\history.json", err.ToString());
+            //}
         }
     }
 }
