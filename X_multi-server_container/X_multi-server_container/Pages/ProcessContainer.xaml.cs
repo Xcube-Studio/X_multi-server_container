@@ -55,10 +55,11 @@ namespace X_multi_server_container.Pages
             };
             ((Grid)this.Content).Children.Add(debugbutton);
             ((Grid)this.Content).Children.Add(debugtext);
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 System.Threading.Thread.Sleep(5000);
-                
-            WriteLine("当前参数\n" + StPar.ToString());
+
+                WriteLine("当前参数\n" + StPar.ToString());
             });
 #endif 
             #endregion
@@ -66,7 +67,7 @@ namespace X_multi_server_container.Pages
         #region 启动参数
         public JObject StPar = new JObject{
             new JProperty("basicFilePath", "cmd"),
-            new JProperty("Encoding", Encoding.Default.ToString()),
+            new JProperty("OutPutEncoding", Encoding.Default.ToString()),
             new JProperty("Type",-1),
             new JProperty("WebsocketAPI",false)
         };
@@ -191,7 +192,16 @@ namespace X_multi_server_container.Pages
             }
         }
         List<string> cmdHistory = new List<string>() { "" };
-        private void SendCMD(string cmd) => p.StandardInput.WriteLine(cmd);
+        private void SendCMD(string cmd)
+        {
+            if (StPar.ContainsKey("InPutEncoding"))
+            {
+                p.StandardInput.WriteLine(GetEncoding(StPar["InPutEncoding"].Value<string>("To")).GetString(GetEncoding(StPar["InPutEncoding"].Value<string>("From")).GetBytes(cmd)));
+                //cmd = GetEncoding(StPar["InPutEncoding"].Value<string>("To")).GetString(Encoding.GetEncoding(65001).GetBytes(cmd));
+            }
+            else
+                p.StandardInput.WriteLine(cmd);
+        }
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             if (SendCMDButton.Content.ToString() == "发送")
@@ -305,7 +315,7 @@ namespace X_multi_server_container.Pages
                         }
                     }
                     p.EnableRaisingEvents = true;
-                    var encoding = GetEncoding(StPar.Value<string>("Encoding"));
+                    var encoding = GetEncoding(StPar.Value<string>("OutPutEncoding"));
                     p.StartInfo.StandardOutputEncoding = encoding;
                     p.StartInfo.StandardErrorEncoding = encoding;
                     WriteLine("当前编码:" + p.StartInfo.StandardOutputEncoding);
@@ -360,16 +370,19 @@ namespace X_multi_server_container.Pages
             { WriteLine("启动失败!\n" + err.ToString()); }
 
         }
-        private Encoding GetEncoding(string v)
+        public Encoding GetEncoding(string v)
         {
-            switch (v)
+            if (v.ToLower() == "default") { return Encoding.Default; }
+            else
             {
-                case "System.Text.ASCIIEncoding": return Encoding.ASCII;
-                case "System.Text.UTF8Encoding": return Encoding.UTF8;
-                case "System.Text.UTF7Encoding": return Encoding.UTF7;
-                case "System.Text.UTF32Encoding": return Encoding.UTF32;
-                case "System.Text.UnicodeEncoding": return Encoding.Unicode;
-                default: return Encoding.Default;
+                try
+                { return Encoding.GetEncoding(int.Parse(v)); }
+                catch (Exception)
+                {
+                    try
+                    { return Encoding.GetEncoding(v); }
+                    catch (Exception) { return Encoding.Default; }
+                }
             }
         }
         #region 面板动画
@@ -436,8 +449,13 @@ namespace X_multi_server_container.Pages
                 webSocketServer.Dispose();
             }
             catch (Exception) { }
-            p.Kill();
-            p.Dispose();
+            try
+            {
+                SendCMD(StPar["ExitCMD"].ToString());
+                p.Kill();
+                p.Dispose();
+            }
+            catch (Exception) { }
         }
         #endregion
         private void SendToAll(object intext)
@@ -467,7 +485,7 @@ namespace X_multi_server_container.Pages
                         {
                             string content = match1.Groups["Content"].Value;
 #if DEBUG
-                          WriteLineDEBUG(msgtype + ":" + content);
+                            WriteLineDEBUG(msgtype + ":" + content);
 #endif
                             if (msgtype == "INFO")
                             {

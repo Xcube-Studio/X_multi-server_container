@@ -14,6 +14,11 @@
                   Closing="AcrylicWindow_Closing"
         Height="450" Width="800" fw:AcrylicWindow.FallbackColor="Black" fw:AcrylicWindow.TintColor="Black">
     <Window.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource ButtonRevealStyle}">
+            <Setter Property="Background" Value="{x:Null}" />
+            <Setter Property="BorderBrush" Value="{x:Null}" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" />
+        </Style>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
                 <Setter.Value>
@@ -81,7 +86,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="Ctrl" HorizontalAlignment="Left" FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE700;" Width="48" Foreground="White" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" />
+            <Button x:Name="Ctrl" HorizontalAlignment="Left" FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE700;" Width="48" Foreground="White"   />
             <!--<Rectangle Width="1" Fill="Gray" Grid.Column="1" />-->
             <Grid x:Name="PageTabAreaReference" Margin="0,0,62,0" Grid.Column="2"/>
             <DockPanel  Grid.Column="2">
@@ -110,7 +115,7 @@
                                         </StackPanel>
                                     </TextBlock.ToolTip>
                                 </TextBlock>
-                                <Button Content="&#xE711;" DockPanel.Dock="Right" Padding="0" Click="Button_ClosePage_Click" Tag="{Binding uuid}" Width="30" VerticalAlignment="Stretch" Style="{StaticResource ButtonRevealStyle}" Background="Transparent" BorderBrush="Transparent" FontFamily="Segoe MDL2 Assets" Margin="0,-2,-5,-2">
+                                <Button Content="&#xE711;" DockPanel.Dock="Right" Padding="0" Click="Button_ClosePage_Click" Tag="{Binding uuid}" Width="30" VerticalAlignment="Stretch" FontFamily="Segoe MDL2 Assets" Margin="0,-2,-5,-2">
                                     <Button.ToolTip>
                                         <StackPanel >
                                             <StackPanel Orientation="Horizontal" >
@@ -127,7 +132,7 @@
                 </ListView>
                 <!--<Rectangle Width="1" Fill="Gray"  />-->
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                    <Button x:Name="Add" Margin="-0.5,0,0,1.5" MaxWidth="62" ToolTip="新建页面(HomePage)"   HorizontalAlignment="Left" Style="{StaticResource ButtonRevealStyle}" BorderBrush="Transparent" Background="Transparent" Click="Button_AddPage_Click"   Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">
+                    <Button x:Name="Add" Margin="-0.5,0,0,1.5" MaxWidth="62" ToolTip="新建页面(HomePage)"   HorizontalAlignment="Left" Click="Button_AddPage_Click"   Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">
                         <TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="White"/>
                     </Button>
                     <!--<Rectangle Width="1" Fill="Gray" />-->

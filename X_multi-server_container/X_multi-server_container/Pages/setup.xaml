@@ -461,64 +461,54 @@
                 </Grid.RowDefinitions>
                 <!--#region 右上分区 -->
                 <fw:AcrylicPanel Grid.Row="1">
-                    <Grid>
-                        <TextBlock Text="打开启动方案" FontSize="25" Foreground="SkyBlue" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
-                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#E5FFFFFF" Margin="10,48,0,0" FontSize="14" ><Run Text="打开某个对象"/><Run Text="以启动你的服务端"/></TextBlock>
-                        <Border Height="1" VerticalAlignment="Top" >
-                            <Border.Background>
-                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
-                            </Border.Background>
-                        </Border>
-                        <Border Height="1" VerticalAlignment="Top" Margin="10,70,10,0" >
-                            <Border.Background>
-                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
-                            </Border.Background>
-                        </Border>
-                        <Button Style="{StaticResource ButtonRevealStyle}" x:Name="button" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Top" Margin="10,76,10,0" Padding="0" FontSize="18">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE729;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <TextBlock Text=" 打开服务端所在文件夹" FontSize="14"/>
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+                        <DockPanel Margin="10,0">
+                            <TextBlock DockPanel.Dock="Top" Text="打开启动方案" FontSize="25" Foreground="SkyBlue"/>
+                            <TextBlock DockPanel.Dock="Top"  Grid.Row="1" Foreground="#E5FFFFFF"   FontSize="14"><Run Text="打开某个对象"/><Run Text="以启动你的服务端"/></TextBlock>
+                            <Border DockPanel.Dock="Top" Height="1" Margin="0,2"  Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+                            <StackPanel>
+                                <!--<Button Style="{StaticResource ButtonRevealStyle}" x:Name="button" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="0" FontSize="18">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE729;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <TextBlock Text=" 打开服务端所在文件夹" FontSize="14"/>
+                                    </StackPanel>
+                                </Button>-->
+                                <Button Style="{StaticResource ButtonRevealStyle}" x:Name="OpenSlnButton" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" HorizontalContentAlignment="Left"   Padding="2,0" FontSize="18" Click="OpenSlnButton_Click" Grid.Row="1">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xED41;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <TextBlock FontSize="14"><Run Text=" 打开"/><Run Text="启动"/><Run Text="方案"/></TextBlock>
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
-                        </Button>
-                        <Button Style="{StaticResource ButtonRevealStyle}" x:Name="OpenSlnButton" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Top" Margin="10,104,10,0" Padding="0" FontSize="18" Click="OpenSlnButton_Click">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xED41;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <TextBlock FontSize="14"><Run Text=" 打开"/><Run Text="启动"/><Run Text="方案"/></TextBlock>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
+                        </DockPanel>
+                    </DockPanel>
                 </fw:AcrylicPanel>
                 <!--#endregion-->
                 <!--#region 右下分区 -->
                 <fw:AcrylicPanel Grid.Row="3">
-                    <Grid>
-                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#E5FFFFFF" Margin="10,48,0,0" FontSize="14" Text="方案模板" />
-                        <TextBlock Text="新建启动方案" Margin="10,10,0,0" FontSize="25" Foreground="SkyBlue" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <Border Height="1" VerticalAlignment="Top" >
-                            <Border.Background>
-                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
-                            </Border.Background>
-                        </Border>
-                        <Border Height="1" VerticalAlignment="Top" Margin="10,70,10,0" >
-                            <Border.Background>
-                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
-                            </Border.Background>
-                        </Border>
-                        <StackPanel  Margin="10,76,10,10"  ScrollViewer.VerticalScrollBarVisibility="Auto">
-                            <Button HorizontalContentAlignment="Left" Style="{StaticResource ButtonRevealStyle}"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"  Padding="0" FontSize="18">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top" Height="1" Margin="0"  Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+                        <DockPanel Margin="10,0">
+                            <TextBlock DockPanel.Dock="Top" Text="新建启动方案"  FontSize="25" Foreground="SkyBlue" />
+                            <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#E5FFFFFF" FontSize="14" Text="方案模板" />
+                            <Border DockPanel.Dock="Top" Height="1" Margin="0,2"  Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+                            <StackPanel  DockPanel.Dock="Top"  ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <!--<Button HorizontalContentAlignment="Left" Style="{StaticResource ButtonRevealStyle}"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"  Padding="0" FontSize="18">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16"   VerticalAlignment="Center"/>
                                     <TextBlock Text=" 基于java核心的启动方案模板" FontSize="13"/>
                                 </StackPanel>
-                            </Button>
-                            <Button HorizontalContentAlignment="Left" Style="{StaticResource ButtonRevealStyle}"   Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"  Padding="0" FontSize="18" Click="BDSTemplateButton_Click">
-                                <DockPanel>
-                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16"  VerticalAlignment="Center"/>
-                                    <TextBlock Text=" 基于BDS核心的启动方案模板" FontSize="13"/>
-                                </DockPanel>
-                            </Button>
-                        </StackPanel>
-                    </Grid>
+                            </Button>-->
+                                <Button HorizontalContentAlignment="Left" Style="{StaticResource ButtonRevealStyle}"   Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"  Padding="2,0" FontSize="18" Click="BDSTemplateButton_Click">
+                                    <DockPanel>
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16"  VerticalAlignment="Center"/>
+                                        <TextBlock Text=" 基于BDS核心的启动方案模板" FontSize="13"/>
+                                    </DockPanel>
+                                </Button>
+                            </StackPanel>
+                        </DockPanel>
+                    </DockPanel>
                 </fw:AcrylicPanel>
                 <!--#endregion-->
             </Grid>

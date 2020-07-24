@@ -1,7 +1,9 @@
 ﻿#define U1
+using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,7 +28,7 @@ namespace X_multi_server_container.Pages
 #endif 
             recentListView.Items.Add(new HistoryModel("相对路径快速启动BDS", "[DEBUG]运行当前目录下的" + path, new JObject() {
                 new JProperty("basicFilePath",  path),
-                new JProperty("Encoding", Encoding.UTF8.ToString()),
+                new JProperty("OutPutEncoding", Encoding.UTF8.ToString()),
                 new JProperty("showWindow", true), 
 #if U1
                new JProperty("WebsocketAPI",  "ws://0.0.0.0:26481/moyuxu"),
@@ -37,7 +39,7 @@ namespace X_multi_server_container.Pages
             }));
             //            throw new Exception((new JObject() {
             //                new JProperty("basicFilePath",  path),
-            //                new JProperty("Encoding", Encoding.UTF8.ToString()),
+            //                new JProperty("OutPutEncoding", Encoding.UTF8.ToString()),
             //                new JProperty("showWindow", true), 
             //#if U1
             //               new JProperty("WebsocketAPI",  "ws://0.0.0.0:26481/moyuxu"),
@@ -93,7 +95,14 @@ namespace X_multi_server_container.Pages
         #endregion
         private void OpenSlnButton_Click(object sender, RoutedEventArgs e)
         {
-
+            OpenFileDialog fileDialog = new OpenFileDialog { InitialDirectory = Environment.CurrentDirectory, Filter = "XMSC启动文件(*.xmsc)|*.xmsc", Title = "打开启动方案" };
+            if (fileDialog.ShowDialog(Application.Current.MainWindow) == true)
+            {
+                CreateSolution createPage = new CreateSolution();
+                createPage.LoadFromFile(fileDialog.FileName);
+                createPage.Title.Text = "已打开启动方案";
+                PageManager.ReplacePage((DataContext as PageItemModel).uuid, createPage,  Path.GetFileName(fileDialog.FileName));
+            }
         }
         private void BDSTemplateButton_Click(object sender, RoutedEventArgs e)
         {
