@@ -769,7 +769,7 @@ namespace X_multi_server_container.Pages
                 WriteLineDEBUG("[ERROR]输入逻辑Input_TextChanged\n" + err);
 #endif
             }
-            WriteToLog(rece);
+            if (logEnable) WriteToLog(rece);
         }
         private void WriteToLog(string logText)
         {
