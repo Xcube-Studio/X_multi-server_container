@@ -81,10 +81,17 @@ namespace X_multi_server_container.Pages
                 {
                     foreach (var filter in ((JArray)config["LogAPI"]["Filters"]))
                         logFilters.Add(new LogFilterModel(filter.Value<int>("Type"), filter.Value<string>("Value")));
-                    Task.Run(() => { Thread.Sleep(1000); LogAPIToggle.IsChecked = true; });
-                 }
+                    void LogAPIToggle_Loaded(object sender, RoutedEventArgs e)
+                    {
+                        LogAPIToggle.IsChecked = true;
+                        LogAPIToggle.Loaded -= LogAPIToggle_Loaded;
+                    }
+                    LogAPIToggle.Loaded += LogAPIToggle_Loaded;
+                }
             }
         }
+
+
         private void SelectPathButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
