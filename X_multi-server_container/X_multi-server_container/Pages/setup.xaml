@@ -8,8 +8,43 @@
       xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
       xmlns:model="clr-namespace:X_multi_server_container.Pages"
       d:DesignHeight="450" d:DesignWidth="800"   FontFamily="Microsoft YaHei"
+   
       Title="setup">
     <Page.Resources>
+        <Style TargetType="Button" x:Key="TEST" BasedOn="{StaticResource ButtonRevealStyle}">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Button.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimationUsingKeyFrames RepeatBehavior="Forever"  AutoReverse="True"  Storyboard.TargetProperty="Foreground.Color">
+                                <!--<SplineColorKeyFrame KeyTime="0:0:0:0" Value="IndianRed" />-->
+                                <EasingColorKeyFrame KeyTime="0:0:2" Value="#FF79FF79">
+                                    <EasingColorKeyFrame.EasingFunction>
+                                        <CubicEase EasingMode="EaseOut"/>
+                                    </EasingColorKeyFrame.EasingFunction>
+                                </EasingColorKeyFrame>
+                                <EasingColorKeyFrame KeyTime="0:0:4" Value="#FF82E0FF">
+                                    <EasingColorKeyFrame.EasingFunction>
+                                        <CubicEase EasingMode="EaseOut"/>
+                                    </EasingColorKeyFrame.EasingFunction>
+                                </EasingColorKeyFrame>
+                                <EasingColorKeyFrame KeyTime="0:0:6" Value="#FFFF7777">
+                                    <EasingColorKeyFrame.EasingFunction>
+                                        <CubicEase EasingMode="EaseOut"/>
+                                    </EasingColorKeyFrame.EasingFunction>
+                                </EasingColorKeyFrame>
+                            </ColorAnimationUsingKeyFrames>
+                            <!--<ColorAnimation Duration="0:0:3"  Storyboard.TargetProperty="Foreground.Color"
+                                      AutoReverse="True"  RepeatBehavior="Forever" From="#FF35F6FF" To="#FFF5FF21">
+                                <ColorAnimation.EasingFunction>
+                                    <BackEase EasingMode="EaseOut"/>
+                                </ColorAnimation.EasingFunction>
+                            </ColorAnimation>-->
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="Wheat" />
         </Style>
@@ -258,7 +293,6 @@
                                 <Path x:Name="ArrowBottom" Data="M185,24 L181.125,27.875 188.75,27.875 z" Stretch="Uniform" Fill="#FFA3A3A3" Width="9" Height="9" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
                                     <Path.RenderTransform>
                                         <RotateTransform Angle="180"/>
-
                                     </Path.RenderTransform>
                                 </Path>
                             </RepeatButton>
@@ -392,6 +426,7 @@
         <!--endregion 滚动条 -->
     </Page.Resources>
     <Grid>
+        <Button Style="{StaticResource TEST}" Visibility="Hidden"/>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="15" x:Name="PaddingModel"/>

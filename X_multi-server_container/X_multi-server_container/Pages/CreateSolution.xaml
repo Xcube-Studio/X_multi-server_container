@@ -37,6 +37,7 @@
                     </MultiTrigger.Conditions>
                     <Setter Property="BorderBrush"  Value="Red"/>
                 </MultiTrigger>
+                
             </Style.Triggers>
         </Style>
         <Style TargetType="{x:Type CheckBox}">
@@ -560,8 +561,9 @@
                                 <TextBox x:Name="LogFileName" Text="%StartDate%.log"/>
                             </DockPanel>
                             <DockPanel>
-                                <TextBlock Text="日志保存条件:" />
-                                <Button DockPanel.Dock="Right" HorizontalAlignment="Right" Content="添加" Click="AddLogFilterButton_Click"  />
+                                <TextBlock Text="日志保存条件(不添加条件表示全部保存)" />
+                                <Button DockPanel.Dock="Right" Content="添加" Click="AddLogFilterButton_Click"  />
+                                <TextBlock Text="=>" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
                             </DockPanel>
                             <ListView x:Name="LogFilderList">
                                 <ListView.ItemTemplate>

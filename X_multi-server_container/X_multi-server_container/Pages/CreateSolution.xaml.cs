@@ -7,9 +7,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using X_multi_server_container.Tools;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -156,7 +159,7 @@ namespace X_multi_server_container.Pages
             return config;
         }
         #endregion
-         #region WSAPI
+        #region WSAPI
         private void pubblishedTemplate_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             switch (pubblishedTemplate.SelectedIndex)
@@ -216,18 +219,36 @@ namespace X_multi_server_container.Pages
         private void AddLogFilterButton_Click(object sender, RoutedEventArgs e)
         {
             logFilters.Add(new LogFilterModel());
+            WebsocketAPIRootStoryBoard();
         }
-
+        private void WebsocketAPIRootStoryBoard()
+        {
+            Task.Run(() =>
+            {
+                Thread.Sleep(50);
+                Dispatcher.Invoke(() =>
+                {
+                    Storyboard storyboard = new Storyboard();
+                    DoubleAnimationUsingKeyFrames keyFramesAnimation = new DoubleAnimationUsingKeyFrames();
+                    keyFramesAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(LogSettingPanel.ActualHeight, TimeSpan.FromSeconds(0.3)));
+                    Storyboard.SetTarget(keyFramesAnimation, LogSettingRoot);
+                    Storyboard.SetTargetProperty(keyFramesAnimation, new PropertyPath("(FrameworkElement.Height)"));
+                    storyboard.Children.Add(keyFramesAnimation);
+                    storyboard.Begin();
+                });
+            });
+        }
         private void DelLogFilterButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 logFilters.Remove(logFilters.First(l => l.Uuid == ((Button)sender).Tag.ToString()));
+                WebsocketAPIRootStoryBoard();
             }
             catch (Exception) { }
         }
         #region Style
-    
+
         #endregion
     }
 }
