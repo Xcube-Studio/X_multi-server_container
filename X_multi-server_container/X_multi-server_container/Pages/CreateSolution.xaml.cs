@@ -2,12 +2,14 @@
 using Newtonsoft.Json.Linq;
 using Ookii.Dialogs.Wpf;
 using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using X_multi_server_container.Tools;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -19,11 +21,15 @@ namespace X_multi_server_container.Pages
     /// </summary>
     public partial class CreateSolution : Page
     {
+        public static ObservableCollection<LogFilterModel> logFilters = new ObservableCollection<LogFilterModel>();
         public CreateSolution()
         {
             InitializeComponent();
             pubblishedTemplate.SelectionChanged += pubblishedTemplate_SelectionChanged;
+            LogFilderList.ItemsSource = logFilters;
+            LogSettingRoot.Height = 0;
         }
+        #region Main
         public void LoadFromFile(string path)
         {
             SubTitle.Visibility = Visibility.Visible;
@@ -78,7 +84,6 @@ namespace X_multi_server_container.Pages
                 targetPath.Text = fileDialog.FileName;
             }
         }
-
         private void LaunchInNewTabButton_Click(object sender, RoutedEventArgs e)
         {
             ProcessContainer processContainerPage = new ProcessContainer();
@@ -116,7 +121,7 @@ namespace X_multi_server_container.Pages
                             try
                             {
                                 File.WriteAllText(saveFileName, GetConfigJson().ToString());
-                     Tools.DialogAPI.          MessageBoxShow("保存成功", "文件已保存至" + saveFileName);
+                                Tools.DialogAPI.MessageBoxShow("保存成功", "文件已保存至" + saveFileName);
                                 Data.HistoryListAdd(new HistoryModel(Path.GetFileName(saveFileName), Path.GetDirectoryName(saveFileName)));
                             }
                             catch (Exception err)
@@ -129,10 +134,6 @@ namespace X_multi_server_container.Pages
                 catch (Exception) { }
             }
         }
-        private void Toggle_Checked(object sender, RoutedEventArgs e) { try { ((TextBlock)((CheckBox)sender).Content).Text = "开"; } catch (Exception) { } }
-
-        private void Toggle_Unchecked(object sender, RoutedEventArgs e) { try { ((TextBlock)((CheckBox)sender).Content).Text = "关"; } catch (Exception) { } }
-
         private JObject GetConfigJson()
         {
             JObject config = new JObject() {
@@ -153,6 +154,29 @@ namespace X_multi_server_container.Pages
                 }));
             }
             return config;
+        }
+        #endregion
+         #region WSAPI
+        private void pubblishedTemplate_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (pubblishedTemplate.SelectedIndex)
+            {
+                case 0:
+                    InPutEncodingConverntCB.IsChecked = false;
+                    outputEncodingCB.Text = "UTF-8";
+                    inputEncodingCBF.Text = "UTF-8";
+                    inputEncodingCBT.Text = "GBK";
+                    break;
+                case 1:
+                case 2:
+                    InPutEncodingConverntCB.IsChecked = true;
+                    outputEncodingCB.Text = "UTF-8";
+                    inputEncodingCBF.Text = "UTF-8";
+                    inputEncodingCBT.Text = "GBK";
+                    break;
+                default:
+                    break;
+            }
         }
         private void portTB_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -187,27 +211,23 @@ namespace X_multi_server_container.Pages
             }
             catch (Exception) { }
         }
+        #endregion
 
-        private void pubblishedTemplate_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void AddLogFilterButton_Click(object sender, RoutedEventArgs e)
         {
-            switch (pubblishedTemplate.SelectedIndex)
-            {
-                case 0:
-                    InPutEncodingConverntCB.IsChecked = false;
-                    outputEncodingCB.Text = "UTF-8";
-                    inputEncodingCBF.Text = "UTF-8";
-                    inputEncodingCBT.Text = "GBK";
-                    break;
-                case 1:
-                case 2:
-                    InPutEncodingConverntCB.IsChecked = true;
-                    outputEncodingCB.Text = "UTF-8";
-                    inputEncodingCBF.Text = "UTF-8";
-                    inputEncodingCBT.Text = "GBK";
-                    break;
-                default:
-                    break;
-            }
+            logFilters.Add(new LogFilterModel());
         }
+
+        private void DelLogFilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                logFilters.Remove(logFilters.First(l => l.Uuid == ((Button)sender).Tag.ToString()));
+            }
+            catch (Exception) { }
+        }
+        #region Style
+    
+        #endregion
     }
 }

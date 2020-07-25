@@ -10,14 +10,11 @@ using System.Windows;
 
 namespace X_multi_server_container.Pages
 {
-   
+
     public static class Data
     {
         public static ObservableCollection<HistoryModel> _historyList = null;
-
-        //private static List<HistoryModel> _historyList = null;
-        //public static List<HistoryModel> HistoryList
-        public static ObservableCollection<HistoryModel> HistoryList
+         public static ObservableCollection<HistoryModel> HistoryList
         {
             get
             {
@@ -51,40 +48,28 @@ namespace X_multi_server_container.Pages
             }
             catch (Exception) { }
             _historyList = new ObservableCollection<HistoryModel>();
-            _historyList.CollectionChanged += _historyList_CollectionChanged;
+            //_historyList.CollectionChanged += _historyList_CollectionChanged;
             historyJArr.ToList().ForEach(l =>
             {
                 try
                 {
                     string path = l.Value<string>("Path");
-                    _historyList.Add(new HistoryModel(Path.GetFileName(path),Path.GetDirectoryName(path)));
+                    _historyList.Add(new HistoryModel(Path.GetFileName(path), Path.GetDirectoryName(path)));
                 }
                 catch (Exception) { }
             });
-            //_historyList= historyJArr.ToList().ConvertAll(l=>new HistoryModel(l.Value<string>))
-
-            //_historyList=
         }
 
-        private static void _historyList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
+        //private static void _historyList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        //{
+        //    //throw new NotImplementedException();
+        //}
 
         private static void SaveHistoryModel()
         {
-            //try
-            //{ 
-            //_historyList.Add(new HistoryModel("dsadasdsaddsa", "dassdsdsdad", new JObject()));
             JArray historyJArr = new JArray();
             _historyList.ToList().ForEach(l => historyJArr.Add(new JObject { new JProperty("Path", l.subtitle + "\\" + l.title) }));
             File.WriteAllText(Environment.CurrentDirectory + "\\history.json", historyJArr.ToString());
-
-            //}
-            //catch (Exception err)
-            //{
-            //    File.WriteAllText(Environment.CurrentDirectory + "\\history.json", err.ToString());
-            //}
         }
     }
 }
