@@ -37,7 +37,7 @@
                     </MultiTrigger.Conditions>
                     <Setter Property="BorderBrush"  Value="Red"/>
                 </MultiTrigger>
-                
+
             </Style.Triggers>
         </Style>
         <Style TargetType="{x:Type CheckBox}">
@@ -473,46 +473,46 @@
                                             <Storyboard>
                                                 <DoubleAnimationUsingKeyFrames Storyboard.TargetName="WebsocketAPIRoot"  Storyboard.TargetProperty="(FrameworkElement.Height)">
                                                     <LinearDoubleKeyFrame KeyTime="0:0:0:0.0" Value="{Binding ActualHeight, ElementName=WebsocketAPIRoot}"/>
-                                                     <LinearDoubleKeyFrame KeyTime="0:0:0:0.2" Value="0"/>
+                                                    <LinearDoubleKeyFrame KeyTime="0:0:0:0.2" Value="0"/>
                                                 </DoubleAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </EventTrigger>
-                                </CheckBox.Triggers> 
+                                </CheckBox.Triggers>
                             </CheckBox>
                         </StackPanel>
                     </GroupBox.Header>
                     <StackPanel x:Name="WebsocketAPIRoot">
                         <StackPanel x:Name="WebsocketAPIPanel">
-                        <DockPanel>
-                            <TextBlock Text="预制输出模板"  />
-                            <ComboBox x:Name="pubblishedTemplate"  >
-                                <ComboBoxItem Content="原版BDS (无法获取聊天输出)" IsSelected="True"/>
-                                <ComboBoxItem Content="Element-Zero + (ChatAPI)"/>
-                                <ComboBoxItem Content="梦之故里 + Chat.dll"/>
-                            </ComboBox>
-                        </DockPanel>
-                        <DockPanel>
-                            <TextBlock Text="Websocket端口(Port)" />
-                            <TextBox x:Name="portTB" Text="29132" TextChanged="portTB_TextChanged"/>
-                        </DockPanel>
-                        <DockPanel>
-                            <TextBlock Text="Websocket端点(EndPoint)"  />
-                            <TextBox x:Name="endpointTB"  Text="mcws" TextChanged="endpointTB_TextChanged"/>
-                        </DockPanel>
-                        <DockPanel>
-                            <TextBlock Text="WS执行指令交换密匙"  />
-                            <TextBox x:Name="wsPwd"  Text="password"/>
-                        </DockPanel>
-                        <DockPanel HorizontalAlignment="Center">
-                            <TextBlock Text="访问地址预览:" HorizontalAlignment="Center"/>
-                            <TextBox x:Name="PreviewAddressTB" IsReadOnly="True" Foreground="Yellow" BorderBrush="{x:Null}" Margin="-3" Text="ws://127.0.0.1:29132/mcws" >
-                                <TextBox.Background>
-                                    <SolidColorBrush  Opacity="0.5" Color="SkyBlue"/>
-                                </TextBox.Background>
-                            </TextBox>
-                        </DockPanel>
-                    </StackPanel>
+                            <DockPanel>
+                                <TextBlock Text="预制输出模板"  />
+                                <ComboBox x:Name="pubblishedTemplate"  >
+                                    <ComboBoxItem Content="原版BDS (无法获取聊天输出)" IsSelected="True"/>
+                                    <ComboBoxItem Content="Element-Zero + (ChatAPI)"/>
+                                    <ComboBoxItem Content="梦之故里 + Chat.dll"/>
+                                </ComboBox>
+                            </DockPanel>
+                            <DockPanel>
+                                <TextBlock Text="Websocket端口(Port)" />
+                                <TextBox x:Name="portTB" Text="29132" TextChanged="portTB_TextChanged"/>
+                            </DockPanel>
+                            <DockPanel>
+                                <TextBlock Text="Websocket端点(EndPoint)"  />
+                                <TextBox x:Name="endpointTB"  Text="mcws" TextChanged="endpointTB_TextChanged"/>
+                            </DockPanel>
+                            <DockPanel>
+                                <TextBlock Text="WS执行指令交换密匙"  />
+                                <TextBox x:Name="wsPwd"  Text="password"/>
+                            </DockPanel>
+                            <DockPanel HorizontalAlignment="Center">
+                                <TextBlock Text="访问地址预览:" HorizontalAlignment="Center"/>
+                                <TextBox x:Name="PreviewAddressTB" IsReadOnly="True" Foreground="Yellow" BorderBrush="{x:Null}" Margin="-3" Text="ws://127.0.0.1:29132/mcws" >
+                                    <TextBox.Background>
+                                        <SolidColorBrush  Opacity="0.5" Color="SkyBlue"/>
+                                    </TextBox.Background>
+                                </TextBox>
+                            </DockPanel>
+                        </StackPanel>
                     </StackPanel>
                 </GroupBox>
                 <!--#endregion-->
@@ -553,12 +553,12 @@
                         <StackPanel x:Name="LogSettingPanel">
                             <DockPanel>
                                 <TextBlock Text="日志保存文件夹" DockPanel.Dock="Left"/>
-                                <Button Content="选择" DockPanel.Dock="Right"  Click="SelectPathButton_Click"/>
-                                <TextBox x:Name="LogDirPath" Text="XMSC_LOG"/>
+                                <Button Content="选择" DockPanel.Dock="Right"  Click="SelectLogDirButton_Click"/>
+                                <TextBox x:Name="LogDirPath" Text="~\XMSC_LOG"/>
                             </DockPanel>
                             <DockPanel>
                                 <TextBlock Text="日志文件名" DockPanel.Dock="Left"/>
-                                <TextBox x:Name="LogFileName" Text="%StartDate%.log"/>
+                                <TextBox x:Name="LogFileName" Text="%date:yyyy-MM-dd%.log"/>
                             </DockPanel>
                             <DockPanel>
                                 <TextBlock Text="日志保存条件(不添加条件表示全部保存)" />

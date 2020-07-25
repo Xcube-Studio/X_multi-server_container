@@ -49,30 +49,51 @@ namespace X_multi_server_container.Pages
             {
                 try
                 {
-                    debugtext.Text += p.ProcessName + "\n";
+                    debugtext.Text = p.ProcessName + "\n";
                     debugtext.Text += p.SessionId + "\n";
                     debugtext.Text += p.Id + "\n";
                     debugtext.Text += p.HandleCount + "\n";
-                    debugtext.Text += p.HasExited + "\n";
-                    p.Kill();
-                    debugtext.Text += p.HasExited + "\n";
+                    debugtext.Text += p.HasExited + "\n\n";
+                    debugtext.Text += p.HandleCount + "\n";
+                    debugtext.Text += logWriter.ToString() + "\n";
                     debugtext.Text += p.HandleCount + "\n";
                 }
                 catch (Exception err) { debugtext.Text += "\n" + err.ToString(); }
             };
             ((Grid)this.Content).Children.Add(debugbutton);
             ((Grid)this.Content).Children.Add(debugtext);
-            Task.Run(() =>
-            {
-                System.Threading.Thread.Sleep(5000);
-                WriteLine("当前参数\n" + StPar.ToString());
-            });
-#endif 
+            //Task.Run(() =>
+            //{
+            //    //System.Threading.Thread.Sleep(5000);
+
+            //});
+#endif
             #endregion
+
+        }
+        private string GetPathF(string path)
+        {
+            string pce = Regex.Replace(path, @"^~\\?", string.IsNullOrEmpty(SlnPath) ? "" : SlnPath + "\\");
+            foreach (Match item in (Regex.Matches(path, "%(time|date)(:|：)(?<Fo>.+?)%", RegexOptions.IgnoreCase)))
+            {
+                //WriteLine(pce);
+                //WriteLine(item.Value);
+                //WriteLine(DateTime.Now.ToString(item.Groups["Fo"].Value));
+                //WriteLine(pce.Replace(item.Value, DateTime.Now.ToString(item.Groups["Fo"].Value)));
+
+                pce = pce.Replace(item.Value, DateTime.Now.ToString(item.Groups["Fo"].Value));
+            }
+            pce = Path.GetFullPath(pce);
+            WriteLine("日志保存路径已刷新:" + pce);
+            if (!Directory.Exists(pce)) Directory.CreateDirectory(Path.GetDirectoryName(pce));
+            return pce;
         }
         #region 启动参数
         public string SlnPath = "";
-        public JObject StPar = new JObject{
+        public bool logEnable = false;
+        public TextWriter logWriter;
+        public List<LogFilterModel> logFilters = new List<LogFilterModel>();
+        public JObject config = new JObject{
             new JProperty("basicFilePath", "cmd"),
             new JProperty("OutPutEncoding", Encoding.Default.ToString()),
             new JProperty("Type",-1),
@@ -201,9 +222,9 @@ namespace X_multi_server_container.Pages
         List<string> cmdHistory = new List<string>() { "" };
         private void SendCMD(string cmd)
         {
-            if (StPar.ContainsKey("InPutEncoding"))
+            if (config.ContainsKey("InPutEncoding"))
             {
-                p.StandardInput.WriteLine(GetEncoding(StPar["InPutEncoding"].Value<string>("To")).GetString(GetEncoding(StPar["InPutEncoding"].Value<string>("From")).GetBytes(cmd)));
+                p.StandardInput.WriteLine(GetEncoding(config["InPutEncoding"].Value<string>("To")).GetString(GetEncoding(config["InPutEncoding"].Value<string>("From")).GetBytes(cmd)));
                 //cmd = GetEncoding(StPar["InPutEncoding"].Value<string>("To")).GetString(Encoding.GetEncoding(65001).GetBytes(cmd));
             }
             else
@@ -292,9 +313,9 @@ namespace X_multi_server_container.Pages
         #endregion
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            #region 界面/进程
             try
             {
+                #region 界面/进程
                 if (!ClearTimer.Enabled)
                 {
                     ClearTimer.Elapsed += ClearTimer_Elapsed;
@@ -307,7 +328,7 @@ namespace X_multi_server_container.Pages
                     #region WS
                     try
                     {
-                        try { if (webSocketServer == null) webSocketServer = new WebSocketServer(StPar.Value<string>("WebsocketAPI")) { RestartAfterListenError = true }; } catch (Exception) { }
+                        try { if (webSocketServer == null) webSocketServer = new WebSocketServer(config.Value<string>("WebsocketAPI")) { RestartAfterListenError = true }; } catch (Exception) { }
                         if (webSocketServer != null)
                         {
                             webSocketServer.Start(socket =>
@@ -335,14 +356,14 @@ namespace X_multi_server_container.Pages
                                 }
                             });
                             WriteLine("WS服务器端启动成功！by gxh");
-                            WriteLine(StPar.Value<string>("WebsocketAPI"));
+                            WriteLine(config.Value<string>("WebsocketAPI"));
                         }
                     }
                     catch (Exception err) { WriteLine("WS服务器启动失败!\n" + err.ToString()); }
                     #endregion
-                    if (StPar.ContainsKey("ShowRebootButton"))
+                    if (config.ContainsKey("ShowRebootButton"))
                     {
-                        if (StPar.Value<bool>("ShowRebootButton"))
+                        if (config.Value<bool>("ShowRebootButton"))
                         {
                             RebootButtonBorder.Visibility = Visibility.Visible;
                             Button rebootButton = new Button() { Content = "重启" };
@@ -364,7 +385,7 @@ namespace X_multi_server_container.Pages
                                         p.WaitForExit(1000);
                                         try
                                         {
-                                            p.StandardInput.WriteLine(StPar["ExitCMD"].ToString());
+                                            p.StandardInput.WriteLine(config["ExitCMD"].ToString());
                                         }
                                         catch (Exception) { }
                                         Thread.Sleep(100);
@@ -391,17 +412,29 @@ namespace X_multi_server_container.Pages
                             RebootButtonBorder.Child = rebootButton;
                         }
                     }
-
                 }
                 BottomDP.Height = 0;
                 EchoInputPanel();
                 #endregion
+                try
+                {
+                    WriteLine("当前参数\n" + config.ToString());
+                    //   config["LogAPI"].Value<string>("Path"));
+                    //LogDirPath.Text = Path.GetDirectoryName(config["LogAPI"].Value<string>("Path"));
+                    if (config["LogAPI"].Value<bool>("Enable"))
+                    {
+                        foreach (var filter in ((JArray)config["LogAPI"]["Filters"]))
+                            logFilters.Add(new LogFilterModel(filter.Value<int>("Type"), filter.Value<string>("Value")));
+                        logWriter = File.AppendText(GetPathF(config["LogAPI"].Value<string>("Path")));
+                        logEnable = true;
+                    }
+                }
+                catch (Exception err) { WriteLine(err); }
             }
             catch (Exception err)
             {
                 WriteLine("启动失败!\n" + err.ToString());
             }
-
         }
         public Encoding GetEncoding(string v)
         {
@@ -488,7 +521,7 @@ namespace X_multi_server_container.Pages
         {
             try
             {
-                try { SendCMD(StPar["ExitCMD"].ToString()); } catch (Exception) { p.Kill(); }
+                try { SendCMD(config["ExitCMD"].ToString()); } catch (Exception) { p.Kill(); }
                 try
                 {
                     if (p.MainWindowHandle != IntPtr.Zero)
@@ -516,15 +549,15 @@ namespace X_multi_server_container.Pages
                 { }
             }
             p = new Process();
-            p.StartInfo.FileName = Regex.Replace(StPar.Value<string>("basicFilePath"), @"^~\\?", SlnPath + "\\");
+            p.StartInfo.FileName = Regex.Replace(config.Value<string>("basicFilePath"), @"^~\\?", SlnPath + "\\");
             p.StartInfo.WorkingDirectory = Path.GetDirectoryName(p.StartInfo.FileName);
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.RedirectStandardInput = true;
             p.StartInfo.RedirectStandardError = true;
-            if (StPar.ContainsKey("showWindow"))
+            if (config.ContainsKey("showWindow"))
             {
-                if (!StPar.Value<bool>("showWindow"))
+                if (!config.Value<bool>("showWindow"))
                 {
 #if DEBUG
                     p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
@@ -534,7 +567,7 @@ namespace X_multi_server_container.Pages
                 }
             }
             p.EnableRaisingEvents = true;
-            var encoding = GetEncoding(StPar.Value<string>("OutPutEncoding"));
+            var encoding = GetEncoding(config.Value<string>("OutPutEncoding"));
             p.StartInfo.StandardOutputEncoding = encoding;
             p.StartInfo.StandardErrorEncoding = encoding;
             WriteLine("当前编码:" + p.StartInfo.StandardOutputEncoding);
@@ -587,7 +620,7 @@ namespace X_multi_server_container.Pages
                 WriteLine(rece);
                 if (webSocketClients.Count > 0)
                 {
-                    switch (StPar.Value<int>("Type"))
+                    switch (config.Value<int>("Type"))
                     {
                         case 0://BDS
                         case 2://MG
@@ -736,6 +769,31 @@ namespace X_multi_server_container.Pages
                 WriteLineDEBUG("[ERROR]输入逻辑Input_TextChanged\n" + err);
 #endif
             }
+            WriteToLog(rece);
+        }
+        private void WriteToLog(string logText)
+        {
+            try
+            {
+                for (int i = 0; i < logFilters.Count; i++)
+                {
+                    switch ((logFilters[i].Type))
+                    {
+                        case 0://包含文本
+                            if (logText.IndexOf(logFilters[i].Value) == -1) return; continue;
+                        case 1:
+                            if (logText.IndexOf(logFilters[i].Value) != -1) return; continue;
+                        case 2:
+                            if (!Regex.IsMatch(logText, logFilters[i].Value)) return; continue;
+                        case 3:
+                            if (Regex.IsMatch(logText, logFilters[i].Value)) return; continue;
+                        default:
+                            continue;
+                    }
+                }
+                logWriter.WriteLineAsync(logText);
+            }
+            catch (Exception err) { WriteLine("[ERROR]WriteLog遇到错误\n" + err.ToString()); }
         }
         private void OnClientMessage(string rece)
         {
@@ -769,7 +827,6 @@ namespace X_multi_server_container.Pages
         #region 定时清屏
         private Timer ClearTimer = new Timer(1800000) { AutoReset = true, Enabled = false };/**/
         private int ClearText = 0;
-
         private void ClearTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             try
@@ -783,6 +840,9 @@ namespace X_multi_server_container.Pages
                     }
                     ClearText = Cos.Text.Length;
                 });
+                logWriter.Close();
+                logWriter.Dispose();
+                logWriter = File.AppendText(GetPathF(config["LogAPI"].Value<string>("Path")));
             }
             catch (Exception) { }
         }

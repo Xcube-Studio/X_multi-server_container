@@ -25,7 +25,7 @@ namespace X_multi_server_container.Pages
     /// </summary>
     public partial class CreateSolution : Page
     {
-        public static ObservableCollection<LogFilterModel> logFilters = new ObservableCollection<LogFilterModel>();
+        public ObservableCollection<LogFilterModel> logFilters = new ObservableCollection<LogFilterModel>();
         public CreateSolution()
         {
             InitializeComponent();
@@ -77,6 +77,8 @@ namespace X_multi_server_container.Pages
             }
             if (config.ContainsKey("LogAPI"))
             {
+                LogFileName.Text = Path.GetFileName(config["LogAPI"].Value<string>("Path"));
+                LogDirPath.Text = Path.GetDirectoryName(config["LogAPI"].Value<string>("Path"));
                 if (config["LogAPI"].Value<bool>("Enable"))
                 {
                     foreach (var filter in ((JArray)config["LogAPI"]["Filters"]))
@@ -107,7 +109,7 @@ namespace X_multi_server_container.Pages
         private void LaunchInNewTabButton_Click(object sender, RoutedEventArgs e)
         {
             ProcessContainer processContainerPage = new ProcessContainer();
-            processContainerPage.StPar = GetConfigJson();
+            processContainerPage.config = GetConfigJson();
 
             PageManager.AddPage(processContainerPage, "进程启动器");
         }
@@ -164,7 +166,11 @@ namespace X_multi_server_container.Pages
                 new JProperty("WebsocketPassword", WSAPIToggle.IsChecked == true ? wsPwd.Text : ""),
                 new JProperty("ExitCMD", exitCMD.Text),
                 new JProperty("ShowRebootButton",rbtshow.IsChecked==true),
-                new JProperty("LogAPI",new JObject (){new JProperty("Enable", LogAPIToggle.IsChecked == true),new JProperty("Filters",new JArray()) }),
+                new JProperty("LogAPI",new JObject (){
+                    new JProperty("Enable", LogAPIToggle.IsChecked == true),
+                    new JProperty("Path", LogDirPath.Text+( LogDirPath.Text.EndsWith("\\")?"":"\\")+LogFileName.Text),
+                    new JProperty("Filters",new JArray()),
+                }),
             };
             if (InPutEncodingConverntCB.IsChecked == true)
             {
@@ -272,5 +278,20 @@ namespace X_multi_server_container.Pages
             catch (Exception) { }
         }
 
+        private void SelectLogDirButton_Click(object sender, RoutedEventArgs e)
+        {
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
+            try
+            {
+                dialog.SelectedPath = Path.GetFullPath(Regex.Replace(LogDirPath.Text , @"^~\\?","") );
+            }
+            catch (Exception) { } 
+            dialog.Description = "选择保存日志的文件夹";
+            dialog.UseDescriptionForTitle = true;
+            if ((bool)dialog.ShowDialog(Application.Current.MainWindow))
+            {
+                LogDirPath.Text = dialog.SelectedPath;
+            }
+        }
     }
 }

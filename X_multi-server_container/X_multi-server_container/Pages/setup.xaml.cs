@@ -30,7 +30,7 @@ namespace X_multi_server_container.Pages
                 ProcessContainer processContainerPage = new ProcessContainer();
                 var item = recentListView.SelectedItem as HistoryModel;
                 string slnPath = item.subtitle + "\\" + item.title;
-                processContainerPage.StPar = JObject.Parse(File.ReadAllText(slnPath));
+                processContainerPage.config = JObject.Parse(File.ReadAllText(slnPath));
                 processContainerPage.SlnPath = slnPath;
                 //    throw new Exception(processContainerPage.StPar.ToString());
                 PageManager.AddPage(processContainerPage, "进程启动器");
