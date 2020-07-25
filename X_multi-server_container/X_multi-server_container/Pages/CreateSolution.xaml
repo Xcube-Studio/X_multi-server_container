@@ -24,7 +24,7 @@
             <Setter Property="Margin" Value="2" />
             <Setter Property="Padding" Value="2" />
         </Style>
-        <Style   TargetType="{x:Type Button}"  BasedOn="{StaticResource ButtonRevealStyle}">
+        <Style   TargetType="{x:Type Button}"  BasedOn="{StaticResource  ButtonRevealStyle}">
             <Setter Property="Padding" Value="8,2" />
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Margin" Value="2" />

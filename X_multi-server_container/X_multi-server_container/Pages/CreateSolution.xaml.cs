@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -74,6 +75,15 @@ namespace X_multi_server_container.Pages
                 inputEncodingCBF.Text = config["InPutEncoding"].Value<string>("From");
                 inputEncodingCBT.Text = config["InPutEncoding"].Value<string>("To");
             }
+            if (config.ContainsKey("LogAPI"))
+            {
+                if (config["LogAPI"].Value<bool>("Enable"))
+                {
+                    foreach (var filter in ((JArray)config["LogAPI"]["Filters"]))
+                        logFilters.Add(new LogFilterModel(filter.Value<int>("Type"), filter.Value<string>("Value")));
+                    Task.Run(() => { Thread.Sleep(1000); LogAPIToggle.IsChecked = true; });
+                 }
+            }
         }
         private void SelectPathButton_Click(object sender, RoutedEventArgs e)
         {
@@ -142,19 +152,26 @@ namespace X_multi_server_container.Pages
             JObject config = new JObject() {
                 new JProperty("basicFilePath", targetPath.Text),
                 new JProperty("OutPutEncoding",   outputEncodingCB.Text),
+                new JProperty("Type",   pubblishedTemplate.SelectedIndex),
                 new JProperty("WebsocketAPI",   WSAPIToggle.IsChecked==true?"ws://0.0.0.0" + (portTB.Text.Length > 0 ? ":" : "") + portTB.Text + "/" + endpointTB.Text:null),
-              new JProperty("WebsocketPassword", WSAPIToggle.IsChecked == true ? wsPwd.Text : ""),
+                new JProperty("WebsocketPassword", WSAPIToggle.IsChecked == true ? wsPwd.Text : ""),
                 new JProperty("ExitCMD", exitCMD.Text),
                 new JProperty("ShowRebootButton",rbtshow.IsChecked==true),
-                new JProperty("Type",   pubblishedTemplate.SelectedIndex)
+                new JProperty("LogAPI",new JObject (){new JProperty("Enable", LogAPIToggle.IsChecked == true),new JProperty("Filters",new JArray()) }),
             };
-
             if (InPutEncodingConverntCB.IsChecked == true)
             {
                 config.Add(new JProperty("InPutEncoding", new JObject {
                     new JProperty("From", inputEncodingCBF.Text   ),
                     new JProperty("To", inputEncodingCBT.Text  )
                 }));
+            }
+            if (LogAPIToggle.IsChecked == true)
+            {
+                foreach (var filter in logFilters)
+                {
+                    ((JArray)config["LogAPI"]["Filters"]).Add(new JObject { new JProperty("Type", filter.Type), new JProperty("Value", filter.Value) });
+                }
             }
             return config;
         }
@@ -247,8 +264,6 @@ namespace X_multi_server_container.Pages
             }
             catch (Exception) { }
         }
-        #region Style
 
-        #endregion
     }
 }

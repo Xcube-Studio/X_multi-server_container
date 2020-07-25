@@ -46,7 +46,12 @@ namespace X_multi_server_container.Pages
         {
             _uuid = Guid.NewGuid().ToString();
         }
-
+        public LogFilterModel(int type_,string value_)
+        {
+            _type = type_;
+            _value = value_;
+            _uuid = Guid.NewGuid().ToString();
+        }
         private string _uuid;
         public string Uuid
         {

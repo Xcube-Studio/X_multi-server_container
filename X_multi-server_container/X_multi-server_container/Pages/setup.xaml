@@ -17,8 +17,7 @@
                     <BeginStoryboard>
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames RepeatBehavior="Forever"  AutoReverse="True"  Storyboard.TargetProperty="Foreground.Color">
-                                <!--<SplineColorKeyFrame KeyTime="0:0:0:0" Value="IndianRed" />-->
-                                <EasingColorKeyFrame KeyTime="0:0:2" Value="#FF79FF79">
+                                 <EasingColorKeyFrame KeyTime="0:0:2" Value="#FF79FF79">
                                     <EasingColorKeyFrame.EasingFunction>
                                         <CubicEase EasingMode="EaseOut"/>
                                     </EasingColorKeyFrame.EasingFunction>
