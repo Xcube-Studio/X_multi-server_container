@@ -92,6 +92,7 @@ namespace X_multi_server_container.Pages
         public string SlnPath = "";
         public bool logEnable = false;
         public TextWriter logWriter;
+        public Queue<string> LogQueue;
         public List<LogFilterModel> logFilters = new List<LogFilterModel>();
         public JObject config = new JObject{
             new JProperty("basicFilePath", "cmd"),
@@ -388,7 +389,7 @@ namespace X_multi_server_container.Pages
                                             p.StandardInput.WriteLine(config["ExitCMD"].ToString());
                                         }
                                         catch (Exception) { }
-                                        Thread.Sleep(100);
+                                        Thread.Sleep(200);
                                         if (state > 50)
                                         {
                                             break;
@@ -427,6 +428,7 @@ namespace X_multi_server_container.Pages
                             logFilters.Add(new LogFilterModel(filter.Value<int>("Type"), filter.Value<string>("Value")));
                         logWriter = File.AppendText(GetPathF(config["LogAPI"].Value<string>("Path")));
                         logEnable = true;
+                        LogQueue = new Queue<string>();
                     }
                 }
                 catch (Exception err) { WriteLine(err); }
@@ -513,6 +515,12 @@ namespace X_multi_server_container.Pages
                 webSocketClients.ForEach(ws => ws.Close());
                 webSocketClients.Clear();
                 webSocketServer.Dispose();
+            }
+            catch (Exception) { }
+            try
+            {
+                logWriter.Close();
+                logWriter.Dispose();
             }
             catch (Exception) { }
             StopProcess();
@@ -791,7 +799,7 @@ namespace X_multi_server_container.Pages
                             continue;
                     }
                 }
-                logWriter.WriteLineAsync(logText);
+                logWriter.WriteLine(logText);
             }
             catch (Exception err) { WriteLine("[ERROR]WriteLog遇到错误\n" + err.ToString()); }
         }
@@ -840,8 +848,12 @@ namespace X_multi_server_container.Pages
                     }
                     ClearText = Cos.Text.Length;
                 });
-                logWriter.Close();
-                logWriter.Dispose();
+                try
+                {
+                    logWriter.Close();
+                    logWriter.Dispose();
+                }
+                catch (Exception) { }
                 logWriter = File.AppendText(GetPathF(config["LogAPI"].Value<string>("Path")));
             }
             catch (Exception) { }
