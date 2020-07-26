@@ -459,7 +459,7 @@
                             </Border.Background>
                         </Border>
                         <TextBlock Text="最近" Margin="5" FontSize="30" Foreground="SkyBlue" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <ListView x:Name="recentListView"   PreviewMouseDoubleClick="recentListView_PreviewMouseDoubleClick" Style="{StaticResource ListBoxRevealStyle}" Background="{x:Null}" BorderBrush="{x:Null}" Margin="10,52,10,10" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                        <ListView x:Name="recentListView"   MouseDoubleClick="recentListView_PreviewMouseDoubleClick" Style="{StaticResource ListBoxRevealStyle}" Background="{x:Null}" BorderBrush="{x:Null}" Margin="10,52,10,10" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Vertical" />

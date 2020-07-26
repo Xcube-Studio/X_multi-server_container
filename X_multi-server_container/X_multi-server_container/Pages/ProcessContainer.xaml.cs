@@ -73,7 +73,7 @@ namespace X_multi_server_container.Pages
         }
         private string GetPathF(string path)
         {
-            string pce = Regex.Replace(path, @"^~\\?", string.IsNullOrEmpty(SlnPath) ? "" : SlnPath + "\\");
+            string pce = Regex.Replace(path, @"^~\\?", string.IsNullOrEmpty(SlnPath) ? "" : Path.GetDirectoryName(SlnPath) + "\\");
             foreach (Match item in (Regex.Matches(path, "%(time|date)(:|：)(?<Fo>.+?)%", RegexOptions.IgnoreCase)))
             {
                 //WriteLine(pce);
@@ -85,14 +85,13 @@ namespace X_multi_server_container.Pages
             }
             pce = Path.GetFullPath(pce);
             WriteLine("日志保存路径已刷新:" + pce);
-            if (!Directory.Exists(pce)) Directory.CreateDirectory(Path.GetDirectoryName(pce));
+            if (!Directory.Exists(Path.GetDirectoryName(pce))) Directory.CreateDirectory(Path.GetDirectoryName(pce));
             return pce;
         }
         #region 启动参数
         public string SlnPath = "";
         public bool logEnable = false;
         public TextWriter logWriter;
-        public Queue<string> LogQueue;
         public List<LogFilterModel> logFilters = new List<LogFilterModel>();
         public JObject config = new JObject{
             new JProperty("basicFilePath", "cmd"),
@@ -413,25 +412,24 @@ namespace X_multi_server_container.Pages
                             RebootButtonBorder.Child = rebootButton;
                         }
                     }
+                    try
+                    {
+                        WriteLine("当前参数\n" + config.ToString());
+                        //   config["LogAPI"].Value<string>("Path"));
+                        //LogDirPath.Text = Path.GetDirectoryName(config["LogAPI"].Value<string>("Path"));
+                        if (config["LogAPI"].Value<bool>("Enable"))
+                        {
+                            foreach (var filter in ((JArray)config["LogAPI"]["Filters"]))
+                                logFilters.Add(new LogFilterModel(filter.Value<int>("Type"), filter.Value<string>("Value")));
+                            logWriter = File.AppendText(GetPathF(config["LogAPI"].Value<string>("Path")));
+                            logEnable = true;
+                        }
+                    }
+                    catch (Exception err) { WriteLine(err); }
                 }
                 BottomDP.Height = 0;
                 EchoInputPanel();
                 #endregion
-                try
-                {
-                    WriteLine("当前参数\n" + config.ToString());
-                    //   config["LogAPI"].Value<string>("Path"));
-                    //LogDirPath.Text = Path.GetDirectoryName(config["LogAPI"].Value<string>("Path"));
-                    if (config["LogAPI"].Value<bool>("Enable"))
-                    {
-                        foreach (var filter in ((JArray)config["LogAPI"]["Filters"]))
-                            logFilters.Add(new LogFilterModel(filter.Value<int>("Type"), filter.Value<string>("Value")));
-                        logWriter = File.AppendText(GetPathF(config["LogAPI"].Value<string>("Path")));
-                        logEnable = true;
-                        LogQueue = new Queue<string>();
-                    }
-                }
-                catch (Exception err) { WriteLine(err); }
             }
             catch (Exception err)
             {
@@ -557,7 +555,7 @@ namespace X_multi_server_container.Pages
                 { }
             }
             p = new Process();
-            p.StartInfo.FileName = Regex.Replace(config.Value<string>("basicFilePath"), @"^~\\?", SlnPath + "\\");
+            p.StartInfo.FileName = Regex.Replace(config.Value<string>("basicFilePath"), @"^~\\?", Path.GetDirectoryName(SlnPath) + "\\");
             p.StartInfo.WorkingDirectory = Path.GetDirectoryName(p.StartInfo.FileName);
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
