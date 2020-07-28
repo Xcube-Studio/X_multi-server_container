@@ -435,205 +435,212 @@
         <!--#endregion-->
     </Page.Resources>
     <DockPanel Margin="10">
-        <TextBlock x:Name="Title" Text="新建启动方案" DockPanel.Dock="Top" FontSize="30"/>
+        <Border DockPanel.Dock="Top" Height="1" Margin="0"  Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+        <TextBlock x:Name="Title" Text="新建启动方案" DockPanel.Dock="Top" FontSize="30" Foreground="SkyBlue"/>
         <TextBlock x:Name="SubTitle" Text="位于" DockPanel.Dock="Top" FontSize="15" Margin="20,0,0,0" Visibility="Collapsed"/>
-        <Border DockPanel.Dock="Top" Height="1" Margin="0,5"  Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
         <DockPanel DockPanel.Dock="Bottom">
-            <Button Content="在新标签页启动" DockPanel.Dock="Right" Click="LaunchInNewTabButton_Click"/>
-            <Button Content="保存启动方案" Click="SaveSlnButton_Click"/>
+            <Button Content="在新标签页启动" DockPanel.Dock="Right" Click="LaunchInNewTabButton_Click" Foreground="Wheat" Background="#00000000"/>
+            <Button Content="保存启动方案" Click="SaveSlnButton_Click" Foreground="Wheat" Background="#00000000"/>
             <Grid/>
         </DockPanel>
 
         <Border DockPanel.Dock="Bottom" Height="1" Margin="0,5"  Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <StackPanel>
-                <DockPanel>
-                    <TextBlock Text="程序路径" DockPanel.Dock="Left"/>
-                    <Button Content="选择" DockPanel.Dock="Right"  Click="SelectPathButton_Click"/>
-                    <TextBox x:Name="targetPath" />
-                </DockPanel>
+                <Grid Height="30">
+                    <Label Padding="0" Content="程序路径:" VerticalAlignment="Center" HorizontalAlignment="Left" Height="16" Margin="4,0,0,0" Foreground="Wheat" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Microsoft YaHei UI Light" FontSize="13" />
+                    <TextBox BorderThickness="1" x:Name="targetPath" Background="#33FFFFFF" BorderBrush="#59FFFFFF" Padding="0" Margin="64,4,55,4" VerticalAlignment="Center" Height="22" FontFamily="Microsoft YaHei UI Light" Foreground="White" CaretBrush="White" />
+                    <Button Style="{StaticResource ButtonRevealStyle}" Content="选择" Click="SelectPathButton_Click" Background="#00000000" Margin="0,4,4,4" Width="47" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="8,0" Foreground="Wheat" FontFamily="Microsoft YaHei UI Light" Height="22"/>
+                </Grid>
                 <!--#region WS接口-->
-                <GroupBox>
-                    <GroupBox.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="WebsocketAPI:" FontSize="16"/>
-                            <CheckBox  IsChecked="True" x:Name="WSAPIToggle"  >
-                                <CheckBox.Triggers>
-                                    <EventTrigger RoutedEvent="CheckBox.Checked">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="WebsocketAPIRoot"  Storyboard.TargetProperty="(FrameworkElement.Height)">
-                                                    <LinearDoubleKeyFrame KeyTime="0:0:0:0.2" Value="{Binding ActualHeight, ElementName=WebsocketAPIPanel}"/>
-                                                </DoubleAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                    <EventTrigger RoutedEvent="CheckBox.Unchecked">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="WebsocketAPIRoot"  Storyboard.TargetProperty="(FrameworkElement.Height)">
-                                                    <LinearDoubleKeyFrame KeyTime="0:0:0:0.0" Value="{Binding ActualHeight, ElementName=WebsocketAPIRoot}"/>
-                                                    <LinearDoubleKeyFrame KeyTime="0:0:0:0.2" Value="0"/>
-                                                </DoubleAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                </CheckBox.Triggers>
-                            </CheckBox>
-                        </StackPanel>
-                    </GroupBox.Header>
-                    <StackPanel x:Name="WebsocketAPIRoot">
-                        <StackPanel x:Name="WebsocketAPIPanel">
-                            <DockPanel>
-                                <TextBlock Text="预制输出模板"  />
-                                <ComboBox x:Name="pubblishedTemplate"  >
-                                    <ComboBoxItem Content="原版BDS (无法获取聊天输出)" IsSelected="True"/>
-                                    <ComboBoxItem Content="Element-Zero + (ChatAPI)"/>
-                                    <ComboBoxItem Content="梦之故里 + Chat.dll"/>
-                                </ComboBox>
-                            </DockPanel>
-                            <DockPanel>
-                                <TextBlock Text="Websocket端口(Port)" />
-                                <TextBox x:Name="portTB" Text="29132" TextChanged="portTB_TextChanged"/>
-                            </DockPanel>
-                            <DockPanel>
-                                <TextBlock Text="Websocket端点(EndPoint)"  />
-                                <TextBox x:Name="endpointTB"  Text="mcws" TextChanged="endpointTB_TextChanged"/>
-                            </DockPanel>
-                            <DockPanel>
-                                <TextBlock Text="WS执行指令交换密匙"  />
-                                <TextBox x:Name="wsPwd"  Text="password"/>
-                            </DockPanel>
-                            <DockPanel HorizontalAlignment="Center">
-                                <TextBlock Text="访问地址预览:" HorizontalAlignment="Center"/>
-                                <TextBox x:Name="PreviewAddressTB" IsReadOnly="True" Foreground="Yellow" BorderBrush="{x:Null}" Margin="-3" Text="ws://127.0.0.1:29132/mcws" >
-                                    <TextBox.Background>
-                                        <SolidColorBrush  Opacity="0.5" Color="SkyBlue"/>
-                                    </TextBox.Background>
-                                </TextBox>
-                            </DockPanel>
-                        </StackPanel>
-                    </StackPanel>
-                </GroupBox>
+                <fw:AcrylicPanel Grid.Row="1" Margin="0,10,0,0">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+                        <DockPanel>
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                                <TextBlock FontSize="16" Foreground="SkyBlue" Text="WebSocketAPI: "/>
+                                <CheckBox  IsChecked="True" x:Name="WSAPIToggle" Background="#33FFFFFF" Foreground="Wheat" BorderBrush="#59FFFFFF" VerticalContentAlignment="Center" Height="15"  >
+                                    <CheckBox.Triggers>
+                                        <EventTrigger RoutedEvent="CheckBox.Checked">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="WebsocketAPIRoot"  Storyboard.TargetProperty="(FrameworkElement.Height)">
+                                                        <LinearDoubleKeyFrame KeyTime="0:0:0:0.2" Value="{Binding ActualHeight, ElementName=WebsocketAPIPanel}"/>
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="CheckBox.Unchecked">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="WebsocketAPIRoot"  Storyboard.TargetProperty="(FrameworkElement.Height)">
+                                                        <LinearDoubleKeyFrame KeyTime="0:0:0:0.0" Value="{Binding ActualHeight, ElementName=WebsocketAPIRoot}"/>
+                                                        <LinearDoubleKeyFrame KeyTime="0:0:0:0.2" Value="0"/>
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </CheckBox.Triggers>
+                                </CheckBox>
+                            </StackPanel>
+                            <StackPanel>
+                                <StackPanel x:Name="WebsocketAPIRoot">
+                                    <StackPanel x:Name="WebsocketAPIPanel" Margin="20,0,0,0">
+                                        <Grid Height="27">
+                                            <TextBlock FontFamily="Microsoft YaHei UI Light" HorizontalAlignment="Left"  ><Run Text="预制输出模板"/><Run Text=":"/></TextBlock>
+                                            <ComboBox x:Name="pubblishedTemplate" Background="Black" HorizontalAlignment="Right" Width="200" VerticalContentAlignment="Center" Margin="2,2,4,2" Height="23">
+                                                <ComboBoxItem Content="原版BDS (无法获取聊天输出)" IsSelected="True"/>
+                                                <ComboBoxItem Content="Element-Zero + (ChatAPI)"/>
+                                                <ComboBoxItem Content="梦之故里 + Chat.dll"/>
+                                            </ComboBox>
+                                        </Grid>
+                                        <Grid Height="27">
+                                            <TextBlock FontFamily="Microsoft YaHei UI Light" HorizontalAlignment="Left" ><Run Text="Web"/><Run Text="S"/><Run Text="ocket端口(Port)"/><Run Text=":"/></TextBlock>
+                                            <TextBox x:Name="portTB" Text="29132" TextChanged="portTB_TextChanged" Background="#33FFFFFF" BorderBrush="#59FFFFFF" BorderThickness="1" Foreground="White" FontFamily="Microsoft YaHei UI Light" FontSize="13" Width="150" HorizontalAlignment="Right" VerticalAlignment="Stretch" VerticalContentAlignment="Center" CaretBrush="White" Margin="2,2,4,2" Height="23"/>
+                                        </Grid>
+                                        <Grid Height="27">
+                                            <TextBlock FontFamily="Microsoft YaHei UI Light" HorizontalAlignment="Left"  ><Run Text="Web"/><Run Text="S"/><Run Text="ocket端点(EndPoint)"/><Run Text=":"/></TextBlock>
+                                            <TextBox x:Name="endpointTB"  Text="mcws" TextChanged="endpointTB_TextChanged" Background="#33FFFFFF" BorderBrush="#59FFFFFF" BorderThickness="1" Foreground="White" FontFamily="Microsoft YaHei UI Light" FontSize="13" HorizontalAlignment="Right" Width="150" VerticalAlignment="Stretch" VerticalContentAlignment="Center" CaretBrush="White" Margin="2,2,4,2" Height="23"/>
+                                        </Grid>
+                                        <Grid Height="27">
+                                            <TextBlock FontFamily="Microsoft YaHei UI Light" HorizontalAlignment="Left"  ><Run Text="WS执行指令交换密匙"/><Run Text=":"/></TextBlock>
+                                            <TextBox x:Name="wsPwd"  Text="password" Background="#33FFFFFF" BorderBrush="#59FFFFFF" BorderThickness="1" Foreground="White" FontFamily="Microsoft YaHei UI Light" FontSize="13" HorizontalAlignment="Right" Width="150" VerticalAlignment="Stretch" VerticalContentAlignment="Center" CaretBrush="White" Margin="2,2,4,2" Height="23"/>
+                                        </Grid>
+                                        <Grid Height="27">
+                                            <TextBlock Text="访问地址预览:" FontFamily="Microsoft YaHei UI Light" HorizontalAlignment="Left"/>
+                                            <TextBox x:Name="PreviewAddressTB" IsReadOnly="True" Foreground="White" BorderBrush="#59FFFFFF" Margin="2,2,4,2" Text="ws://127.0.0.1:29132/mcws" HorizontalAlignment="Right" Background="#33FFFFFF" BorderThickness="1" FontFamily="Microsoft YaHei UI Light" FontSize="13" Width="200" VerticalContentAlignment="Center" CaretBrush="White" Height="23"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </DockPanel>
+                    </DockPanel>
+                </fw:AcrylicPanel>
                 <!--#endregion-->
                 <!--#endregion-->
                 <!--#endregion-->
                 <!--#region 日志-->
                 <Grid x:Name="widmodel" Margin="50,0"/>
 
-                <GroupBox>
-                    <GroupBox.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="日志API:（取自控制台输出）" FontSize="16"/>
-                            <CheckBox  x:Name="LogAPIToggle"  >
-                                <CheckBox.Triggers>
-                                    <EventTrigger RoutedEvent="CheckBox.Checked">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LogSettingRoot"  Storyboard.TargetProperty="(FrameworkElement.Height)">
-                                                    <LinearDoubleKeyFrame KeyTime="0:0:0:0.2" Value="{Binding ActualHeight, ElementName=LogSettingPanel}"/>
-                                                </DoubleAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                    <EventTrigger RoutedEvent="CheckBox.Unchecked">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LogSettingRoot"  Storyboard.TargetProperty="(FrameworkElement.Height)">
-                                                    <LinearDoubleKeyFrame KeyTime="0:0:0:0.2" Value="0"/>
-                                                </DoubleAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                </CheckBox.Triggers>
-                            </CheckBox>
-                        </StackPanel>
-                    </GroupBox.Header>
-                    <StackPanel x:Name="LogSettingRoot">
-                        <StackPanel x:Name="LogSettingPanel">
-                            <DockPanel>
-                                <TextBlock Text="日志保存文件夹" DockPanel.Dock="Left"/>
-                                <Button Content="选择" DockPanel.Dock="Right"  Click="SelectLogDirButton_Click"/>
-                                <TextBox x:Name="LogDirPath" Text="~\XMSC_LOG"/>
-                            </DockPanel>
-                            <DockPanel>
-                                <TextBlock Text="日志文件名" DockPanel.Dock="Left"/>
-                                <TextBox x:Name="LogFileName" Text="%date:yyyy-MM-dd%.log"/>
-                            </DockPanel>
-                            <DockPanel>
-                                <TextBlock Text="日志保存条件(不添加条件表示全部保存)" />
-                                <Button DockPanel.Dock="Right" Content="添加" Click="AddLogFilterButton_Click"  />
-                                <TextBlock Text="=>" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
-                            </DockPanel>
-                            <ListView x:Name="LogFilderList">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Width="{Binding ActualWidth, ElementName=widmodel, Mode=OneWay}" >
-                                            <Grid Margin="0,-1,-83,-4">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                </Grid.ColumnDefinitions>
-                                                <DockPanel>
-                                                    <ComboBox SelectedIndex="{Binding Type}" VerticalAlignment="Center">
-                                                        <ComboBoxItem  Content="包含文本"/>
-                                                        <ComboBoxItem  Content="不包含文本"/>
-                                                        <ComboBoxItem  Content="正则匹配"/>
-                                                        <ComboBoxItem  Content="正则不匹配"/>
-                                                    </ComboBox>
-                                                    <TextBox Text="{Binding Value}" Margin="3,0,5,0" Tag="{Binding Uuid}"/>
-                                                </DockPanel>
-                                                <Button Content="删除" HorizontalAlignment="Right" Grid.Column="1" Margin="0,2,2,2" Tag="{Binding Uuid}" Click="DelLogFilterButton_Click"/>
-                                            </Grid>
+                <fw:AcrylicPanel Grid.Row="1" Margin="0,10,0,0">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+                        <DockPanel>
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                                <TextBlock Text="日志API: (取自控制台输出) " FontSize="16" Foreground="SkyBlue"/>
+                                <CheckBox  x:Name="LogAPIToggle" Foreground="Wheat" Background="#33FFFFFF" BorderBrush="#59FFFFFF"  >
+                                    <CheckBox.Triggers>
+                                        <EventTrigger RoutedEvent="CheckBox.Checked">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LogSettingRoot"  Storyboard.TargetProperty="(FrameworkElement.Height)">
+                                                        <LinearDoubleKeyFrame KeyTime="0:0:0:0.2" Value="{Binding ActualHeight, ElementName=LogSettingPanel}"/>
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="CheckBox.Unchecked">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LogSettingRoot"  Storyboard.TargetProperty="(FrameworkElement.Height)">
+                                                        <LinearDoubleKeyFrame KeyTime="0:0:0:0.2" Value="0"/>
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </CheckBox.Triggers>
+                                </CheckBox>
+                            </StackPanel>
+                            <StackPanel>
+                                <StackPanel x:Name="LogSettingRoot">
+                                    <StackPanel x:Name="LogSettingPanel" Margin="20,0,0,0">
+                                        <Grid Height="27">
+                                            <TextBlock Text="日志保存文件夹:" HorizontalAlignment="Left" FontFamily="Microsoft YaHei UI Light" />
+                                            <Button Style="{StaticResource ButtonRevealStyle}" Padding="8,0" Margin="0,2,4,2" Content="选择" Click="SelectLogDirButton_Click" HorizontalAlignment="Right" Foreground="Wheat" Background="#00000000" Height="22"/>
+                                            <TextBox x:Name="LogDirPath" Text="~\XMSC_LOG" Margin="108,2,53,2" Background="#33FFFFFF" BorderBrush="#59FFFFFF" CaretBrush="White" Foreground="White" BorderThickness="1" FontFamily="Microsoft YaHei UI Light" FontSize="13" Height="23"/>
                                         </Grid>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                            <!--<DockPanel>
+                                        <Grid Height="27">
+                                            <TextBlock Text="日志文件名:" HorizontalAlignment="Left" FontFamily="Microsoft YaHei UI Light"/>
+                                            <TextBox x:Name="LogFileName" Text="%date:yyyy-MM-dd%.log" Margin="0,2,4,2" Height="23" FontFamily="Microsoft YaHei UI Light" Padding="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderThickness="1" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Right" Background="#33FFFFFF" CaretBrush="White" Foreground="White" BorderBrush="#59FFFFFF"/>
+                                        </Grid>
+                                        <Grid Height="27">
+                                            <TextBlock Text="日志保存条件(不添加条件表示全部保存)" HorizontalAlignment="Left" FontFamily="Microsoft YaHei UI Light" />
+                                            <Button Style="{StaticResource ButtonRevealStyle}" Padding="8,0" Margin="0,2,4,2" Content="添加" Click="AddLogFilterButton_Click" HorizontalAlignment="Right" Background="#00000000" Height="22" Foreground="Wheat"  />
+                                            <TextBlock Text="=>" HorizontalAlignment="Right" Margin="0,6,85,6"/>
+                                        </Grid>
+                                        <ListView x:Name="LogFilderList">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Width="{Binding ActualWidth, ElementName=widmodel, Mode=OneWay}" >
+                                                        <Grid Margin="0,-1,-83,-4">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <DockPanel>
+                                                                <ComboBox SelectedIndex="{Binding Type}" VerticalAlignment="Center">
+                                                                    <ComboBoxItem  Content="包含文本"/>
+                                                                    <ComboBoxItem  Content="不包含文本"/>
+                                                                    <ComboBoxItem  Content="正则匹配"/>
+                                                                    <ComboBoxItem  Content="正则不匹配"/>
+                                                                </ComboBox>
+                                                                <TextBox Text="{Binding Value}" Margin="3,0,5,0" Tag="{Binding Uuid}"/>
+                                                            </DockPanel>
+                                                            <Button Content="删除" HorizontalAlignment="Right" Grid.Column="1" Margin="0,2,2,2" Tag="{Binding Uuid}" Click="DelLogFilterButton_Click"/>
+                                                        </Grid>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                        <!--<DockPanel>
                             <TextBlock Text="控制台输出编码:"/>
                             <TextBox Text="UTF-8"/>
                         </DockPanel>-->
-                        </StackPanel>
-                    </StackPanel>
-                </GroupBox>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </DockPanel>
+                    </DockPanel>
+                </fw:AcrylicPanel>
                 <!--#region 高级参数-->
-                <GroupBox>
-                    <GroupBox.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="高级参数:" FontSize="16"/>
-                        </StackPanel>
-                    </GroupBox.Header>
-                    <StackPanel>
+                <fw:AcrylicPanel Grid.Row="1" Margin="0,10,0,0">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
                         <DockPanel>
-                            <TextBlock Text="控制台输出编码:"/>
-                            <TextBox  x:Name="outputEncodingCB"  Text="UTF-8"/>
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                                <TextBlock Text="高级参数:" FontSize="16" Foreground="SkyBlue"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <StackPanel Margin="20,0,0,0">
+                                    <Grid Height="27">
+                                        <TextBlock Text="控制台输出编码:" HorizontalAlignment="Left" FontFamily="Microsoft YaHei UI Light"/>
+                                        <TextBox x:Name="outputEncodingCB" Text="UTF-8" FontFamily="Microsoft YaHei UI Light" FontSize="13" CaretBrush="White" Background="#33FFFFFF" BorderBrush="#59FFFFFF" Foreground="White" BorderThickness="1" Margin="2,2,4,2" HorizontalAlignment="Right" Height="22" Width="75"/>
+                                    </Grid>
+                                    <Grid Height="54">
+                                        <Grid Height="27" VerticalAlignment="Top">
+                                            <TextBlock Text="控制台输入编码转换" HorizontalAlignment="Left" FontFamily="Microsoft YaHei UI Light"/>
+                                            <CheckBox x:Name="InPutEncodingConverntCB" Foreground="Wheat" Margin="0,2,4,0" HorizontalAlignment="Right" Background="#33FFFFFF" BorderBrush="#59FFFFFF"   />
+                                        </Grid>
+                                        <Grid Height="27" VerticalAlignment="Bottom" Margin="50,0,0,0">
+                                            <TextBlock Text="From:" Margin="2,5,2,4" Height="18" HorizontalAlignment="Left"/>
+                                            <TextBox  x:Name="inputEncodingCBF" Text="UTF-8" FontFamily="Microsoft YaHei UI Light" FontSize="13" CaretBrush="White" Background="#33FFFFFF" BorderBrush="#59FFFFFF" Foreground="White" BorderThickness="1" Height="23" Width="75" HorizontalAlignment="Right" Margin="0,2,4,2"/>
+                                            <TextBlock Text="To:" Margin="0,4,84,5" Height="18" FontFamily="Microsoft YaHei UI Light" HorizontalAlignment="Right"/>
+                                            <TextBox  x:Name="inputEncodingCBT" Text="GBK" FontFamily="Microsoft YaHei UI Light" FontSize="13" CaretBrush="White" Background="#33FFFFFF" BorderBrush="#59FFFFFF" Foreground="White" BorderThickness="1" Margin="0,2,109,3" HorizontalAlignment="Right" Height="22" Width="75"/>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid Height="27">
+                                        <TextBlock Text="终止命令(请务必正确填写):" HorizontalAlignment="Left" FontFamily="Microsoft YaHei UI Light"/>
+                                        <TextBox  x:Name="exitCMD"  Text="stop" FontFamily="Microsoft YaHei UI Light" FontSize="13" CaretBrush="White" Background="#33FFFFFF" BorderBrush="#59FFFFFF" Foreground="White" BorderThickness="1" Margin="2,2,4,2" HorizontalAlignment="Right" Height="22" Width="75"/>
+                                    </Grid>
+                                    <Grid Height="27">
+                                        <TextBlock Text="快速重启按钮" HorizontalAlignment="Left" FontFamily="Microsoft YaHei UI Light"/>
+                                        <CheckBox  IsChecked="True" x:Name="rbtshow" Foreground="Wheat" Margin="0,2,4,0" HorizontalAlignment="Right" Background="#33FFFFFF" BorderBrush="#59FFFFFF" />
+                                    </Grid>
+                                </StackPanel>
+                            </StackPanel>
                         </DockPanel>
-                        <DockPanel>
-                            <TextBlock Text="控制台输入编码转换"/>
-                            <CheckBox   x:Name="InPutEncodingConverntCB"   />
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="From:" Margin="2,4,2,3"/>
-                                <TextBox  x:Name="inputEncodingCBF"  Text="UTF-8" Grid.Column="1"/>
-                                <TextBlock Text="To:" Grid.Column="2" Margin="2,4,2,3"/>
-                                <TextBox  x:Name="inputEncodingCBT"  Grid.Column ="3" Text="GBK"/>
-                            </Grid>
-                        </DockPanel>
-                        <DockPanel>
-                            <TextBlock Text="终止命令(请务必正确填写):"/>
-                            <TextBox  x:Name="exitCMD"  Text="stop"/>
-                        </DockPanel>
-                        <DockPanel>
-                            <TextBlock Text="快速重启按钮"/>
-                            <CheckBox  IsChecked="True" x:Name="rbtshow" />
-                        </DockPanel>
-                    </StackPanel>
-                </GroupBox>
+                    </DockPanel>
+                </fw:AcrylicPanel>
             </StackPanel>
         </ScrollViewer>
     </DockPanel>
