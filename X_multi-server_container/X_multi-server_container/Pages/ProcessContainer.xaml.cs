@@ -222,42 +222,69 @@ namespace X_multi_server_container.Pages
         List<string> cmdHistory = new List<string>() { "" };
         private void SendCMD(string cmd)
         {
-            if (config.ContainsKey("InPutEncoding"))
+            try
             {
-                p.StandardInput.WriteLine(GetEncoding(config["InPutEncoding"].Value<string>("To")).GetString(GetEncoding(config["InPutEncoding"].Value<string>("From")).GetBytes(cmd)));
-                //cmd = GetEncoding(StPar["InPutEncoding"].Value<string>("To")).GetString(Encoding.GetEncoding(65001).GetBytes(cmd));
+
+                if (config.ContainsKey("InPutEncoding"))
+                {
+                    p.StandardInput.WriteLine(GetEncoding(config["InPutEncoding"].Value<string>("To")).GetString(GetEncoding(config["InPutEncoding"].Value<string>("From")).GetBytes(cmd)));
+                    //cmd = GetEncoding(StPar["InPutEncoding"].Value<string>("To")).GetString(Encoding.GetEncoding(65001).GetBytes(cmd));
+                }
+                else
+                    p.StandardInput.WriteLine(cmd);
             }
-            else
-                p.StandardInput.WriteLine(cmd);
+            catch (Exception
+#if DEBUG
+            err
+#endif
+            )
+            {
+#if DEBUG
+                WriteLineDEBUG("[ERROR]执行命令Input_TextChanged\n" + err);
+#endif
+            }
         }
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SendCMDButton.Content.ToString() == "发送")
+            try
             {
-                string cmd = Input.Text;
+                if (SendCMDButton.Content.ToString() == "发送")
+                {
+                    string cmd = Input.Text;
 #if DEBUG //输入回显
                 WriteLineDEBUG("输入命令 >" + cmd);
 #endif
-                int index = int.Parse(Input.Tag.ToString());
-                if (index < cmdHistory.Count - 1)
-                {
-                    string tmpHis = cmdHistory[index];
-                    for (int i = index + 1; i < cmdHistory.Count; i++)
-                        cmdHistory[i - 1] = cmdHistory[i];
-                    cmdHistory[cmdHistory.Count - 1] = tmpHis;
+                    int index = int.Parse(Input.Tag.ToString());
+                    if (index < cmdHistory.Count - 1)
+                    {
+                        string tmpHis = cmdHistory[index];
+                        for (int i = index + 1; i < cmdHistory.Count; i++)
+                            cmdHistory[i - 1] = cmdHistory[i];
+                        cmdHistory[cmdHistory.Count - 1] = tmpHis;
+                    }
+                    Input.Clear();
+                    Input.Tag = cmdHistory.Count;
+                    cmdHistory.Add("");
+                    try
+                    {
+                        SendCMD(cmd);
+                    }
+                    catch (Exception) { }
                 }
-                Input.Clear();
-                Input.Tag = cmdHistory.Count;
-                cmdHistory.Add("");
-                try
+                else
                 {
-                    SendCMD(cmd);
+                    HideInputPanel();
                 }
-                catch (Exception) { }
             }
-            else
+            catch (Exception
+#if DEBUG
+            err
+#endif
+            )
             {
-                HideInputPanel();
+#if DEBUG
+                WriteLineDEBUG("[ERROR]发送按钮Input_TextChanged\n" + err);
+#endif
             }
         }
         private void UP_Button_Click(object sender, RoutedEventArgs e)
@@ -335,14 +362,14 @@ namespace X_multi_server_container.Pages
                             {
                                 try
                                 {
-                                    //WS建立连接
-                                    socket.OnOpen = () => { try { webSocketClients.Add(socket); WriteLine("[websocket]连接已建立"); } catch (Exception) { } };
-                                    //WS断开连接
-                                    socket.OnClose = () => { try { webSocketClients.Remove(socket); WriteLine("[websocket]连接已断开"); } catch (Exception) { } };
-                                    //WS收到信息
-                                    socket.OnMessage = rece => { OnClientMessage(rece); };
-                                    //WS出错
-                                    socket.OnError = rece => { WriteLine(rece.ToString()); };
+                                //WS建立连接
+                                socket.OnOpen = () => { try { webSocketClients.Add(socket); WriteLine("[websocket]连接已建立"); } catch (Exception) { } };
+                                //WS断开连接
+                                socket.OnClose = () => { try { webSocketClients.Remove(socket); WriteLine("[websocket]连接已断开"); } catch (Exception) { } };
+                                //WS收到信息
+                                socket.OnMessage = rece => { OnClientMessage(rece); };
+                                //WS出错
+                                socket.OnError = rece => { WriteLine(rece.ToString()); };
                                 }
                                 catch (Exception
 #if DEBUG
@@ -380,8 +407,8 @@ namespace X_multi_server_container.Pages
                                     for (int i = 0; i < 200; i++)
                                     {
                                         p.OutputDataReceived += (s, b) => state = 0;
-                                        //WriteLine(p.HasExited);
-                                        if (p.HasExited) { state++; }
+                                    //WriteLine(p.HasExited);
+                                    if (p.HasExited) { state++; }
                                         p.WaitForExit(1000);
                                         try
                                         {
@@ -417,12 +444,15 @@ namespace X_multi_server_container.Pages
                         WriteLine("当前参数\n" + config.ToString());
                         //   config["LogAPI"].Value<string>("Path"));
                         //LogDirPath.Text = Path.GetDirectoryName(config["LogAPI"].Value<string>("Path"));
-                        if (config["LogAPI"].Value<bool>("Enable"))
+                        if (config.ContainsKey("LogAPI"))
                         {
-                            foreach (var filter in ((JArray)config["LogAPI"]["Filters"]))
-                                logFilters.Add(new LogFilterModel(filter.Value<int>("Type"), filter.Value<string>("Value")));
-                            logWriter = File.AppendText(GetPathF(config["LogAPI"].Value<string>("Path")));
-                            logEnable = true;
+                            if (config["LogAPI"].Value<bool>("Enable"))
+                            {
+                                foreach (var filter in ((JArray)config["LogAPI"]["Filters"]))
+                                    logFilters.Add(new LogFilterModel(filter.Value<int>("Type"), filter.Value<string>("Value")));
+                                logWriter = File.AppendText(GetPathF(config["LogAPI"].Value<string>("Path")));
+                                logEnable = true;
+                            }
                         }
                     }
                     catch (Exception err) { WriteLine(err); }
@@ -555,7 +585,8 @@ namespace X_multi_server_container.Pages
                 { }
             }
             p = new Process();
-            p.StartInfo.FileName = Regex.Replace(config.Value<string>("basicFilePath"), @"^~\\?", Path.GetDirectoryName(SlnPath) + "\\");
+            string path = Regex.Replace(config.Value<string>("basicFilePath"), @"^~\\?", string.IsNullOrEmpty(SlnPath) ? "" : (Path.GetDirectoryName(SlnPath) + "\\"));
+            p.StartInfo.FileName = path;
             p.StartInfo.WorkingDirectory = Path.GetDirectoryName(p.StartInfo.FileName);
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
@@ -600,11 +631,11 @@ namespace X_multi_server_container.Pages
                         }
                         if (p.HasExited) break;
                     }
-                    //WriteLine(p.HandleCount);
-                    //WriteLine(p.MainWindowHandle);
-                    User32API.ShowWindow(p.Handle, User32API.SW_MINIMIZE);
-                    //User32API.ShowWindow(User32API.GetPWindowHandle(p.Id), User32API.SW_MINIMIZE);
-                });
+                //WriteLine(p.HandleCount);
+                //WriteLine(p.MainWindowHandle);
+                User32API.ShowWindow(p.Handle, User32API.SW_MINIMIZE);
+                //User32API.ShowWindow(User32API.GetPWindowHandle(p.Id), User32API.SW_MINIMIZE);
+            });
             }
             catch (Exception) { }
         }
