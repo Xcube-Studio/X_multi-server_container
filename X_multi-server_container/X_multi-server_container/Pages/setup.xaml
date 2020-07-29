@@ -17,7 +17,7 @@
                     <BeginStoryboard>
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames RepeatBehavior="Forever"  AutoReverse="True"  Storyboard.TargetProperty="Foreground.Color">
-                                 <EasingColorKeyFrame KeyTime="0:0:2" Value="#FF79FF79">
+                                <EasingColorKeyFrame KeyTime="0:0:2" Value="#FF79FF79">
                                     <EasingColorKeyFrame.EasingFunction>
                                         <CubicEase EasingMode="EaseOut"/>
                                     </EasingColorKeyFrame.EasingFunction>
@@ -505,7 +505,7 @@
                         <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
                         <DockPanel Margin="10,0">
                             <TextBlock DockPanel.Dock="Top" Text="打开启动方案" FontSize="25" Foreground="SkyBlue"/>
-                            <TextBlock DockPanel.Dock="Top"  Grid.Row="1" Foreground="#E5FFFFFF"   FontSize="14"><Run Text="打开某个对象"/><Run Text="以启动你的服务端"/></TextBlock>
+                            <TextBlock DockPanel.Dock="Top"  Grid.Row="1" Foreground="#CCFFFFFF"   FontSize="13" FontFamily="Microsoft YaHei UI Light"><Run Text="打开某个对象"/><Run Text="以启动你的服务端"/></TextBlock>
                             <Border DockPanel.Dock="Top" Height="1" Margin="0,2"  Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
                             <StackPanel>
                                 <!--<Button Style="{StaticResource ButtonRevealStyle}" x:Name="button" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="0" FontSize="18">
@@ -516,8 +516,8 @@
                                 </Button>-->
                                 <Button Style="{StaticResource ButtonRevealStyle}" x:Name="OpenSlnButton" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" HorizontalContentAlignment="Left"   Padding="2,0" FontSize="18" Click="OpenSlnButton_Click" Grid.Row="1">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xED41;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        <TextBlock FontSize="14"><Run Text=" 打开"/><Run Text=" /"/><Run Text=" 编辑"/><Run Text="启动"/><Run Text="方案"/></TextBlock>
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xED41;" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                                        <TextBlock FontSize="14" FontFamily="Microsoft YaHei UI"><Run Text=" 打开"/><Run Text=" /"/><Run Text=" 编辑"/><Run Text="启动"/><Run Text="方案"/></TextBlock>
                                     </StackPanel>
                                 </Button>
                             </StackPanel>
@@ -531,7 +531,7 @@
                         <Border DockPanel.Dock="Top" Height="1" Margin="0"  Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
                         <DockPanel Margin="10,0">
                             <TextBlock DockPanel.Dock="Top" Text="新建启动方案"  FontSize="25" Foreground="SkyBlue" />
-                            <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#E5FFFFFF" FontSize="14" Text="方案模板" />
+                            <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#CCFFFFFF" FontSize="13" Text="方案模板" FontFamily="Microsoft YaHei UI Light" />
                             <Border DockPanel.Dock="Top" Height="1" Margin="0,2"  Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
                             <StackPanel  DockPanel.Dock="Top"  ScrollViewer.VerticalScrollBarVisibility="Auto">
                                 <!--<Button HorizontalContentAlignment="Left" Style="{StaticResource ButtonRevealStyle}"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"  Padding="0" FontSize="18">
@@ -542,8 +542,8 @@
                             </Button>-->
                                 <Button HorizontalContentAlignment="Left" Style="{StaticResource ButtonRevealStyle}"   Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"  Padding="2,0" FontSize="18" Click="BDSTemplateButton_Click">
                                     <DockPanel>
-                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16"  VerticalAlignment="Center"/>
-                                        <TextBlock Text=" 基于BDS核心的启动方案模板" FontSize="13"/>
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" FontSize="16"  VerticalAlignment="Bottom"/>
+                                        <TextBlock Text=" 基于BDS核心的启动方案模板" FontSize="13" FontFamily="Microsoft YaHei UI"/>
                                     </DockPanel>
                                 </Button>
                             </StackPanel>
