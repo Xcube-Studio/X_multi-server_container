@@ -862,7 +862,7 @@ namespace X_multi_server_container.Pages
         }
         #endregion
         #region 定时清屏
-        private Timer ClearTimer = new Timer(1800000) { AutoReset = true, Enabled = false };/**/
+        private Timer ClearTimer = new Timer(600000) { AutoReset = true, Enabled = false };/**/
         private int ClearText = 0;
         private void ClearTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
