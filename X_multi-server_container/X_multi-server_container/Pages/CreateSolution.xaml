@@ -469,10 +469,15 @@
         <Border DockPanel.Dock="Bottom" Height="1" Margin="0,5"  Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <StackPanel>
-                <DockPanel  > 
-                    <TextBlock Text="程序路径:" />
-                    <Button DockPanel.Dock="Right"  Content="选择" Click="SelectPathButton_Click"  Grid.Column="2" />
-                    <TextBox x:Name="targetPath" Grid.Column="1"    />
+                <Grid x:Name="widmodel" Margin="50,0"/>
+                <DockPanel  >
+                    <TextBlock Text="程序路径:"/>
+                    <Grid MaxWidth="{Binding ActualWidth, ElementName=widmodel}">
+                        <DockPanel Margin="-20,0,-13,0">
+                            <Button DockPanel.Dock="Right" Content="选择"  Click="SelectPathButton_Click"/>
+                            <TextBox x:Name="targetPath" Text="mc_start.bat" />
+                        </DockPanel>
+                    </Grid>
                 </DockPanel>
                 <!--#region WS接口-->
                 <fw:AcrylicPanel Grid.Row="1" Margin="0,10,0,0">
@@ -540,7 +545,6 @@
                 </fw:AcrylicPanel>
                 <!--#endregion-->
                 <!--#region 日志-->
-                <Grid x:Name="widmodel" Margin="50,0"/>
                 <fw:AcrylicPanel Grid.Row="1" Margin="0,10,0,0">
                     <DockPanel>
                         <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
@@ -622,6 +626,52 @@
                     </DockPanel>
                 </fw:AcrylicPanel>
                 <!--#endregion-->
+                <!--#region 日志-->
+                <fw:AcrylicPanel Grid.Row="1" Margin="0,10,0,0">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+                        <DockPanel>
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                                <TextBlock Text="定时备份: " FontSize="16" Foreground="SkyBlue"/>
+                                <CheckBox  x:Name="BackupToggle"    >
+                                    <CheckBox.Triggers>
+                                        <EventTrigger RoutedEvent="CheckBox.Checked">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LogSettingRoot"  Storyboard.TargetProperty="(FrameworkElement.Height)">
+                                                        <LinearDoubleKeyFrame KeyTime="0:0:0:0.2" Value="{Binding ActualHeight, ElementName=LogSettingPanel}"/>
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="CheckBox.Unchecked">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LogSettingRoot"  Storyboard.TargetProperty="(FrameworkElement.Height)">
+                                                        <LinearDoubleKeyFrame KeyTime="0:0:0:0.2" Value="0"/>
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </CheckBox.Triggers>
+                                </CheckBox>
+                            </StackPanel>
+                            <StackPanel Margin="20,0,0,0">
+                                <DockPanel>
+                                    <TextBlock Text="模式:"/>
+                                    <ComboBox SelectedIndex="0" HorizontalAlignment="Right">
+                                        <ComboBoxItem Content="时间间隔(单位:小时)"/>
+                                        <ComboBoxItem Content="时刻(格式HH:mm:ss)"/>
+                                    </ComboBox>
+                                </DockPanel>
+                                <DockPanel>
+
+                                </DockPanel>
+                            </StackPanel>
+                        </DockPanel>
+                    </DockPanel>
+                </fw:AcrylicPanel>
+                <!--#endregion-->
                 <!--#region 高级参数-->
                 <fw:AcrylicPanel Grid.Row="1" Margin="0,10,0,0">
                     <DockPanel>
@@ -666,7 +716,7 @@
                                                 </CheckBox.Triggers>
                                             </CheckBox>
                                         </Grid>
-                                        <StackPanel  x:Name="InPutEncodingConverntContentHeight"  Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                                        <StackPanel Height="27" x:Name="InPutEncodingConverntContentHeight"  Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
                                             <TextBlock Text="From:"/>
                                             <TextBox  x:Name="inputEncodingCBF" Text="UTF-8"  MinWidth="50"/>
                                             <TextBlock Text="To:" />

@@ -69,8 +69,7 @@ namespace X_multi_server_container.Pages
             //});
 #endif
             #endregion
-
-        }
+         }
         private string GetPathF(string path)
         {
             string pce = Regex.Replace(path, @"^~\\?", string.IsNullOrEmpty(SlnPath) ? "" : Path.GetDirectoryName(SlnPath) + "\\");
@@ -682,18 +681,18 @@ namespace X_multi_server_container.Pages
                                             if (match2.Groups["dis"].Success)
                                             {
                                                 SendToAll(new JObject(){
-                                    new JProperty("operate","onleft"),
-                                    new JProperty( "target",match2.Groups["Player"].Value ),
-                                    new JProperty( "text",match2.Groups["xuid"].Value )
-                                 });
+                                                                    new JProperty("operate","onleft"),
+                                                                    new JProperty( "target",match2.Groups["Player"].Value ),
+                                                                    new JProperty( "text",match2.Groups["xuid"].Value )
+                                                                 });
                                             }
                                             else
                                             {
                                                 SendToAll(new JObject(){
-                                    new JProperty("operate","onjoin"),
-                                    new JProperty( "target",match2.Groups["Player"].Value ),
-                                    new JProperty( "text",match2.Groups["xuid"].Value )
-                                 });
+                                                                    new JProperty("operate","onjoin"),
+                                                                    new JProperty( "target",match2.Groups["Player"].Value ),
+                                                                    new JProperty( "text",match2.Groups["xuid"].Value )
+                                                                 });
                                             }
                                         }
                                     }
